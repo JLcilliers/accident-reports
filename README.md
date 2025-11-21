@@ -1,36 +1,171 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AccidentReports.com
 
-## Getting Started
+A multi-page Next.js web application that provides free accident and police reports as a lead funnel for personal injury law firms.
 
-First, run the development server:
+## 🚀 Features
 
+- **Free Accident Report Lookup**: Users can search and obtain accident reports at no cost
+- **Multi-Step Funnel**: Guided 3-step process for report requests
+- **Legal Lead Generation**: Built-in legal help conversion paths
+- **SEO-Optimized Landing Pages**: State and city-specific pages for local SEO
+- **Modern Tech Stack**: Built with Next.js 14+, TypeScript, and Tailwind CSS
+
+## 📋 Pages Structure
+
+### Main Funnel
+- `/` - Home page
+- `/get-report/step-1` - Accident details collection
+- `/get-report/step-2` - Contact information
+- `/get-report/step-3` - Report status and delivery
+- `/reports/[reportId]` - Individual report view
+
+### Marketing & Conversion
+- `/legal-help` - Legal consultation request form
+- `/states/[stateSlug]/accident-reports` - State-specific landing pages
+- `/cities/[citySlug]/accident-reports` - City-specific landing pages
+
+### Information Pages
+- `/faq` - Frequently asked questions
+- `/about` - About the service
+- `/for-lawyers` - Partner program information
+- `/terms` - Terms of service
+- `/privacy` - Privacy policy
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 14+ with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Deployment**: Vercel (recommended)
+
+## 📦 Getting Started
+
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd accident-reports
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Create environment file (optional):
+```bash
+cp .env.local.example .env.local
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Run the development server:
+```bash
+npm run dev
+```
 
-## Learn More
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-To learn more about Next.js, take a look at the following resources:
+### Build for Production
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run build
+npm start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🗂️ Project Structure
 
-## Deploy on Vercel
+```
+accident-reports/
+├── app/
+│   ├── (funnel)/          # Report request funnel pages
+│   │   ├── get-report/    # 3-step report request
+│   │   └── reports/       # Individual report pages
+│   ├── (marketing)/       # Marketing and SEO pages
+│   │   ├── states/        # State landing pages
+│   │   ├── cities/        # City landing pages
+│   │   ├── legal-help/    # Legal conversion page
+│   │   └── ...            # Other marketing pages
+│   ├── api/               # API routes
+│   │   ├── report-requests/
+│   │   ├── reports/
+│   │   └── legal-leads/
+│   ├── layout.tsx         # Root layout
+│   └── page.tsx           # Home page
+├── components/            # Reusable React components
+│   ├── Header.tsx
+│   ├── Footer.tsx
+│   ├── PageContainer.tsx
+│   ├── StepIndicator.tsx
+│   └── CTABox.tsx
+├── lib/                   # Utilities and data
+│   ├── types.ts           # TypeScript interfaces
+│   └── mockData.ts        # Mock data for MVP
+└── public/                # Static assets
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🔌 API Routes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### POST /api/report-requests
+Create a new report request
+- **Body**: `{ accidentDetails, contact }`
+- **Returns**: `{ requestId, matchedReportId }`
+
+### GET /api/reports/search
+Search for reports
+- **Query Params**: `state`, `city`, `date`
+- **Returns**: Array of matching reports
+
+### GET /api/reports/[reportId]
+Get a specific report by ID
+- **Returns**: Report object
+
+### POST /api/legal-leads
+Create a legal consultation request
+- **Body**: `{ name, email, phone, state, description, reportId }`
+- **Returns**: `{ leadId, success }`
+
+## 🎨 Customization
+
+### Styling
+All styling is done with Tailwind CSS. Modify `tailwind.config.ts` for theme customization.
+
+### Data
+Currently uses mock data in `lib/mockData.ts`. Replace with real database connections as needed.
+
+### SEO
+Update metadata in individual page files and `app/layout.tsx` for SEO optimization.
+
+## 🚢 Deployment on Vercel
+
+1. Push code to GitHub repository
+2. Connect repository to Vercel
+3. Configure project settings (use default Next.js settings)
+4. Deploy!
+
+Vercel will automatically:
+- Build the project
+- Generate static pages
+- Set up serverless functions for API routes
+- Provide a production URL
+
+## 📝 Future Enhancements
+
+- [ ] Connect to real accident report databases
+- [ ] Implement user authentication
+- [ ] Add email notifications for report delivery
+- [ ] Integrate payment processing (if adding premium features)
+- [ ] Add analytics tracking (Google Analytics, etc.)
+- [ ] Implement CRM integration for lead management
+- [ ] Add automated testing
+
+## 📄 License
+
+This project is for demonstration purposes.
+
+## 🤝 Contributing
+
+This is a closed-source project for a specific business use case.
