@@ -4,27 +4,51 @@ import PageContainer from "@/components/PageContainer";
 export default function Home() {
   return (
     <>
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20">
+      {/* Hero Section with Video Background */}
+      <section className="relative text-white py-20 overflow-hidden min-h-[600px] flex items-center">
+        {/* Video Background */}
+        <div className="absolute inset-0 w-full h-full">
+          <iframe
+            src="https://streamable.com/e/q21jnj?autoplay=1&nocontrols=1&muted=1&loop=1"
+            allow="autoplay; fullscreen"
+            allowFullScreen
+            className="absolute top-0 left-0 w-full h-full object-cover border-none"
+            style={{
+              width: '100%',
+              height: '100%',
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              minWidth: '100%',
+              minHeight: '100%',
+              objectFit: 'cover'
+            }}
+          />
+          {/* Dark overlay for text readability */}
+          <div className="absolute inset-0 bg-black/50"></div>
+        </div>
+
+        {/* Content */}
         <PageContainer>
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-5xl font-bold mb-6">
+          <div className="max-w-3xl mx-auto text-center relative z-10">
+            <h1 className="text-5xl font-bold mb-6 drop-shadow-lg">
               Get Your Accident Report Online – Free
             </h1>
-            <p className="text-xl mb-8 text-blue-100">
+            <p className="text-xl mb-8 text-white drop-shadow-md">
               We locate and deliver your accident or police report at no cost.
               Plus, get a free case review from experienced personal injury attorneys.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/get-report/step-1"
-                className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition"
+                className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition shadow-xl"
               >
                 Find My Accident Report
               </Link>
               <Link
                 href="/legal-help"
-                className="bg-blue-500 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-blue-400 transition border-2 border-white"
+                className="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-blue-700 transition border-2 border-white shadow-xl"
               >
                 Get Free Case Review
               </Link>
