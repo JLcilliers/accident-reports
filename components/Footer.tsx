@@ -2,125 +2,104 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white">
-      <div className="container mx-auto px-6 lg:px-12 py-16 lg:py-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16 mb-12">
-          {/* Brand Column */}
-          <div className="lg:col-span-1">
-            <h3 className="text-2xl font-bold mb-4 text-white">AccidentReports.com</h3>
-            <p className="text-gray-400 leading-relaxed mb-6">
+    <footer className="bg-gray-900 text-white border-t-2 border-gray-800">
+      <div className="container mx-auto px-6 lg:px-12 py-14 lg:py-18">
+        {/* Irregular column layout - varied widths */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12 mb-10">
+          {/* Brand Column - Wider (5 cols on desktop) */}
+          <div className="md:col-span-12 lg:col-span-5 md:pr-6 lg:pr-10 border-b md:border-b-0 md:border-r-0 lg:border-r border-gray-800 pb-8 md:pb-0">
+            <h3 className="text-xl font-bold mb-3.5 text-white">AccidentReports.com</h3>
+            <p className="text-gray-400 leading-relaxed mb-5 text-sm">
               Free accident and police reports for accident victims nationwide.
             </p>
-            {/* Trust Badges */}
+            {/* Trust Badges - Subtle styling */}
             <div className="flex items-center gap-3 flex-wrap">
-              <div className="flex items-center gap-2 text-sm text-gray-300">
-                <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+              <div className="flex items-center gap-1.5 text-xs text-gray-300 bg-gray-800 px-2.5 py-1.5 rounded border border-gray-700">
+                <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd"/>
                 </svg>
-                <span className="font-semibold">Secure</span>
+                <span className="font-medium">Secure</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-300">
-                <svg className="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+              <div className="flex items-center gap-1.5 text-xs text-gray-300 bg-gray-800 px-2.5 py-1.5 rounded border border-gray-700">
+                <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
                 </svg>
-                <span className="font-semibold">Trusted</span>
+                <span className="font-medium">Trusted</span>
               </div>
             </div>
           </div>
 
-          {/* Quick Links Column */}
-          <div>
-            <h4 className="text-lg font-bold mb-6 text-white">Quick Links</h4>
-            <ul className="space-y-3">
+          {/* Quick Links Column - Medium (3 cols) */}
+          <div className="md:col-span-6 lg:col-span-3 md:pl-0 lg:pl-6">
+            <h4 className="text-base font-bold mb-4 text-white border-l-2 border-blue-600 pl-3">Quick Links</h4>
+            <ul className="space-y-2.5 pl-3">
               <li>
-                <Link href="/" className="text-gray-400 hover:text-white transition inline-flex items-center group">
-                  <svg className="w-4 h-4 mr-2 text-blue-500 opacity-0 group-hover:opacity-100 transition" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd"/>
-                  </svg>
+                <Link href="/" className="text-gray-400 hover:text-white transition text-sm">
                   Home
                 </Link>
               </li>
               <li>
-                <Link href="/get-report/step-1" className="text-gray-400 hover:text-white transition inline-flex items-center group">
-                  <svg className="w-4 h-4 mr-2 text-blue-500 opacity-0 group-hover:opacity-100 transition" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd"/>
-                  </svg>
+                <Link href="/get-report/step-1" className="text-gray-400 hover:text-white transition text-sm">
                   Get Report
                 </Link>
               </li>
               <li>
-                <Link href="/legal-help" className="text-gray-400 hover:text-white transition inline-flex items-center group">
-                  <svg className="w-4 h-4 mr-2 text-blue-500 opacity-0 group-hover:opacity-100 transition" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd"/>
-                  </svg>
+                <Link href="/legal-help" className="text-gray-400 hover:text-white transition text-sm">
                   Legal Help
                 </Link>
               </li>
               <li>
-                <Link href="/faq" className="text-gray-400 hover:text-white transition inline-flex items-center group">
-                  <svg className="w-4 h-4 mr-2 text-blue-500 opacity-0 group-hover:opacity-100 transition" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd"/>
-                  </svg>
+                <Link href="/faq" className="text-gray-400 hover:text-white transition text-sm">
                   FAQ
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Resources Column */}
-          <div>
-            <h4 className="text-lg font-bold mb-6 text-white">Resources</h4>
-            <ul className="space-y-3">
-              <li>
-                <Link href="/about" className="text-gray-400 hover:text-white transition inline-flex items-center group">
-                  <svg className="w-4 h-4 mr-2 text-blue-500 opacity-0 group-hover:opacity-100 transition" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd"/>
-                  </svg>
-                  About
-                </Link>
-              </li>
-              <li>
-                <Link href="/for-lawyers" className="text-gray-400 hover:text-white transition inline-flex items-center group">
-                  <svg className="w-4 h-4 mr-2 text-blue-500 opacity-0 group-hover:opacity-100 transition" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd"/>
-                  </svg>
-                  For Lawyers
-                </Link>
-              </li>
-            </ul>
-          </div>
+          {/* Combined Resources & Legal Column - Narrower (4 cols) */}
+          <div className="md:col-span-6 lg:col-span-4 md:pl-6 lg:pl-8">
+            <div className="mb-7">
+              <h4 className="text-base font-bold mb-4 text-white border-l-2 border-green-600 pl-3">Resources</h4>
+              <ul className="space-y-2.5 pl-3">
+                <li>
+                  <Link href="/about" className="text-gray-400 hover:text-white transition text-sm">
+                    About
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/for-lawyers" className="text-gray-400 hover:text-white transition text-sm">
+                    For Lawyers
+                  </Link>
+                </li>
+              </ul>
+            </div>
 
-          {/* Legal Column */}
-          <div>
-            <h4 className="text-lg font-bold mb-6 text-white">Legal</h4>
-            <ul className="space-y-3">
-              <li>
-                <Link href="/terms" className="text-gray-400 hover:text-white transition inline-flex items-center group">
-                  <svg className="w-4 h-4 mr-2 text-blue-500 opacity-0 group-hover:opacity-100 transition" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd"/>
-                  </svg>
-                  Terms of Service
-                </Link>
-              </li>
-              <li>
-                <Link href="/privacy" className="text-gray-400 hover:text-white transition inline-flex items-center group">
-                  <svg className="w-4 h-4 mr-2 text-blue-500 opacity-0 group-hover:opacity-100 transition" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd"/>
-                  </svg>
-                  Privacy Policy
-                </Link>
-              </li>
-            </ul>
+            {/* Legal section within same column */}
+            <div className="pt-6 border-t border-gray-800">
+              <h4 className="text-sm font-semibold mb-3 text-gray-300">Legal</h4>
+              <ul className="space-y-2">
+                <li>
+                  <Link href="/terms" className="text-gray-500 hover:text-gray-300 transition text-xs">
+                    Terms of Service
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/privacy" className="text-gray-500 hover:text-gray-300 transition text-xs">
+                    Privacy Policy
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-gray-800 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-gray-400 text-sm">
+        {/* Bottom Bar - Subtle separator */}
+        <div className="border-t border-gray-800 pt-6">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+            <p className="text-gray-400 text-xs">
               &copy; {new Date().getFullYear()} AccidentReports.com. All rights reserved.
             </p>
-            <p className="text-gray-500 text-xs">
+            <p className="text-gray-500 text-xs bg-gray-800 px-3 py-1.5 rounded border border-gray-700">
               Not a law firm. We connect you with legal professionals.
             </p>
           </div>
