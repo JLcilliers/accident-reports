@@ -30,102 +30,60 @@ export default function Home() {
 
         {/* Content */}
         <div className="container mx-auto px-6 lg:px-12 relative z-20 py-20 lg:py-32">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
-            {/* Left Column - Content */}
-            <div className="text-left">
-              {/* Trust Badges Mini Bar */}
-              <div className="flex flex-wrap items-center gap-4 mb-6">
-                <div className="flex items-center gap-2 text-sm bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                  <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
-                  </svg>
-                  <span className="font-semibold">10,000+ Reports</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                  <svg className="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd"/>
-                  </svg>
-                  <span className="font-semibold">Secure</span>
-                </div>
-              </div>
-
-              {/* Headline */}
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight drop-shadow-2xl">
-                Get Your Accident Report Online – Free
-              </h1>
-
-              {/* Subheadline */}
-              <p className="text-lg md:text-xl mb-8 text-gray-100 leading-relaxed drop-shadow-lg">
-                We locate and deliver your accident or police report at no cost.
-                Plus, get a free case review from experienced personal injury attorneys.
-              </p>
-
-              {/* CTAs */}
-              <div className="flex flex-col sm:flex-row gap-4 mb-6">
-                <Link
-                  href="/get-report/step-1"
-                  className="inline-flex items-center justify-center bg-blue-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-blue-700 transition shadow-2xl hover:shadow-blue-500/50 hover:-translate-y-0.5 transform"
-                >
-                  Find My Accident Report
-                  <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                  </svg>
-                </Link>
-                <Link
-                  href="/legal-help"
-                  className="inline-flex items-center justify-center bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition border-2 border-white shadow-xl"
-                >
-                  Get Free Case Review
-                </Link>
-              </div>
-
-              {/* Trust Microcopy */}
-              <p className="text-sm text-gray-200 flex items-center gap-2">
+          <div className="max-w-4xl mx-auto text-center">
+            {/* Trust Badges Mini Bar */}
+            <div className="flex flex-wrap items-center justify-center gap-4 mb-6">
+              <div className="flex items-center gap-2 text-sm bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
                 <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
                 </svg>
-                No credit card required • 100% confidential • Takes under 2 minutes
-              </p>
-            </div>
-
-            {/* Right Column - Visual Element */}
-            <div className="hidden lg:flex items-center justify-center">
-              <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-2xl max-w-md">
-                <div className="bg-white rounded-xl p-6 shadow-lg">
-                  <div className="flex items-start gap-4 mb-4">
-                    <div className="bg-blue-100 rounded-lg p-3">
-                      <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                      </svg>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-bold text-gray-900 text-lg mb-1">Official Police Report</h3>
-                      <p className="text-sm text-gray-600">Delivered instantly to your inbox</p>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-sm text-gray-700">
-                      <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
-                      </svg>
-                      <span>100% Free Service</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-700">
-                      <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
-                      </svg>
-                      <span>Secure & Encrypted</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-700">
-                      <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
-                      </svg>
-                      <span>Fast Delivery (Minutes)</span>
-                    </div>
-                  </div>
-                </div>
+                <span className="font-semibold">10,000+ Reports</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                <svg className="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd"/>
+                </svg>
+                <span className="font-semibold">Secure</span>
               </div>
             </div>
+
+            {/* Headline */}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight drop-shadow-2xl">
+              Get Your Accident Report Online – Free
+            </h1>
+
+            {/* Subheadline */}
+            <p className="text-lg md:text-xl mb-8 text-gray-100 leading-relaxed drop-shadow-lg">
+              We locate and deliver your accident or police report at no cost.
+              Plus, get a free case review from experienced personal injury attorneys.
+            </p>
+
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row gap-4 mb-6 justify-center">
+              <Link
+                href="/get-report/step-1"
+                className="inline-flex items-center justify-center bg-blue-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-blue-700 transition shadow-2xl hover:shadow-blue-500/50 hover:-translate-y-0.5 transform"
+              >
+                Find My Accident Report
+                <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                </svg>
+              </Link>
+              <Link
+                href="/legal-help"
+                className="inline-flex items-center justify-center bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition border-2 border-white shadow-xl"
+              >
+                Get Free Case Review
+              </Link>
+            </div>
+
+            {/* Trust Microcopy */}
+            <p className="text-sm text-gray-200 flex items-center justify-center gap-2">
+              <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
+              </svg>
+              No credit card required • 100% confidential • Takes under 2 minutes
+            </p>
           </div>
         </div>
       </section>
