@@ -7,26 +7,20 @@ export default function Home() {
       {/* Hero Section with Video Background */}
       <section className="relative text-white py-20 overflow-hidden min-h-[600px] flex items-center">
         {/* Video Background */}
-        <div className="absolute inset-0 w-full h-full">
+        <div className="absolute inset-0 w-full h-full bg-black">
           <iframe
             src="https://streamable.com/e/q21jnj?autoplay=1&nocontrols=1&muted=1&loop=1"
             allow="autoplay; fullscreen"
             allowFullScreen
-            className="absolute top-0 left-0 w-full h-full object-cover border-none"
+            className="absolute top-0 left-0 w-full h-full border-none"
             style={{
               width: '100%',
               height: '100%',
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              minWidth: '100%',
-              minHeight: '100%',
-              objectFit: 'cover'
+              objectFit: 'contain'
             }}
           />
           {/* Dark overlay for text readability */}
-          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="absolute inset-0 bg-black/40"></div>
         </div>
 
         {/* Content */}
