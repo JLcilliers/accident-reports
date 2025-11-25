@@ -1,340 +1,483 @@
 import Link from "next/link";
+import SearchHero from "@/components/search/SearchHero";
 
 export default function Home() {
   return (
     <>
-      {/* HERO SECTION - Left-aligned professional layout */}
-      <section className="relative text-white overflow-hidden min-h-[680px] lg:min-h-[760px] flex items-center">
-        {/* Video Background - unchanged */}
-        <div className="absolute inset-0 w-full h-full overflow-hidden">
-          <iframe
-            src="https://streamable.com/e/q21jnj?autoplay=1&nocontrols=1&muted=1&loop=1"
-            allow="autoplay; fullscreen"
-            allowFullScreen
-            className="absolute border-none"
-            style={{
-              width: '177.77vh',
-              height: '56.25vw',
-              minWidth: '100%',
-              minHeight: '100%',
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              pointerEvents: 'none'
-            }}
-          />
-          {/* Darker overlay for dark theme */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#05070B]/85 via-[#05070B]/60 to-[#05070B]/95 z-10"></div>
-          {/* Top vignette for better nav contrast */}
-          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/15 to-transparent z-10"></div>
-          <div className="absolute inset-0 z-10 opacity-[0.03]" style={{
-            backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")'
-          }}></div>
-        </div>
+      {/* HERO SECTION with Search */}
+      <SearchHero />
 
-        {/* Left accent bar - neon green accent */}
-        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-[#B6FF2C] via-[#8EE522] to-[#B6FF2C] z-20 hidden lg:block shadow-lg"></div>
-
-        {/* Content container - max-width 1200px, left-aligned */}
-        <div className="container mx-auto px-6 lg:px-12 relative z-20 py-16 lg:py-28 max-w-[1200px]">
-          <div className="max-w-[560px] ml-[10px] lg:ml-[20px]">
-            {/* Trust Badges - Pill style with precise spacing */}
-            <div className="flex flex-wrap items-center gap-2 mb-7">
-              <div className="flex items-center gap-2 text-sm bg-white/10 backdrop-blur-sm px-3.5 py-2 rounded-full border border-white/20 shadow">
-                <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
-                </svg>
-                <span className="font-semibold">10,000+ Reports</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm bg-white/10 backdrop-blur-sm px-3.5 py-2 rounded-full border border-white/20 shadow">
-                <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd"/>
-                </svg>
-                <span className="font-semibold">Secure</span>
-              </div>
-            </div>
-
-            {/* Headline - Large and dominant */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-[1.1] tracking-tight">
-              Get Your Accident Report Online – Free
-            </h1>
-
-            {/* Subheadline - 18px with good line height */}
-            <p className="text-lg md:text-xl mb-8 text-gray-50 leading-relaxed max-w-xl">
-              We locate and deliver your accident or police report at no cost.
-              Plus, get a free case review from experienced personal injury attorneys.
-            </p>
-
-            {/* CTAs - Neon green primary, secondary transparent with green border */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-7">
-              <Link
-                href="/get-report/step-1"
-                className="inline-flex items-center justify-center bg-[#B6FF2C] text-[#05070B] px-8 py-4 min-h-[48px] rounded-lg font-bold text-base hover:bg-[#8EE522] transition-all shadow-lg hover:shadow-[0_0_18px_rgba(182,255,44,0.35)]"
-              >
-                Find My Accident Report
-                <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                </svg>
-              </Link>
-              <Link
-                href="/legal-help"
-                className="inline-flex items-center justify-center bg-transparent text-[#B6FF2C] px-7 py-3.5 min-h-[48px] rounded-lg font-semibold text-base hover:bg-[#B6FF2C]/10 transition-all border border-[#8EE522]"
-              >
-                Get Free Case Review
-              </Link>
-            </div>
-
-            {/* Trust Microcopy */}
-            <p className="text-base text-gray-100 flex items-center gap-2 leading-relaxed">
-              <svg className="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
-              </svg>
-              No credit card required • 100% confidential • Takes under 2 minutes
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* HOW IT WORKS SECTION - Dark background with neon hover effects */}
-      <section className="py-16 lg:py-24 bg-[#05070B]">
+      {/* FEATURE TILES - "What You Can Do Here" */}
+      <section className="py-16 lg:py-20 bg-white">
         <div className="container mx-auto px-6 lg:px-12 max-w-[1200px]">
-          <div className="mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-3 tracking-tight">How It Works</h2>
-            <p className="text-lg text-[#A5B1C5] leading-relaxed">Simple, fast, and completely free</p>
+          <div className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-3">
+              What You Can Do Here
+            </h2>
+            <p className="text-slate-600 max-w-2xl mx-auto">
+              AccidentLookup helps you find accident information and understand your options
+            </p>
           </div>
 
-          {/* Three cards with dark base and neon green hover effect */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            {/* Step 1 */}
-            <div className="how-card group bg-[#0C1016] rounded-[14px] p-6 border border-[#1C2430] shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-[220ms] ease-out hover:bg-[#B6FF2C] hover:transform hover:-translate-y-[10px] hover:shadow-[0_22px_45px_rgba(182,255,44,0.55)] hover:border-transparent overflow-hidden">
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-[#B6FF2C]/8 text-[#B6FF2C] group-hover:bg-[#05070B] group-hover:text-[#B6FF2C] transition-colors duration-[220ms]">
-                  <span className="text-sm font-semibold">1</span>
-                </div>
-                <svg className="w-8 h-8 text-[#B6FF2C] group-hover:text-[#05070B] transition-colors duration-[220ms]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-white mb-3 group-hover:text-[#05070B] transition-colors duration-[220ms]">Tell Us About Your Accident</h3>
-              <p className="text-[#A5B1C5] leading-relaxed text-base group-hover:text-[#05070B] transition-colors duration-[220ms]">
-                Provide basic details about when and where your accident occurred.
-                Takes less than 2 minutes.
-              </p>
-            </div>
-
-            {/* Step 2 */}
-            <div className="how-card group bg-[#0C1016] rounded-[14px] p-6 border border-[#1C2430] shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-[220ms] ease-out hover:bg-[#B6FF2C] hover:transform hover:-translate-y-[10px] hover:shadow-[0_22px_45px_rgba(182,255,44,0.55)] hover:border-transparent overflow-hidden">
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-[#B6FF2C]/8 text-[#B6FF2C] group-hover:bg-[#05070B] group-hover:text-[#B6FF2C] transition-colors duration-[220ms]">
-                  <span className="text-sm font-semibold">2</span>
-                </div>
-                <svg className="w-8 h-8 text-[#B6FF2C] group-hover:text-[#05070B] transition-colors duration-[220ms]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Feature 1 */}
+            <div className="bg-slate-50 rounded-xl p-6 border border-slate-200 hover:border-blue-200 hover:shadow-lg transition-all group">
+              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-800 transition-colors">
+                <svg className="w-6 h-6 text-blue-800 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-white mb-3 group-hover:text-[#05070B] transition-colors duration-[220ms]">We Locate Your Report</h3>
-              <p className="text-[#A5B1C5] leading-relaxed text-base group-hover:text-[#05070B] transition-colors duration-[220ms]">
-                Our system searches official databases to find your accident or police report.
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">Search Recent Car Accidents</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                Find information about traffic accidents in your area by location, date, or road.
               </p>
             </div>
 
-            {/* Step 3 */}
-            <div className="how-card group bg-[#0C1016] rounded-[14px] p-6 border border-[#1C2430] shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-[220ms] ease-out hover:bg-[#B6FF2C] hover:transform hover:-translate-y-[10px] hover:shadow-[0_22px_45px_rgba(182,255,44,0.55)] hover:border-transparent overflow-hidden">
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-[#B6FF2C]/8 text-[#B6FF2C] group-hover:bg-[#05070B] group-hover:text-[#B6FF2C] transition-colors duration-[220ms]">
-                  <span className="text-sm font-semibold">3</span>
-                </div>
-                <svg className="w-8 h-8 text-[#B6FF2C] group-hover:text-[#05070B] transition-colors duration-[220ms]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-white mb-3 group-hover:text-[#05070B] transition-colors duration-[220ms]">Get Your Report + Legal Help</h3>
-              <p className="text-[#A5B1C5] leading-relaxed text-base group-hover:text-[#05070B] transition-colors duration-[220ms]">
-                Download your report for free and get a no-obligation case review
-                from experienced attorneys.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* TRUST / STATS SECTION - Dark background with subtle gradient */}
-      <section className="py-16 lg:py-20 bg-gradient-to-b from-[#0B1018] to-[#05070B] border-t border-[#1C2430]">
-        <div className="container mx-auto px-6 lg:px-12 max-w-[1200px]">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-2 tracking-tight">
-              Trusted by Accident Victims Nationwide
-            </h2>
-            <div className="w-20 h-1 bg-[#B6FF2C] mx-auto mt-4 rounded-full"></div>
-          </div>
-
-          {/* Stats with vertical dividers and neon green accents */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-            {/* Stat 1 */}
-            <div className="group bg-[#0C1016] rounded-lg p-8 text-center shadow-[0_10px_30px_rgba(0,0,0,0.35)] border border-[#1C2430] transition-all duration-[220ms] ease-out hover:bg-[#B6FF2C] hover:transform hover:-translate-y-[10px] hover:shadow-[0_22px_45px_rgba(182,255,44,0.55)] hover:border-transparent relative">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-[#B6FF2C] rounded-lg mb-5 shadow-lg group-hover:bg-[#05070B] transition-colors duration-[220ms]">
-                <svg className="w-8 h-8 text-[#05070B] group-hover:text-[#B6FF2C] transition-colors duration-[220ms]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+            {/* Feature 2 */}
+            <div className="bg-slate-50 rounded-xl p-6 border border-slate-200 hover:border-blue-200 hover:shadow-lg transition-all group">
+              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-800 transition-colors">
+                <svg className="w-6 h-6 text-blue-800 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                 </svg>
               </div>
-              <div className="text-5xl font-bold text-[#B6FF2C] mb-2 tracking-tight group-hover:text-[#05070B] transition-colors duration-[220ms]">10,000+</div>
-              <p className="text-[#A5B1C5] font-semibold text-sm uppercase tracking-wide group-hover:text-[#05070B] transition-colors duration-[220ms]">Reports Delivered</p>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">Get Your Police Report</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                Learn how to obtain your official accident or police report from local authorities.
+              </p>
             </div>
 
-            {/* Vertical divider - hidden on mobile */}
-            <div className="hidden md:block absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-px h-24 bg-[#1C2430]"></div>
-
-            {/* Stat 2 */}
-            <div className="group bg-[#0C1016] rounded-lg p-8 text-center shadow-[0_10px_30px_rgba(0,0,0,0.35)] border border-[#1C2430] transition-all duration-[220ms] ease-out hover:bg-[#B6FF2C] hover:transform hover:-translate-y-[10px] hover:shadow-[0_22px_45px_rgba(182,255,44,0.55)] hover:border-transparent relative">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-[#B6FF2C] rounded-lg mb-5 shadow-lg group-hover:bg-[#05070B] transition-colors duration-[220ms]">
-                <svg className="w-8 h-8 text-[#05070B] group-hover:text-[#B6FF2C] transition-colors duration-[220ms]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            {/* Feature 3 */}
+            <div className="bg-slate-50 rounded-xl p-6 border border-slate-200 hover:border-blue-200 hover:shadow-lg transition-all group">
+              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-800 transition-colors">
+                <svg className="w-6 h-6 text-blue-800 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
                 </svg>
               </div>
-              <div className="text-5xl font-bold text-[#B6FF2C] mb-2 tracking-tight group-hover:text-[#05070B] transition-colors duration-[220ms]">24/7</div>
-              <p className="text-[#A5B1C5] font-semibold text-sm uppercase tracking-wide group-hover:text-[#05070B] transition-colors duration-[220ms]">Support Available</p>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">Understand Your Legal Options</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                Connect with experienced personal injury attorneys for a free case evaluation.
+              </p>
             </div>
 
-            {/* Vertical divider - hidden on mobile */}
-            <div className="hidden md:block absolute top-1/2 left-2/3 -translate-x-1/2 -translate-y-1/2 w-px h-24 bg-[#1C2430]"></div>
-
-            {/* Stat 3 */}
-            <div className="group bg-[#0C1016] rounded-lg p-8 text-center shadow-[0_10px_30px_rgba(0,0,0,0.35)] border border-[#1C2430] transition-all duration-[220ms] ease-out hover:bg-[#B6FF2C] hover:transform hover:-translate-y-[10px] hover:shadow-[0_22px_45px_rgba(182,255,44,0.55)] hover:border-transparent relative">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-[#B6FF2C] rounded-lg mb-5 shadow-lg group-hover:bg-[#05070B] transition-colors duration-[220ms]">
-                <svg className="w-8 h-8 text-[#05070B] group-hover:text-[#B6FF2C] transition-colors duration-[220ms]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            {/* Feature 4 */}
+            <div className="bg-slate-50 rounded-xl p-6 border border-slate-200 hover:border-blue-200 hover:shadow-lg transition-all group">
+              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-800 transition-colors">
+                <svg className="w-6 h-6 text-blue-800 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                 </svg>
               </div>
-              <div className="text-5xl font-bold text-[#B6FF2C] mb-2 tracking-tight group-hover:text-[#05070B] transition-colors duration-[220ms]">100%</div>
-              <p className="text-[#A5B1C5] font-semibold text-sm uppercase tracking-wide group-hover:text-[#05070B] transition-colors duration-[220ms]">Free Service</p>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">Browse by City or Highway</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                Explore accidents organized by location, including major highways and intersections.
+              </p>
+            </div>
+
+            {/* Feature 5 */}
+            <div className="bg-slate-50 rounded-xl p-6 border border-slate-200 hover:border-blue-200 hover:shadow-lg transition-all group">
+              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-800 transition-colors">
+                <svg className="w-6 h-6 text-blue-800 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">Read Safety & Recovery Guides</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                Access helpful resources on what to do after an accident and how to recover.
+              </p>
+            </div>
+
+            {/* Feature 6 */}
+            <div className="bg-slate-50 rounded-xl p-6 border border-slate-200 hover:border-blue-200 hover:shadow-lg transition-all group">
+              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-800 transition-colors">
+                <svg className="w-6 h-6 text-blue-800 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">Stay Informed</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                Get updates on traffic incidents and road safety news in your community.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* WHY CHOOSE US SECTION - Two-column layout with 35/65 split */}
-      <section className="py-16 lg:py-24 bg-[#05070B]">
+      {/* STAY IN THE KNOW SECTION */}
+      <section className="py-16 lg:py-20 bg-slate-50">
         <div className="container mx-auto px-6 lg:px-12 max-w-[1200px]">
-          <div className="lg:grid lg:grid-cols-12 lg:gap-12">
-            {/* Left column - Section header with neon accent bar (35% width) */}
-            <div className="lg:col-span-4 mb-10 lg:mb-0 lg:pr-8 border-l-4 border-[#B6FF2C] pl-6">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">Why Choose Us?</h2>
-              <p className="text-lg text-[#A5B1C5] leading-relaxed mb-6">
-                Everything you need to get your accident report and legal support
-              </p>
-              <div className="hidden lg:block w-16 h-1 bg-[#B6FF2C] rounded-full"></div>
-            </div>
-
-            {/* Right column - 2x2 benefit grid (65% width) */}
-            <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {/* Benefit 1 */}
-              <div className="group bg-[#0C1016] rounded-lg p-6 border border-[#1C2430] shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-[220ms] ease-out hover:bg-[#B6FF2C] hover:transform hover:-translate-y-[10px] hover:shadow-[0_22px_45px_rgba(182,255,44,0.55)] hover:border-transparent">
-                <div className="w-12 h-12 bg-[#B6FF2C] rounded-lg flex items-center justify-center mb-4 shadow group-hover:bg-[#05070B] transition-colors duration-[220ms]">
-                  <svg className="w-6 h-6 text-[#05070B] group-hover:text-[#B6FF2C] transition-colors duration-[220ms]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                  </svg>
-                </div>
-                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-[#05070B] transition-colors duration-[220ms]">Completely Free</h3>
-                <p className="text-[#A5B1C5] text-base leading-relaxed group-hover:text-[#05070B] transition-colors duration-[220ms]">
-                  No hidden fees, no credit card required. Get your accident report at absolutely no cost.
-                </p>
-              </div>
-
-              {/* Benefit 2 */}
-              <div className="group bg-[#0C1016] rounded-lg p-6 border border-[#1C2430] shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-[220ms] ease-out hover:bg-[#B6FF2C] hover:transform hover:-translate-y-[10px] hover:shadow-[0_22px_45px_rgba(182,255,44,0.55)] hover:border-transparent">
-                <div className="w-12 h-12 bg-[#B6FF2C] rounded-lg flex items-center justify-center mb-4 shadow group-hover:bg-[#05070B] transition-colors duration-[220ms]">
-                  <svg className="w-6 h-6 text-[#05070B] group-hover:text-[#B6FF2C] transition-colors duration-[220ms]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                  </svg>
-                </div>
-                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-[#05070B] transition-colors duration-[220ms]">Fast & Easy</h3>
-                <p className="text-[#A5B1C5] text-base leading-relaxed group-hover:text-[#05070B] transition-colors duration-[220ms]">
-                  Simple online process that takes minutes. No need to visit government offices.
-                </p>
-              </div>
-
-              {/* Benefit 3 */}
-              <div className="group bg-[#0C1016] rounded-lg p-6 border border-[#1C2430] shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-[220ms] ease-out hover:bg-[#B6FF2C] hover:transform hover:-translate-y-[10px] hover:shadow-[0_22px_45px_rgba(182,255,44,0.55)] hover:border-transparent">
-                <div className="w-12 h-12 bg-[#B6FF2C] rounded-lg flex items-center justify-center mb-4 shadow group-hover:bg-[#05070B] transition-colors duration-[220ms]">
-                  <svg className="w-6 h-6 text-[#05070B] group-hover:text-[#B6FF2C] transition-colors duration-[220ms]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                  </svg>
-                </div>
-                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-[#05070B] transition-colors duration-[220ms]">Secure & Confidential</h3>
-                <p className="text-[#A5B1C5] text-base leading-relaxed group-hover:text-[#05070B] transition-colors duration-[220ms]">
-                  Your information is protected with industry-standard encryption and security.
-                </p>
-              </div>
-
-              {/* Benefit 4 */}
-              <div className="group bg-[#0C1016] rounded-lg p-6 border border-[#1C2430] shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-[220ms] ease-out hover:bg-[#B6FF2C] hover:transform hover:-translate-y-[10px] hover:shadow-[0_22px_45px_rgba(182,255,44,0.55)] hover:border-transparent">
-                <div className="w-12 h-12 bg-[#B6FF2C] rounded-lg flex items-center justify-center mb-4 shadow group-hover:bg-[#05070B] transition-colors duration-[220ms]">
-                  <svg className="w-6 h-6 text-[#05070B] group-hover:text-[#B6FF2C] transition-colors duration-[220ms]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
-                  </svg>
-                </div>
-                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-[#05070B] transition-colors duration-[220ms]">Legal Support Available</h3>
-                <p className="text-[#A5B1C5] text-base leading-relaxed group-hover:text-[#05070B] transition-colors duration-[220ms]">
-                  Connect with experienced attorneys for a free case review if you were injured.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA BANNER SECTION - Dark gradient with neon green button */}
-      <section className="relative min-h-[220px] py-16 lg:py-20 bg-gradient-to-br from-[#05070B] via-[#0B1018] to-[#05070B] overflow-hidden border-t border-[#1C2430]">
-        {/* Subtle dot texture */}
-        <div className="absolute inset-0 opacity-[0.03]" style={{
-          backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Ccircle cx=\'2\' cy=\'2\' r=\'1\' fill=\'%23ffffff\'/%3E%3C/svg%3E")'
-        }}></div>
-
-        <div className="container mx-auto px-6 lg:px-12 max-w-[1200px] relative">
-          <div className="lg:flex lg:items-center lg:gap-12 text-center lg:text-left">
-            <div className="mb-8 lg:mb-0 lg:flex-1">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">
-                Ready to Get Your Accident Report?
+          <div className="lg:grid lg:grid-cols-2 lg:gap-12 items-center">
+            {/* Left Content */}
+            <div className="mb-10 lg:mb-0">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">
+                Stay In-The-Know About Local Accidents
               </h2>
-              <p className="text-lg text-[#A5B1C5] leading-relaxed">
-                Start now and get your free report in minutes
+              <p className="text-slate-600 leading-relaxed mb-6">
+                We monitor public reports, news sources, and official records to bring you timely information about traffic accidents in your area. Our team publishes clear, factual summaries to help you stay informed.
               </p>
-            </div>
-            <div className="lg:flex-shrink-0">
+              <ul className="space-y-3 mb-6">
+                <li className="flex items-start gap-3">
+                  <svg className="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
+                  </svg>
+                  <span className="text-slate-700">Updated throughout the day as new information becomes available</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <svg className="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
+                  </svg>
+                  <span className="text-slate-700">Easy-to-understand summaries with key details</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <svg className="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
+                  </svg>
+                  <span className="text-slate-700">Coverage across all 50 states</span>
+                </li>
+              </ul>
               <Link
-                href="/get-report/step-1"
-                className="inline-flex items-center justify-center bg-[#B6FF2C] text-[#05070B] px-8 py-4 rounded-lg font-bold text-base hover:bg-[#8EE522] transition-all shadow-lg hover:shadow-[0_0_18px_rgba(182,255,44,0.35)]"
+                href="/accidents"
+                className="inline-flex items-center gap-2 text-blue-800 hover:text-blue-900 font-semibold transition"
               >
-                Get Started Now
-                <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                Browse Latest Accidents
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                 </svg>
               </Link>
-              <p className="text-sm text-[#A5B1C5] mt-4 flex items-center justify-center lg:justify-start gap-2">
-                <svg className="w-4 h-4 text-[#B6FF2C] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
+            </div>
+
+            {/* Right - Sample Accident Card */}
+            <div className="bg-white rounded-xl border border-slate-200 shadow-lg overflow-hidden">
+              <div className="p-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-1 rounded-full">Recent</span>
+                  <span className="text-slate-500 text-sm">2 hours ago</span>
+                </div>
+                <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                  Two-Vehicle Collision on I-25 near Downtown Denver
+                </h3>
+                <div className="flex flex-wrap gap-4 text-sm text-slate-600 mb-4">
+                  <span className="flex items-center gap-1.5">
+                    <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    Denver, CO
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Today, 3:45 PM
+                  </span>
+                </div>
+                <p className="text-slate-600 text-sm leading-relaxed mb-4">
+                  A two-vehicle collision was reported on I-25 northbound near the downtown exits. Injuries have been reported. Traffic is backed up for approximately 2 miles.
+                </p>
+                <Link
+                  href="/accidents/colorado/denver/i-25-collision-example"
+                  className="text-blue-800 hover:text-blue-900 font-medium text-sm flex items-center gap-1"
+                >
+                  View Full Details
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/>
+                  </svg>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* WHAT CAN I FIND SECTION */}
+      <section className="py-16 lg:py-20 bg-white">
+        <div className="container mx-auto px-6 lg:px-12 max-w-[1200px]">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-3">
+              What Information Can I Find?
+            </h2>
+            <p className="text-slate-600 max-w-2xl mx-auto">
+              Our database includes details about traffic accidents from public sources
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Info Card 1 */}
+            <div className="bg-white rounded-xl p-6 border border-slate-200 hover:shadow-md transition">
+              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                <svg className="w-5 h-5 text-blue-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                 </svg>
-                No credit card required • Takes under 2 minutes
+              </div>
+              <h3 className="text-base font-semibold text-slate-900 mb-2">Accident Details</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                Date, time, and exact location of the incident including street names and intersections.
+              </p>
+            </div>
+
+            {/* Info Card 2 */}
+            <div className="bg-white rounded-xl p-6 border border-slate-200 hover:shadow-md transition">
+              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                <svg className="w-5 h-5 text-blue-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+              </div>
+              <h3 className="text-base font-semibold text-slate-900 mb-2">Injury Information</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                General information about injuries or fatalities when reported in public records.
+              </p>
+            </div>
+
+            {/* Info Card 3 */}
+            <div className="bg-white rounded-xl p-6 border border-slate-200 hover:shadow-md transition">
+              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                <svg className="w-5 h-5 text-blue-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <h3 className="text-base font-semibold text-slate-900 mb-2">Road Closures</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                Information about traffic impacts, road closures, and alternate routes when available.
+              </p>
+            </div>
+
+            {/* Info Card 4 */}
+            <div className="bg-white rounded-xl p-6 border border-slate-200 hover:shadow-md transition">
+              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                <svg className="w-5 h-5 text-blue-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+                </svg>
+              </div>
+              <h3 className="text-base font-semibold text-slate-900 mb-2">Next Steps & Resources</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                Guidance on what to do if you were involved, including legal and insurance information.
+              </p>
+            </div>
+
+            {/* Info Card 5 */}
+            <div className="bg-white rounded-xl p-6 border border-slate-200 hover:shadow-md transition">
+              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                <svg className="w-5 h-5 text-blue-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                </svg>
+              </div>
+              <h3 className="text-base font-semibold text-slate-900 mb-2">Official Source Links</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                Links to official sources, news reports, and agencies for more detailed information.
+              </p>
+            </div>
+
+            {/* Info Card 6 */}
+            <div className="bg-white rounded-xl p-6 border border-slate-200 hover:shadow-md transition">
+              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                <svg className="w-5 h-5 text-blue-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                </svg>
+              </div>
+              <h3 className="text-base font-semibold text-slate-900 mb-2">Updates & Corrections</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                Articles are updated as investigations progress and new information becomes available.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* MOBILE STICKY CTA BAR */}
-      <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-[#0C1016] to-[#05070B] border-t-2 border-[#1C2430] shadow-2xl z-50 lg:hidden">
+      {/* TESTIMONIALS SECTION */}
+      <section className="py-16 lg:py-20 bg-slate-50">
+        <div className="container mx-auto px-6 lg:px-12 max-w-[1200px]">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-3">
+              How We Have Helped
+            </h2>
+            <p className="text-slate-600 max-w-2xl mx-auto">
+              Real stories from people who found the information they needed
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Testimonial 1 */}
+            <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
+              <div className="flex items-center gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <svg key={i} className="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                ))}
+              </div>
+              <p className="text-slate-600 text-sm leading-relaxed mb-4">
+                &ldquo;My dad was in an accident and we couldn&apos;t get details from the hospital. This site helped us understand what happened and connected us with a great attorney.&rdquo;
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                  <span className="text-blue-800 font-semibold text-sm">MR</span>
+                </div>
+                <div>
+                  <p className="text-slate-900 font-medium text-sm">Maria R.</p>
+                  <p className="text-slate-500 text-xs">Denver, CO</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Testimonial 2 */}
+            <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
+              <div className="flex items-center gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <svg key={i} className="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                ))}
+              </div>
+              <p className="text-slate-600 text-sm leading-relaxed mb-4">
+                &ldquo;I witnessed a crash and wanted to know if everyone was okay. Found the information here the next day. Very helpful and respectfully written.&rdquo;
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center">
+                  <span className="text-emerald-800 font-semibold text-sm">JT</span>
+                </div>
+                <div>
+                  <p className="text-slate-900 font-medium text-sm">James T.</p>
+                  <p className="text-slate-500 text-xs">Phoenix, AZ</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Testimonial 3 */}
+            <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
+              <div className="flex items-center gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <svg key={i} className="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                ))}
+              </div>
+              <p className="text-slate-600 text-sm leading-relaxed mb-4">
+                &ldquo;The guide on getting my police report saved me hours. I didn&apos;t know which department to contact until I read their step-by-step instructions.&rdquo;
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                  <span className="text-purple-800 font-semibold text-sm">SK</span>
+                </div>
+                <div>
+                  <p className="text-slate-900 font-medium text-sm">Sarah K.</p>
+                  <p className="text-slate-500 text-xs">Austin, TX</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* WHY USE US SECTION */}
+      <section className="py-16 lg:py-20 bg-white">
+        <div className="container mx-auto px-6 lg:px-12 max-w-[1200px]">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-3">
+              Why Choose AccidentLookup?
+            </h2>
+            <p className="text-slate-600 max-w-2xl mx-auto">
+              We handle accident information with care and professionalism
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Reason 1 */}
+            <div className="text-center">
+              <div className="w-14 h-14 bg-blue-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">Fast Publishing</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                Incident articles published quickly after public reports become available.
+              </p>
+            </div>
+
+            {/* Reason 2 */}
+            <div className="text-center">
+              <div className="w-14 h-14 bg-blue-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">Clear Language</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                Non-technical, easy-to-understand summaries of what happened.
+              </p>
+            </div>
+
+            {/* Reason 3 */}
+            <div className="text-center">
+              <div className="w-14 h-14 bg-blue-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">Vetted Attorneys</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                Connections to experienced local personal injury lawyers.
+              </p>
+            </div>
+
+            {/* Reason 4 */}
+            <div className="text-center">
+              <div className="w-14 h-14 bg-blue-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">Respectful Coverage</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                We handle sensitive information with care and dignity.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA BANNER */}
+      <section className="py-16 lg:py-20 bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900">
+        <div className="container mx-auto px-6 lg:px-12 max-w-[1200px]">
+          <div className="lg:flex lg:items-center lg:justify-between">
+            <div className="mb-8 lg:mb-0 lg:max-w-xl">
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
+                Need Legal Help After an Accident?
+              </h2>
+              <p className="text-blue-100 leading-relaxed">
+                Connect with experienced personal injury attorneys who can review your case for free. No obligation, completely confidential.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link
+                href="/legal-help"
+                className="inline-flex items-center justify-center bg-white text-blue-800 px-8 py-3.5 rounded-lg font-semibold hover:bg-blue-50 transition-all shadow-lg"
+              >
+                Get Free Case Review
+              </Link>
+              <Link
+                href="/search"
+                className="inline-flex items-center justify-center bg-transparent text-white px-8 py-3.5 rounded-lg font-semibold hover:bg-white/10 transition-all border border-white/30"
+              >
+                Search Accidents
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* MOBILE STICKY CTA */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-lg z-50 lg:hidden">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between gap-3">
             <div className="flex-1">
-              <p className="text-white font-bold text-sm">Get Your Free Report</p>
-              <p className="text-[#A5B1C5] text-xs">Takes less than 2 minutes</p>
+              <p className="text-slate-900 font-semibold text-sm">Find Accident Info</p>
+              <p className="text-slate-500 text-xs">Free to search</p>
             </div>
             <Link
-              href="/get-report/step-1"
-              className="bg-[#B6FF2C] text-[#05070B] px-6 py-2.5 rounded-md font-bold text-sm hover:bg-[#8EE522] transition shadow-lg whitespace-nowrap"
+              href="/search"
+              className="bg-blue-800 text-white px-6 py-2.5 rounded-lg font-semibold text-sm hover:bg-blue-900 transition shadow whitespace-nowrap"
             >
-              Start Now →
+              Search Now
             </Link>
           </div>
         </div>

@@ -1,17 +1,43 @@
 @import "tailwindcss";
 
 :root {
-  --bg-main: #05070B;
-  --bg-elevated: #0C1016;
-  --accent-green: #B6FF2C;
-  --accent-green-soft: #8EE522;
-  --text-primary: #FFFFFF;
-  --text-secondary: #A5B1C5;
-  --border-soft: #1C2430;
-  --cta-yellow: #B6FF2C;
+  /* Light Theme - BeenVerified-inspired */
+  --bg-main: #FFFFFF;
+  --bg-elevated: #F8FAFC;
+  --bg-subtle: #F1F5F9;
+
+  /* Primary Blue (BeenVerified-style) */
+  --primary: #1E40AF;
+  --primary-hover: #1E3A8A;
+  --primary-light: #DBEAFE;
+
+  /* Secondary/Accent */
+  --accent: #0EA5E9;
+  --accent-light: #E0F2FE;
+
+  /* Text Colors */
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+
+  /* Borders */
+  --border-light: #E2E8F0;
+  --border-medium: #CBD5E1;
+
+  /* Success/CTA Green */
+  --success: #059669;
+  --success-light: #D1FAE5;
+
+  /* Warning/Alert */
+  --warning: #D97706;
+  --warning-light: #FEF3C7;
+
+  /* Error */
+  --error: #DC2626;
+  --error-light: #FEE2E2;
 
   --background: var(--bg-main);
-  --foreground: var(--text-secondary);
+  --foreground: var(--text-primary);
 }
 
 @theme inline {
@@ -24,5 +50,62 @@
 body {
   background: var(--bg-main);
   color: var(--text-secondary);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom focus styles for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Custom selection color */
+::selection {
+  background-color: var(--primary-light);
+  color: var(--primary);
+}
+
+/* Utility classes for the new theme */
+.bg-gradient-hero {
+  background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 50%, #0EA5E9 100%);
+}
+
+.text-gradient-primary {
+  background: linear-gradient(135deg, #1E40AF 0%, #0EA5E9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Card hover effects - light theme */
+.card-hover {
+  transition: all 0.2s ease-out;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.12);
+}
+
+/* Button styles */
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+  transition: all 0.2s ease-out;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+}
+
+/* Search input focus */
+.search-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
 }
