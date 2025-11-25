@@ -1,11 +1,11 @@
 import Link from "next/link";
-import SearchHero from "@/components/search/SearchHero";
+import VideoHero from "@/components/hero/VideoHero";
 
 export default function Home() {
   return (
     <>
-      {/* HERO SECTION with Search */}
-      <SearchHero />
+      {/* HERO SECTION with Video Background */}
+      <VideoHero />
 
       {/* FEATURE TILES - Clean minimal cards */}
       <section className="py-20 lg:py-28 bg-white">

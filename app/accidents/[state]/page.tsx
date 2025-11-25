@@ -116,66 +116,63 @@ export default async function StateAccidentsPage({
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 py-12 lg:py-16">
-        <div className="container mx-auto px-6 lg:px-12 max-w-[1200px]">
+    <div className="min-h-screen bg-[#F7F7F7]">
+      <div className="container mx-auto px-6 lg:px-12 max-w-[1200px] py-12 lg:py-16">
+        {/* Page Header */}
+        <div className="mb-12">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm text-blue-200 mb-6">
-            <Link href="/" className="hover:text-white transition">Home</Link>
+          <nav className="flex items-center gap-2 text-sm text-neutral-400 mb-6">
+            <Link href="/" className="hover:text-neutral-600 transition">Home</Link>
             <span>/</span>
-            <Link href="/accidents" className="hover:text-white transition">Accidents</Link>
+            <Link href="/accidents" className="hover:text-neutral-600 transition">Accidents</Link>
             <span>/</span>
-            <span className="text-white font-medium">{stateData.name}</span>
+            <span className="text-neutral-900 font-medium">{stateData.name}</span>
           </nav>
 
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+          <h1 className="text-4xl md:text-5xl font-medium text-neutral-900 mb-4 tracking-tight">
             Traffic Accidents in {stateData.name}
           </h1>
-          <p className="text-lg text-blue-100 max-w-3xl mb-8">
+          <p className="text-lg text-neutral-500 max-w-3xl mb-8 leading-relaxed">
             {stateData.description}
           </p>
 
           {/* Stats Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-white/10 backdrop-blur rounded-xl p-4">
-              <p className="text-blue-200 text-sm mb-1">This Year</p>
-              <p className="text-2xl font-bold text-white">{stateData.totalAccidents.toLocaleString()}</p>
-              <p className="text-blue-200 text-xs">Total Accidents</p>
+            <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5">
+              <p className="text-neutral-500 text-sm mb-1">This Year</p>
+              <p className="text-3xl font-medium text-neutral-900">{stateData.totalAccidents.toLocaleString()}</p>
+              <p className="text-neutral-500 text-xs">Total Accidents</p>
             </div>
-            <div className="bg-white/10 backdrop-blur rounded-xl p-4">
-              <p className="text-blue-200 text-sm mb-1">Last 7 Days</p>
-              <p className="text-2xl font-bold text-white">{stateData.lastWeek}</p>
-              <p className="text-blue-200 text-xs">New Reports</p>
+            <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5">
+              <p className="text-neutral-500 text-sm mb-1">Last 7 Days</p>
+              <p className="text-3xl font-medium text-neutral-900">{stateData.lastWeek}</p>
+              <p className="text-neutral-500 text-xs">New Reports</p>
             </div>
-            <div className="bg-white/10 backdrop-blur rounded-xl p-4">
-              <p className="text-blue-200 text-sm mb-1">Year to Date</p>
-              <p className="text-2xl font-bold text-white">{stateData.fatalities}</p>
-              <p className="text-blue-200 text-xs">Fatalities</p>
+            <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5">
+              <p className="text-neutral-500 text-sm mb-1">Year to Date</p>
+              <p className="text-3xl font-medium text-neutral-900">{stateData.fatalities}</p>
+              <p className="text-neutral-500 text-xs">Fatalities</p>
             </div>
-            <div className="bg-white/10 backdrop-blur rounded-xl p-4">
-              <p className="text-blue-200 text-sm mb-1">Major Cities</p>
-              <p className="text-2xl font-bold text-white">{stateData.cities.length}</p>
-              <p className="text-blue-200 text-xs">Covered</p>
+            <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5">
+              <p className="text-neutral-500 text-sm mb-1">Major Cities</p>
+              <p className="text-3xl font-medium text-neutral-900">{stateData.cities.length}</p>
+              <p className="text-neutral-500 text-xs">Covered</p>
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="container mx-auto px-6 lg:px-12 max-w-[1200px] py-8">
         {/* Cities Grid */}
         <div className="mb-12">
-          <h2 className="text-xl font-bold text-slate-900 mb-6">Browse by City</h2>
+          <h2 className="text-xl font-medium text-neutral-900 mb-6">Browse by City</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {stateData.cities.map((city) => (
               <Link
                 key={city.slug}
                 href={`/accidents/${state}/${city.slug}`}
-                className="bg-white rounded-xl border border-slate-200 p-4 hover:shadow-md hover:border-blue-300 transition text-center"
+                className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-4 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] hover:border-[#2A7D6E]/30 transition-all duration-300 text-center"
               >
-                <h3 className="font-semibold text-slate-900 mb-1">{city.name}</h3>
-                <p className="text-sm text-slate-600">{city.recent} this week</p>
-                <p className="text-xs text-slate-500 mt-1">{city.accidents} total</p>
+                <h3 className="font-medium text-neutral-900 mb-1">{city.name}</h3>
+                <p className="text-sm text-neutral-600">{city.recent} this week</p>
+                <p className="text-xs text-neutral-500 mt-1">{city.accidents} total</p>
               </Link>
             ))}
           </div>
@@ -184,44 +181,44 @@ export default async function StateAccidentsPage({
         <div className="lg:grid lg:grid-cols-3 lg:gap-8">
           {/* Recent Incidents */}
           <div className="lg:col-span-2">
-            <h2 className="text-xl font-bold text-slate-900 mb-6">Recent Accidents in {stateData.name}</h2>
+            <h2 className="text-xl font-medium text-neutral-900 mb-6">Recent Accidents in {stateData.name}</h2>
 
             <div className="space-y-4">
               {STATE_INCIDENTS.map((incident) => (
                 <div
                   key={incident.id}
-                  className="bg-white rounded-xl border border-slate-200 p-5 hover:shadow-md transition"
+                  className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all duration-300"
                 >
                   <div className="flex items-start justify-between gap-4 mb-3">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${getSeverityColor(incident.severity)}`}>
+                      <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${getSeverityColor(incident.severity)}`}>
                         {incident.severity}
                       </span>
-                      <span className="text-slate-500 text-sm">
+                      <span className="text-neutral-500 text-sm">
                         {formatTimeAgo(incident.hoursAgo)}
                       </span>
                     </div>
-                    <span className="bg-slate-100 text-slate-700 text-xs font-medium px-2.5 py-1 rounded-full">
+                    <span className="bg-neutral-100 text-neutral-700 text-xs font-medium px-2.5 py-1 rounded-full">
                       {incident.type}
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-semibold text-slate-900 mb-2 hover:text-blue-800 transition">
+                  <h3 className="text-lg font-medium text-neutral-900 mb-2 hover:text-[#2A7D6E] transition">
                     <Link href={`/accidents/${state}/${incident.city}/${incident.slug}`}>
                       {incident.title}
                     </Link>
                   </h3>
 
-                  <div className="flex flex-wrap gap-4 text-sm text-slate-600 mb-3">
+                  <div className="flex flex-wrap gap-4 text-sm text-neutral-600 mb-3">
                     <span className="flex items-center gap-1.5">
-                      <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <svg className="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                       </svg>
                       {incident.cityName} - {incident.location}
                     </span>
                     <span className="flex items-center gap-1.5">
-                      <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <svg className="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                       </svg>
                       {incident.date} at {incident.time}
@@ -230,7 +227,7 @@ export default async function StateAccidentsPage({
 
                   <Link
                     href={`/accidents/${state}/${incident.city}/${incident.slug}`}
-                    className="text-blue-800 hover:text-blue-900 font-medium text-sm flex items-center gap-1"
+                    className="text-[#2A7D6E] hover:text-[#236859] font-medium text-sm flex items-center gap-1"
                   >
                     View Full Details
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -245,7 +242,7 @@ export default async function StateAccidentsPage({
             <div className="text-center mt-8">
               <Link
                 href={`/search?state=${state}`}
-                className="inline-flex items-center gap-2 bg-slate-900 text-white px-6 py-3 rounded-lg hover:bg-slate-800 transition font-medium"
+                className="inline-flex items-center gap-2 bg-neutral-900 text-white px-6 py-3 rounded-xl hover:bg-neutral-800 transition font-medium"
               >
                 View All {stateData.name} Accidents
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -258,54 +255,54 @@ export default async function StateAccidentsPage({
           {/* Sidebar */}
           <div className="lg:col-span-1 mt-8 lg:mt-0">
             {/* Legal Help CTA */}
-            <div className="bg-gradient-to-br from-blue-800 to-blue-900 rounded-xl p-6 text-white mb-6">
-              <h3 className="text-lg font-bold mb-3">Injured in a {stateData.name} Accident?</h3>
-              <p className="text-blue-100 text-sm mb-4 leading-relaxed">
+            <div className="bg-neutral-900 rounded-2xl p-6 text-white mb-6">
+              <h3 className="text-lg font-medium mb-3">Injured in a {stateData.name} Accident?</h3>
+              <p className="text-neutral-400 text-sm mb-4 leading-relaxed">
                 Get a free case evaluation from an experienced personal injury attorney. No fees unless you win.
               </p>
               <Link
                 href="/legal-help"
-                className="block w-full bg-white text-blue-800 px-4 py-3 rounded-lg hover:bg-blue-50 transition font-semibold text-center text-sm"
+                className="block w-full bg-[#2A7D6E] text-white px-4 py-3 rounded-xl hover:bg-[#236859] transition font-medium text-center text-sm"
               >
                 Get Free Legal Consultation
               </Link>
             </div>
 
             {/* Search Card */}
-            <div className="bg-white rounded-xl border border-slate-200 p-5 mb-6">
-              <h3 className="text-sm font-semibold text-slate-900 mb-3 uppercase tracking-wide">Search Accidents</h3>
-              <p className="text-slate-600 text-sm mb-4">
+            <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5 mb-6">
+              <h3 className="text-sm font-medium text-neutral-900 mb-3 uppercase tracking-wide">Search Accidents</h3>
+              <p className="text-neutral-600 text-sm mb-4">
                 Looking for a specific accident in {stateData.name}?
               </p>
               <Link
                 href={`/search?state=${state.toUpperCase()}`}
-                className="block w-full bg-slate-900 text-white px-4 py-2.5 rounded-lg hover:bg-slate-800 transition font-medium text-center text-sm"
+                className="block w-full bg-neutral-900 text-white px-4 py-3 rounded-xl hover:bg-neutral-800 transition font-medium text-center text-sm"
               >
                 Search {stateData.name} Accidents
               </Link>
             </div>
 
             {/* Major Highways */}
-            <div className="bg-white rounded-xl border border-slate-200 p-5 mb-6">
-              <h3 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Major Highways</h3>
+            <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5 mb-6">
+              <h3 className="text-sm font-medium text-neutral-900 mb-4 uppercase tracking-wide">Major Highways</h3>
               <div className="space-y-2">
-                <Link href={`/search?state=${state}&road=i-25`} className="block text-blue-800 hover:text-blue-900 text-sm hover:underline">
+                <Link href={`/search?state=${state}&road=i-25`} className="block text-[#2A7D6E] hover:text-[#236859] text-sm hover:underline">
                   I-25 Accidents
                 </Link>
-                <Link href={`/search?state=${state}&road=i-70`} className="block text-blue-800 hover:text-blue-900 text-sm hover:underline">
+                <Link href={`/search?state=${state}&road=i-70`} className="block text-[#2A7D6E] hover:text-[#236859] text-sm hover:underline">
                   I-70 Accidents
                 </Link>
-                <Link href={`/search?state=${state}&road=i-76`} className="block text-blue-800 hover:text-blue-900 text-sm hover:underline">
+                <Link href={`/search?state=${state}&road=i-76`} className="block text-[#2A7D6E] hover:text-[#236859] text-sm hover:underline">
                   I-76 Accidents
                 </Link>
-                <Link href={`/search?state=${state}&road=us-36`} className="block text-blue-800 hover:text-blue-900 text-sm hover:underline">
+                <Link href={`/search?state=${state}&road=us-36`} className="block text-[#2A7D6E] hover:text-[#236859] text-sm hover:underline">
                   US-36 Accidents
                 </Link>
               </div>
             </div>
 
             {/* Disclaimer */}
-            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
               <p className="text-amber-800 text-xs leading-relaxed">
                 <strong>Disclaimer:</strong> Statistics are based on publicly available data and may not represent all accidents. For official statistics, contact CDOT or local law enforcement.
               </p>

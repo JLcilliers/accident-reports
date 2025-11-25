@@ -9,7 +9,7 @@ export default function FAQPage() {
     },
     {
       question: "Where do you get your data?",
-      answer: "We search multiple public databases, partner data sources, and official records to locate your accident report. Our AI-powered system cross-references information to find the most accurate match.",
+      answer: "We search multiple public databases, partner data sources, and official records to locate your accident report. Our system cross-references information to find the most accurate match.",
     },
     {
       question: "How long does it take to get a report?",
@@ -48,8 +48,8 @@ export default function FAQPage() {
   return (
     <PageContainer>
       <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">Frequently Asked Questions</h1>
-        <p className="text-lg text-[#A5B1C5] leading-relaxed">
+        <h1 className="text-4xl md:text-5xl font-medium text-neutral-900 mb-4 tracking-tight">Frequently Asked Questions</h1>
+        <p className="text-lg text-neutral-500 leading-relaxed">
           Find answers to common questions about getting your accident report
         </p>
       </div>
@@ -58,30 +58,30 @@ export default function FAQPage() {
         {faqs.map((faq, index) => (
           <div
             key={index}
-            className="group bg-[#0C1016] rounded-[14px] p-6 border border-[#1C2430] shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-[220ms] ease-out hover:bg-[#B6FF2C] hover:transform hover:-translate-y-[4px] hover:shadow-[0_22px_45px_rgba(182,255,44,0.55)] hover:border-transparent"
+            className="bg-white rounded-2xl p-6 border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all duration-300"
           >
-            <h2 className="text-xl font-bold text-white mb-3 group-hover:text-[#05070B] transition-colors duration-[220ms]">{faq.question}</h2>
-            <p className="text-[#A5B1C5] leading-relaxed group-hover:text-[#05070B] transition-colors duration-[220ms]">{faq.answer}</p>
+            <h2 className="text-lg font-medium text-neutral-900 mb-3">{faq.question}</h2>
+            <p className="text-neutral-600 leading-relaxed">{faq.answer}</p>
           </div>
         ))}
       </div>
 
       {/* CTA Section */}
-      <div className="bg-[#0C1016] rounded-[14px] p-8 border border-[#1C2430] shadow-[0_10px_30px_rgba(0,0,0,0.35)] text-center">
-        <h2 className="text-3xl font-bold text-white mb-4">Still Have Questions?</h2>
-        <p className="text-lg text-[#A5B1C5] mb-6 leading-relaxed">
+      <div className="bg-neutral-900 rounded-2xl p-8 text-center">
+        <h2 className="text-3xl font-medium text-white mb-4">Still Have Questions?</h2>
+        <p className="text-lg text-neutral-400 mb-6 leading-relaxed">
           Get started now and we'll help you every step of the way
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
-            href="/get-report/step-1"
-            className="inline-flex items-center justify-center bg-[#B6FF2C] text-[#05070B] px-8 py-4 rounded-lg font-bold text-base hover:bg-[#8EE522] transition-all shadow-lg hover:shadow-[0_0_18px_rgba(182,255,44,0.35)]"
+            href="/search"
+            className="inline-flex items-center justify-center bg-[#2A7D6E] text-white px-8 py-4 rounded-xl font-medium hover:bg-[#236859] transition-all"
           >
-            Find My Accident Report
+            Search Accident Records
           </Link>
           <Link
             href="/contact"
-            className="inline-flex items-center justify-center bg-transparent text-[#B6FF2C] px-7 py-3.5 rounded-lg font-semibold text-base hover:bg-[#B6FF2C]/10 transition-all border border-[#8EE522]"
+            className="inline-flex items-center justify-center bg-transparent text-white px-8 py-4 rounded-xl font-medium hover:bg-white/10 transition-all border border-neutral-700"
           >
             Contact Our Team
           </Link>

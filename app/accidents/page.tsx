@@ -77,69 +77,60 @@ function formatTimeAgo(hours: number) {
 
 export default function AccidentsIndexPage() {
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 py-12 lg:py-16">
-        <div className="container mx-auto px-6 lg:px-12 max-w-[1200px]">
-          <nav className="flex items-center gap-2 text-sm text-blue-200 mb-6">
-            <Link href="/" className="hover:text-white transition">Home</Link>
-            <span>/</span>
-            <span className="text-white font-medium">Accidents</span>
-          </nav>
-
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+    <div className="min-h-screen bg-[#F7F7F7]">
+      <div className="container mx-auto px-6 lg:px-12 max-w-[1200px] py-12 lg:py-16">
+        {/* Page Header */}
+        <div className="mb-12">
+          <h1 className="text-4xl md:text-5xl font-medium text-neutral-900 mb-4 tracking-tight">
             Traffic Accidents Across the US
           </h1>
-          <p className="text-lg text-blue-100 max-w-3xl mb-8">
+          <p className="text-lg text-neutral-500 max-w-3xl mb-8 leading-relaxed">
             Browse recent traffic accidents by state and city. Find detailed reports about crashes in your area.
           </p>
 
           {/* Quick Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-white/10 backdrop-blur rounded-xl p-4">
-              <p className="text-2xl font-bold text-white">50</p>
-              <p className="text-blue-200 text-sm">States Covered</p>
+            <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5">
+              <p className="text-3xl font-medium text-neutral-900">50</p>
+              <p className="text-neutral-500 text-sm">States Covered</p>
             </div>
-            <div className="bg-white/10 backdrop-blur rounded-xl p-4">
-              <p className="text-2xl font-bold text-white">4,275</p>
-              <p className="text-blue-200 text-sm">This Week</p>
+            <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5">
+              <p className="text-3xl font-medium text-neutral-900">4,275</p>
+              <p className="text-neutral-500 text-sm">This Week</p>
             </div>
-            <div className="bg-white/10 backdrop-blur rounded-xl p-4">
-              <p className="text-2xl font-bold text-white">24/7</p>
-              <p className="text-blue-200 text-sm">Updated</p>
+            <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5">
+              <p className="text-3xl font-medium text-neutral-900">24/7</p>
+              <p className="text-neutral-500 text-sm">Updated</p>
             </div>
-            <div className="bg-white/10 backdrop-blur rounded-xl p-4">
-              <p className="text-2xl font-bold text-white">Free</p>
-              <p className="text-blue-200 text-sm">To Search</p>
+            <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5">
+              <p className="text-3xl font-medium text-neutral-900">Free</p>
+              <p className="text-neutral-500 text-sm">To Search</p>
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="container mx-auto px-6 lg:px-12 max-w-[1200px] py-8">
         {/* Browse by State */}
         <div className="mb-12">
-          <h2 className="text-xl font-bold text-slate-900 mb-6">Browse by State</h2>
+          <h2 className="text-xl font-medium text-neutral-900 mb-6">Browse by State</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {STATES.map((state) => (
               <Link
                 key={state.slug}
                 href={`/accidents/${state.slug}`}
-                className="bg-white rounded-xl border border-slate-200 p-4 hover:shadow-md hover:border-blue-300 transition"
+                className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-4 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] hover:border-[#2A7D6E]/30 transition-all duration-300"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-2xl font-bold text-slate-900">{state.abbr}</span>
-                  <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full">
+                  <span className="text-2xl font-medium text-neutral-900">{state.abbr}</span>
+                  <span className="bg-[#E8F5F2] text-[#2A7D6E] text-xs font-medium px-2 py-1 rounded-full">
                     {state.accidents}
                   </span>
                 </div>
-                <h3 className="font-medium text-slate-700 text-sm mb-1">{state.name}</h3>
-                <p className="text-xs text-slate-500">{state.cities.slice(0, 2).join(", ")}</p>
+                <h3 className="font-medium text-neutral-700 text-sm mb-1">{state.name}</h3>
+                <p className="text-xs text-neutral-500">{state.cities.slice(0, 2).join(", ")}</p>
               </Link>
             ))}
           </div>
           <div className="text-center mt-6">
-            <button className="text-blue-800 hover:text-blue-900 font-medium text-sm">
+            <button className="text-[#2A7D6E] hover:text-[#236859] font-medium text-sm">
               View All 50 States →
             </button>
           </div>
@@ -148,47 +139,47 @@ export default function AccidentsIndexPage() {
         <div className="lg:grid lg:grid-cols-3 lg:gap-8">
           {/* Recent Accidents */}
           <div className="lg:col-span-2">
-            <h2 className="text-xl font-bold text-slate-900 mb-6">Latest Accidents Nationwide</h2>
+            <h2 className="text-xl font-medium text-neutral-900 mb-6">Latest Accidents Nationwide</h2>
 
             <div className="space-y-4">
               {RECENT_INCIDENTS.map((incident) => (
                 <div
                   key={incident.id}
-                  className="bg-white rounded-xl border border-slate-200 p-5 hover:shadow-md transition"
+                  className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all duration-300"
                 >
                   <div className="flex items-start justify-between gap-4 mb-3">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${getSeverityColor(incident.severity)}`}>
+                      <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${getSeverityColor(incident.severity)}`}>
                         {incident.severity}
                       </span>
-                      <span className="text-slate-500 text-sm">
+                      <span className="text-neutral-500 text-sm">
                         {formatTimeAgo(incident.hoursAgo)}
                       </span>
                     </div>
-                    <span className="bg-slate-100 text-slate-700 text-xs font-medium px-2.5 py-1 rounded-full">
+                    <span className="bg-neutral-100 text-neutral-700 text-xs font-medium px-2.5 py-1 rounded-full">
                       {incident.type}
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-semibold text-slate-900 mb-2 hover:text-blue-800 transition">
+                  <h3 className="text-lg font-medium text-neutral-900 mb-2 hover:text-[#2A7D6E] transition">
                     <Link href={`/accidents/${incident.state}/${incident.city}/${incident.slug}`}>
                       {incident.title}
                     </Link>
                   </h3>
 
-                  <div className="flex items-center gap-2 text-sm text-slate-600 mb-3">
-                    <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <div className="flex items-center gap-2 text-sm text-neutral-600 mb-3">
+                    <svg className="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                     </svg>
-                    <Link href={`/accidents/${incident.state}/${incident.city}`} className="hover:text-blue-800">
+                    <Link href={`/accidents/${incident.state}/${incident.city}`} className="hover:text-[#2A7D6E]">
                       {incident.cityName}, {incident.stateAbbr}
                     </Link>
                   </div>
 
                   <Link
                     href={`/accidents/${incident.state}/${incident.city}/${incident.slug}`}
-                    className="text-blue-800 hover:text-blue-900 font-medium text-sm flex items-center gap-1"
+                    className="text-[#2A7D6E] hover:text-[#236859] font-medium text-sm flex items-center gap-1"
                   >
                     View Details
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -201,7 +192,7 @@ export default function AccidentsIndexPage() {
 
             {/* Load More */}
             <div className="text-center mt-8">
-              <button className="bg-slate-900 text-white px-6 py-3 rounded-lg hover:bg-slate-800 transition font-medium">
+              <button className="bg-neutral-900 text-white px-6 py-3 rounded-xl hover:bg-neutral-800 transition font-medium">
                 Load More Accidents
               </button>
             </div>
@@ -210,49 +201,49 @@ export default function AccidentsIndexPage() {
           {/* Sidebar */}
           <div className="lg:col-span-1 mt-8 lg:mt-0">
             {/* Search CTA */}
-            <div className="bg-white rounded-xl border border-slate-200 p-5 mb-6">
-              <h3 className="font-semibold text-slate-900 mb-3">Search Accidents</h3>
-              <p className="text-slate-600 text-sm mb-4">
+            <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5 mb-6">
+              <h3 className="font-medium text-neutral-900 mb-3">Search Accidents</h3>
+              <p className="text-neutral-600 text-sm mb-4">
                 Looking for a specific accident? Use our advanced search.
               </p>
               <Link
                 href="/search"
-                className="block w-full bg-blue-800 text-white px-4 py-2.5 rounded-lg hover:bg-blue-900 transition font-medium text-center text-sm"
+                className="block w-full bg-[#2A7D6E] text-white px-4 py-3 rounded-xl hover:bg-[#236859] transition font-medium text-center text-sm"
               >
                 Search Accidents
               </Link>
             </div>
 
             {/* Legal Help CTA */}
-            <div className="bg-gradient-to-br from-blue-800 to-blue-900 rounded-xl p-6 text-white mb-6">
-              <h3 className="text-lg font-bold mb-3">Were You in an Accident?</h3>
-              <p className="text-blue-100 text-sm mb-4 leading-relaxed">
+            <div className="bg-neutral-900 rounded-2xl p-6 text-white mb-6">
+              <h3 className="text-lg font-medium mb-3">Were You in an Accident?</h3>
+              <p className="text-neutral-400 text-sm mb-4 leading-relaxed">
                 Get a free case evaluation from an experienced personal injury attorney near you.
               </p>
               <Link
                 href="/legal-help"
-                className="block w-full bg-white text-blue-800 px-4 py-3 rounded-lg hover:bg-blue-50 transition font-semibold text-center text-sm"
+                className="block w-full bg-[#2A7D6E] text-white px-4 py-3 rounded-xl hover:bg-[#236859] transition font-medium text-center text-sm"
               >
                 Get Free Legal Help
               </Link>
             </div>
 
             {/* Get Report CTA */}
-            <div className="bg-white rounded-xl border border-slate-200 p-5 mb-6">
-              <h3 className="font-semibold text-slate-900 mb-3">Need Your Police Report?</h3>
-              <p className="text-slate-600 text-sm mb-4">
+            <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5 mb-6">
+              <h3 className="font-medium text-neutral-900 mb-3">Need Your Police Report?</h3>
+              <p className="text-neutral-600 text-sm mb-4">
                 We can help you obtain the official accident report.
               </p>
               <Link
                 href="/get-report/step-1"
-                className="block w-full bg-slate-900 text-white px-4 py-2.5 rounded-lg hover:bg-slate-800 transition font-medium text-center text-sm"
+                className="block w-full bg-neutral-900 text-white px-4 py-3 rounded-xl hover:bg-neutral-800 transition font-medium text-center text-sm"
               >
                 Get Your Report
               </Link>
             </div>
 
             {/* Disclaimer */}
-            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
               <p className="text-amber-800 text-xs leading-relaxed">
                 <strong>Disclaimer:</strong> Information is compiled from publicly available sources and may be incomplete. Details may change as investigations continue. Not an official record.
               </p>
