@@ -7,8 +7,10 @@ interface PageContainerProps {
 
 export default function PageContainer({ children, className = "" }: PageContainerProps) {
   return (
-    <div className={`container mx-auto px-4 py-8 max-w-6xl ${className}`}>
-      {children}
+    <div className={`bg-[#05070B] min-h-screen ${className}`}>
+      <div className="container mx-auto px-6 lg:px-12 py-12 lg:py-16 max-w-[1200px]">
+        {children}
+      </div>
     </div>
   );
 }

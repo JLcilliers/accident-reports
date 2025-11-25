@@ -8,9 +8,9 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-12 mb-6">
           {/* Brand Column - Wider */}
           <div className="md:col-span-1 lg:pr-8">
-            <h3 className="text-xl font-bold mb-4 text-white">AccidentReports.com</h3>
+            <h3 className="text-xl font-bold mb-4 text-white">AI First Accident Reports</h3>
             <p className="text-[#A5B1C5] leading-relaxed mb-6 text-base">
-              Free accident and police reports for accident victims nationwide.
+              Free accident and police reports for accident victims nationwide. Powered by AI + automation.
             </p>
             {/* Trust Badges */}
             <div className="flex items-center gap-3 flex-wrap">
@@ -40,12 +40,12 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/get-report/step-1" className="text-[#A5B1C5] hover:text-[#B6FF2C] transition text-base leading-relaxed">
-                  Get Report
+                  Find My Report
                 </Link>
               </li>
               <li>
-                <Link href="/legal-help" className="text-[#A5B1C5] hover:text-[#B6FF2C] transition text-base leading-relaxed">
-                  Legal Help
+                <Link href="/how-it-works" className="text-[#A5B1C5] hover:text-[#B6FF2C] transition text-base leading-relaxed">
+                  How It Works
                 </Link>
               </li>
               <li>
@@ -58,30 +58,26 @@ export default function Footer() {
                   About
                 </Link>
               </li>
+              <li>
+                <Link href="/contact" className="text-[#A5B1C5] hover:text-[#B6FF2C] transition text-base leading-relaxed">
+                  Contact
+                </Link>
+              </li>
             </ul>
           </div>
 
           {/* Resources & Legal Column */}
           <div className="md:col-span-1">
-            <h4 className="text-base font-bold mb-4 text-white">Resources</h4>
-            <ul className="space-y-3 mb-6">
-              <li>
-                <Link href="/for-lawyers" className="text-[#A5B1C5] hover:text-[#B6FF2C] transition text-base leading-relaxed">
-                  For Lawyers
-                </Link>
-              </li>
-            </ul>
-
-            <h4 className="text-base font-bold mb-4 text-white mt-8">Legal</h4>
+            <h4 className="text-base font-bold mb-4 text-white">Legal</h4>
             <ul className="space-y-3">
-              <li>
-                <Link href="/terms" className="text-[#A5B1C5] hover:text-[#B6FF2C] transition text-base leading-relaxed">
-                  Terms of Service
-                </Link>
-              </li>
               <li>
                 <Link href="/privacy" className="text-[#A5B1C5] hover:text-[#B6FF2C] transition text-base leading-relaxed">
                   Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="text-[#A5B1C5] hover:text-[#B6FF2C] transition text-base leading-relaxed">
+                  Terms of Service
                 </Link>
               </li>
             </ul>
@@ -92,10 +88,10 @@ export default function Footer() {
         <div className="border-t border-[#1C2430] pt-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <p className="text-[#A5B1C5] text-sm leading-relaxed">
-              &copy; {new Date().getFullYear()} AccidentReports.com. All rights reserved.
+              &copy; {new Date().getFullYear()} AI First Accident Reports. All rights reserved.
             </p>
             <p className="text-[#A5B1C5] text-sm bg-[#0C1016] px-4 py-2 rounded border border-[#1C2430] leading-relaxed">
-              Not a law firm. We connect you with legal professionals.
+              Not legal advice. We connect you with information and legal professionals.
             </p>
           </div>
         </div>
