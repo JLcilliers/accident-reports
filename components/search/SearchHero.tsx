@@ -82,7 +82,8 @@ export default function SearchHero() {
       if (formData.state) params.set("state", formData.state);
     }
 
-    router.push(`/search?${params.toString()}`);
+    // Redirect to search funnel with animated progress
+    router.push(`/search/progress?${params.toString()}`);
   };
 
   return (
