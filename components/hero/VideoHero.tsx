@@ -107,12 +107,10 @@ export default function VideoHero() {
           muted
           loop
           playsInline
-          poster="/hero-poster.jpg"
           className="absolute inset-0 w-full h-full object-cover"
           onLoadedData={() => {}}
         >
-          {/* Replace with your actual video source */}
-          <source src="/hero-video.mp4" type="video/mp4" />
+          <source src="https://res.cloudinary.com/dovgh19xr/video/upload/v1764098845/Video_Generation_City_to_Calm_Relief_m3bqs6.mp4" type="video/mp4" />
         </video>
 
         {/* White Gradient Overlay - Creates the clinical, readable aesthetic */}
