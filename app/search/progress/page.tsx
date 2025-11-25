@@ -79,8 +79,8 @@ function CircularProgress({ progress }: { progress: number }) {
           cy="50"
           r="45"
           fill="none"
-          stroke="#e2e8f0"
-          strokeWidth="8"
+          stroke="#F0F0F0"
+          strokeWidth="6"
         />
         {/* Progress circle */}
         <circle
@@ -88,8 +88,8 @@ function CircularProgress({ progress }: { progress: number }) {
           cy="50"
           r="45"
           fill="none"
-          stroke="#1e40af"
-          strokeWidth="8"
+          stroke="#2A7D6E"
+          strokeWidth="6"
           strokeLinecap="round"
           strokeDasharray={circumference}
           strokeDashoffset={strokeDashoffset}
@@ -98,8 +98,8 @@ function CircularProgress({ progress }: { progress: number }) {
       </svg>
       {/* Center content */}
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-2xl font-bold text-slate-900">{progress}%</span>
-        <span className="text-xs text-slate-500">Searching</span>
+        <span className="text-2xl font-medium text-neutral-900">{progress}%</span>
+        <span className="text-xs text-neutral-400">Searching</span>
       </div>
     </div>
   );
@@ -116,25 +116,25 @@ function TaskList({ tasks, currentTime }: { tasks: { label: string; delay: numbe
           <div key={index} className="flex items-center gap-3">
             <div className={`w-5 h-5 rounded-full flex items-center justify-center transition-all duration-300 ${
               isComplete
-                ? "bg-green-500"
+                ? "bg-[#2A7D6E]"
                 : isActive
-                  ? "bg-blue-500 animate-pulse"
-                  : "bg-slate-200"
+                  ? "bg-[#2A7D6E]/20"
+                  : "bg-neutral-100"
             }`}>
               {isComplete ? (
                 <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
                 </svg>
               ) : isActive ? (
-                <div className="w-2 h-2 bg-white rounded-full" />
+                <div className="w-2 h-2 bg-[#2A7D6E] rounded-full animate-pulse" />
               ) : null}
             </div>
             <span className={`text-sm transition-colors ${
               isComplete
-                ? "text-green-700 font-medium"
+                ? "text-[#2A7D6E] font-medium"
                 : isActive
-                  ? "text-slate-900"
-                  : "text-slate-400"
+                  ? "text-neutral-900"
+                  : "text-neutral-400"
             }`}>
               {task.label}
             </span>
@@ -147,7 +147,7 @@ function TaskList({ tasks, currentTime }: { tasks: { label: string; delay: numbe
 
 function SourceGrid({ currentTime }: { currentTime: number }) {
   return (
-    <div className="grid grid-cols-3 gap-4 mt-6">
+    <div className="grid grid-cols-3 gap-3 mt-6">
       {SOURCE_ICONS.map((source, index) => {
         const isActive = currentTime >= index * 500;
         const isComplete = currentTime >= index * 500 + 1000;
@@ -155,19 +155,19 @@ function SourceGrid({ currentTime }: { currentTime: number }) {
         return (
           <div
             key={source.name}
-            className={`flex flex-col items-center p-3 rounded-lg transition-all duration-300 ${
+            className={`flex flex-col items-center p-4 rounded-xl transition-all duration-300 ${
               isComplete
-                ? "bg-green-50 border border-green-200"
+                ? "bg-[#E8F5F2] border border-[#2A7D6E]/20"
                 : isActive
-                  ? "bg-blue-50 border border-blue-200"
-                  : "bg-slate-50 border border-slate-100"
+                  ? "bg-neutral-50 border border-neutral-200"
+                  : "bg-neutral-50 border border-neutral-100"
             }`}
           >
-            <span className={`text-2xl mb-1 transition-transform duration-300 ${isActive && !isComplete ? "animate-bounce" : ""}`}>
+            <span className={`text-xl mb-1.5 transition-transform duration-300 ${isActive && !isComplete ? "animate-bounce" : ""}`}>
               {source.icon}
             </span>
             <span className={`text-xs text-center transition-colors ${
-              isComplete ? "text-green-700" : isActive ? "text-blue-700" : "text-slate-400"
+              isComplete ? "text-[#2A7D6E]" : isActive ? "text-neutral-700" : "text-neutral-400"
             }`}>
               {source.name}
             </span>
@@ -193,7 +193,7 @@ function FunnelStep({
 
   return (
     <div className="w-full max-w-2xl mx-auto">
-      <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8">
+      <div className="bg-white rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.06)] border border-neutral-100 p-8 md:p-10">
         <div className="flex flex-col md:flex-row items-center gap-8">
           {/* Progress Circle */}
           <div className="flex-shrink-0">
@@ -202,8 +202,8 @@ function FunnelStep({
 
           {/* Content */}
           <div className="flex-1 text-center md:text-left">
-            <h2 className="text-xl font-bold text-slate-900 mb-2">{step.title}</h2>
-            <p className="text-slate-600 mb-6">{subtitle}</p>
+            <h2 className="text-xl font-medium text-neutral-900 mb-2 tracking-tight">{step.title}</h2>
+            <p className="text-neutral-500 mb-6">{subtitle}</p>
 
             {step.id === "sources" ? (
               <SourceGrid currentTime={currentTime} />
@@ -213,18 +213,18 @@ function FunnelStep({
           </div>
         </div>
 
-        {/* Animated road/map decoration */}
-        <div className="mt-8 pt-6 border-t border-slate-100">
-          <div className="flex items-center justify-center gap-2 text-slate-400">
-            <div className="w-8 h-0.5 bg-slate-200 rounded" />
-            <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-            <div className="w-16 h-0.5 bg-slate-200 rounded" />
-            <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" style={{ animationDelay: "200ms" }} />
-            <div className="w-8 h-0.5 bg-slate-200 rounded" />
-            <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" style={{ animationDelay: "400ms" }} />
-            <div className="w-16 h-0.5 bg-slate-200 rounded" />
+        {/* Animated progress decoration */}
+        <div className="mt-8 pt-6 border-t border-neutral-100">
+          <div className="flex items-center justify-center gap-2">
+            <div className="w-8 h-0.5 bg-neutral-100 rounded" />
+            <div className="w-2 h-2 rounded-full bg-[#2A7D6E] animate-pulse" />
+            <div className="w-16 h-0.5 bg-neutral-100 rounded" />
+            <div className="w-2 h-2 rounded-full bg-[#2A7D6E] animate-pulse" style={{ animationDelay: "200ms" }} />
+            <div className="w-8 h-0.5 bg-neutral-100 rounded" />
+            <div className="w-2 h-2 rounded-full bg-[#2A7D6E] animate-pulse" style={{ animationDelay: "400ms" }} />
+            <div className="w-16 h-0.5 bg-neutral-100 rounded" />
           </div>
-          <p className="text-center text-xs text-slate-400 mt-3">
+          <p className="text-center text-xs text-neutral-400 mt-3">
             Searching accident databases...
           </p>
         </div>
@@ -260,21 +260,21 @@ function EmailGate({
 
   return (
     <div className="w-full max-w-md mx-auto">
-      <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8">
+      <div className="bg-white rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.06)] border border-neutral-100 p-8 md:p-10">
         {/* Success indicator */}
         <div className="flex justify-center mb-6">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-            <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
+          <div className="w-16 h-16 bg-[#E8F5F2] rounded-2xl flex items-center justify-center">
+            <svg className="w-8 h-8 text-[#2A7D6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
           </div>
         </div>
 
-        <h2 className="text-xl font-bold text-slate-900 text-center mb-2">
+        <h2 className="text-xl font-medium text-neutral-900 text-center mb-2 tracking-tight">
           Your Results Are Ready
         </h2>
-        <p className="text-slate-600 text-center mb-6">
-          We found potential matches{city && state ? ` in ${city}, ${state}` : ""}. Enter your email to view your results and stay updated on new incidents.
+        <p className="text-neutral-500 text-center mb-8">
+          We found potential matches{city && state ? ` in ${city}, ${state}` : ""}. Enter your email to view your results.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -287,30 +287,30 @@ function EmailGate({
                 setEmail(e.target.value);
                 setError("");
               }}
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3.5 border border-neutral-200 rounded-xl text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-[#2A7D6E]/20 focus:border-[#2A7D6E] transition-all bg-white"
             />
-            {error && <p className="text-red-600 text-sm mt-1">{error}</p>}
+            {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
           </div>
 
           <button
             type="submit"
-            className="w-full bg-blue-800 text-white py-3 rounded-lg font-semibold hover:bg-blue-900 transition"
+            className="w-full bg-[#2A7D6E] text-white py-4 rounded-xl font-medium hover:bg-[#236859] transition-all"
           >
             View My Results
           </button>
         </form>
 
-        <div className="mt-6 pt-6 border-t border-slate-100">
+        <div className="mt-8 pt-6 border-t border-neutral-100">
           <div className="flex items-start gap-3">
-            <svg className="w-5 h-5 text-slate-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+            <svg className="w-4 h-4 text-neutral-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
             </svg>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-neutral-400">
               By continuing, you agree to our{" "}
-              <Link href="/terms" className="text-blue-800 hover:underline">Terms of Service</Link>
+              <Link href="/terms" className="text-[#2A7D6E] hover:underline">Terms of Service</Link>
               {" "}and{" "}
-              <Link href="/privacy" className="text-blue-800 hover:underline">Privacy Policy</Link>.
-              We respect your privacy and never sell your information.
+              <Link href="/privacy" className="text-[#2A7D6E] hover:underline">Privacy Policy</Link>.
+              We respect your privacy.
             </p>
           </div>
         </div>
@@ -387,11 +387,11 @@ function SearchProgressContent() {
   const currentStep = FUNNEL_STEPS[currentStepIndex];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen bg-[#F7F7F7]">
       {/* Header */}
-      <div className="bg-white border-b border-slate-200">
+      <div className="bg-white/80 backdrop-blur-md border-b border-neutral-100">
         <div className="container mx-auto px-6 max-w-[1200px] py-4">
-          <Link href="/" className="text-xl font-bold text-blue-800">
+          <Link href="/" className="text-xl font-medium tracking-tight text-neutral-900">
             AccidentLookup
           </Link>
         </div>
@@ -406,18 +406,18 @@ function SearchProgressContent() {
               {FUNNEL_STEPS.map((step, index) => (
                 <div key={step.id} className="flex items-center">
                   <div
-                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
                       index < currentStepIndex
-                        ? "bg-green-500"
+                        ? "bg-[#2A7D6E]"
                         : index === currentStepIndex
-                          ? "bg-blue-800 scale-125"
-                          : "bg-slate-200"
+                          ? "bg-[#2A7D6E] scale-150"
+                          : "bg-neutral-200"
                     }`}
                   />
                   {index < FUNNEL_STEPS.length - 1 && (
                     <div
-                      className={`w-8 h-0.5 transition-all duration-300 ${
-                        index < currentStepIndex ? "bg-green-500" : "bg-slate-200"
+                      className={`w-10 h-0.5 transition-all duration-300 ${
+                        index < currentStepIndex ? "bg-[#2A7D6E]" : "bg-neutral-200"
                       }`}
                     />
                   )}
@@ -444,7 +444,7 @@ function SearchProgressContent() {
           <div className="text-center mt-8">
             <button
               onClick={() => setShowEmailGate(true)}
-              className="text-slate-400 hover:text-slate-600 text-sm underline"
+              className="text-neutral-400 hover:text-neutral-600 text-sm underline"
             >
               Skip to results
             </button>
@@ -453,9 +453,9 @@ function SearchProgressContent() {
       </div>
 
       {/* Footer */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 py-4">
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-neutral-100 py-4">
         <div className="container mx-auto px-6 max-w-[1200px]">
-          <p className="text-center text-xs text-slate-500">
+          <p className="text-center text-xs text-neutral-400">
             Information based on publicly available sources. Not legal advice. Not affiliated with any government agency.
           </p>
         </div>
@@ -467,10 +467,10 @@ function SearchProgressContent() {
 export default function SearchProgressPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[#F7F7F7] flex items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-blue-800 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-600">Initializing search...</p>
+          <div className="w-12 h-12 border-3 border-[#2A7D6E] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-neutral-500">Initializing search...</p>
         </div>
       </div>
     }>

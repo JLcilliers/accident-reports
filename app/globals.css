@@ -1,42 +1,54 @@
 @import "tailwindcss";
 
 :root {
-  /* Light Theme - BeenVerified-inspired */
-  --bg-main: #FFFFFF;
-  --bg-elevated: #F8FAFC;
-  --bg-subtle: #F1F5F9;
+  /* Devialet-inspired Clean, Clinical Design System */
 
-  /* Primary Blue (BeenVerified-style) */
-  --primary: #1E40AF;
-  --primary-hover: #1E3A8A;
-  --primary-light: #DBEAFE;
+  /* Backgrounds - Very light, airy */
+  --bg-page: #F7F7F7;
+  --bg-card: #FFFFFF;
+  --bg-elevated: #FAFAFA;
+  --bg-subtle: #F0F0F0;
 
-  /* Secondary/Accent */
-  --accent: #0EA5E9;
-  --accent-light: #E0F2FE;
+  /* Primary Accent - Muted teal/green for clinical feel */
+  --primary: #2A7D6E;
+  --primary-hover: #236859;
+  --primary-light: #E8F5F2;
+  --primary-muted: #4A9A8A;
 
-  /* Text Colors */
-  --text-primary: #0F172A;
-  --text-secondary: #475569;
-  --text-muted: #94A3B8;
+  /* Secondary - Soft gray */
+  --secondary: #6B7280;
+  --secondary-light: #E5E7EB;
 
-  /* Borders */
-  --border-light: #E2E8F0;
-  --border-medium: #CBD5E1;
+  /* Text Colors - Near black to gray scale */
+  --text-primary: #111111;
+  --text-secondary: #333333;
+  --text-muted: #666666;
+  --text-subtle: #999999;
 
-  /* Success/CTA Green */
-  --success: #059669;
-  --success-light: #D1FAE5;
+  /* Borders - Very subtle */
+  --border-light: #EBEBEB;
+  --border-medium: #DEDEDE;
 
-  /* Warning/Alert */
-  --warning: #D97706;
+  /* Status Colors */
+  --success: #2A7D6E;
+  --success-light: #E8F5F2;
+  --warning: #B45309;
   --warning-light: #FEF3C7;
-
-  /* Error */
-  --error: #DC2626;
+  --error: #B91C1C;
   --error-light: #FEE2E2;
 
-  --background: var(--bg-main);
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+
+  /* Spacing rhythm */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  --background: var(--bg-page);
   --foreground: var(--text-primary);
 }
 
@@ -47,65 +59,168 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Base typography - Clean, thin, professional */
 body {
-  background: var(--bg-main);
+  background: var(--bg-page);
   color: var(--text-secondary);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Smooth scrolling */
 html {
   scroll-behavior: smooth;
 }
 
-/* Custom focus styles for accessibility */
+/* Typography scale - Large, clean headings */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+/* Focus states - Subtle but accessible */
 *:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
 
-/* Custom selection color */
+/* Selection - Muted green */
 ::selection {
   background-color: var(--primary-light);
   color: var(--primary);
 }
 
-/* Utility classes for the new theme */
-.bg-gradient-hero {
-  background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 50%, #0EA5E9 100%);
+/* Clean card styles */
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
 }
 
-.text-gradient-primary {
-  background: linear-gradient(135deg, #1E40AF 0%, #0EA5E9 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.card:hover {
+  box-shadow: var(--shadow-lg);
 }
 
-/* Card hover effects - light theme */
-.card-hover {
-  transition: all 0.2s ease-out;
-}
-
-.card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.12);
-}
-
-/* Button styles */
+/* Minimal button styles */
 .btn-primary {
   background-color: var(--primary);
   color: white;
-  transition: all 0.2s ease-out;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
 }
 
 .btn-primary:hover {
   background-color: var(--primary-hover);
-  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+  transform: translateY(-1px);
 }
 
-/* Search input focus */
-.search-input:focus {
+.btn-outline {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-medium);
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+.btn-outline:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* Clean input styles */
+.input-clean {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 0.875rem 1rem;
+  font-size: 0.9375rem;
+  transition: all 0.2s ease;
+  color: var(--text-primary);
+}
+
+.input-clean:focus {
   border-color: var(--primary);
   box-shadow: 0 0 0 3px var(--primary-light);
+  outline: none;
+}
+
+.input-clean::placeholder {
+  color: var(--text-subtle);
+}
+
+/* Subtle divider */
+.divider {
+  height: 1px;
+  background: var(--border-light);
+  margin: 2rem 0;
+}
+
+/* Section spacing - Generous whitespace */
+.section-padding {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+@media (min-width: 1024px) {
+  .section-padding {
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+  }
+}
+
+/* Smooth animations */
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Progress ring for funnel - Clinical style */
+.progress-ring-bg {
+  stroke: var(--border-light);
+}
+
+.progress-ring-fill {
+  stroke: var(--primary);
+  transition: stroke-dashoffset 0.5s ease-out;
+}
+
+/* Clean tag/badge styles */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 100px;
+  letter-spacing: 0.01em;
+}
+
+.badge-primary {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.badge-muted {
+  background: var(--bg-subtle);
+  color: var(--text-muted);
 }

@@ -87,135 +87,135 @@ export default function SearchHero() {
   };
 
   return (
-    <section className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 py-16 lg:py-24">
+    <section className="bg-[#F7F7F7] py-20 lg:py-28">
       <div className="container mx-auto px-6 lg:px-12 max-w-[1200px]">
-        <div className="text-center mb-10">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
-            Find Information About Recent Traffic Accidents
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium text-neutral-900 mb-4 tracking-tight">
+            Search Accident Records
           </h1>
-          <p className="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto leading-relaxed">
-            Search our accident database by location or date to find information about crashes that may affect you or your loved ones.
+          <p className="text-lg text-neutral-500 max-w-xl mx-auto leading-relaxed">
+            Find information about recent traffic incidents by location or individual name.
           </p>
         </div>
 
         {/* Search Card */}
-        <div className="bg-white rounded-2xl shadow-2xl p-6 md:p-8 max-w-4xl mx-auto">
+        <div className="bg-white rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-8 md:p-10 max-w-3xl mx-auto">
           {/* Search Type Tabs */}
-          <div className="flex gap-1 mb-6 bg-slate-100 p-1 rounded-lg w-fit mx-auto">
+          <div className="flex gap-1 mb-8 bg-neutral-100 p-1 rounded-full w-fit mx-auto">
             <button
               type="button"
               onClick={() => setSearchType("accident")}
-              className={`px-6 py-2.5 rounded-md font-medium text-sm transition ${
+              className={`px-6 py-2.5 rounded-full font-medium text-sm transition-all ${
                 searchType === "accident"
-                  ? "bg-white text-blue-800 shadow-sm"
-                  : "text-slate-600 hover:text-slate-800"
+                  ? "bg-white text-neutral-900 shadow-sm"
+                  : "text-neutral-500 hover:text-neutral-700"
               }`}
             >
-              Search by Location
+              By Location
             </button>
             <button
               type="button"
               onClick={() => setSearchType("name")}
-              className={`px-6 py-2.5 rounded-md font-medium text-sm transition ${
+              className={`px-6 py-2.5 rounded-full font-medium text-sm transition-all ${
                 searchType === "name"
-                  ? "bg-white text-blue-800 shadow-sm"
-                  : "text-slate-600 hover:text-slate-800"
+                  ? "bg-white text-neutral-900 shadow-sm"
+                  : "text-neutral-500 hover:text-neutral-700"
               }`}
             >
-              Search by Name
+              By Name
             </button>
           </div>
 
           <form onSubmit={handleSubmit}>
             {searchType === "accident" ? (
               /* Location Search Form */
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <div className="md:col-span-1">
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                    City
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Enter city"
-                    value={formData.city}
-                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                  />
+              <div className="space-y-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-2">
+                      City
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Enter city"
+                      value={formData.city}
+                      onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                      className="w-full px-4 py-3.5 border border-neutral-200 rounded-xl text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-[#2A7D6E]/20 focus:border-[#2A7D6E] transition-all bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-2">
+                      State
+                    </label>
+                    <select
+                      value={formData.state}
+                      onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                      className="w-full px-4 py-3.5 border border-neutral-200 rounded-xl text-neutral-900 focus:outline-none focus:ring-2 focus:ring-[#2A7D6E]/20 focus:border-[#2A7D6E] transition-all appearance-none bg-white cursor-pointer"
+                    >
+                      {US_STATES.map((state) => (
+                        <option key={state.value} value={state.value}>
+                          {state.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-                <div className="md:col-span-1">
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                    State
-                  </label>
-                  <select
-                    value={formData.state}
-                    onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition appearance-none bg-white"
-                  >
-                    {US_STATES.map((state) => (
-                      <option key={state.value} value={state.value}>
-                        {state.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="md:col-span-1">
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                    Date (Optional)
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
+                    Date <span className="text-neutral-400 font-normal">(optional)</span>
                   </label>
                   <input
                     type="date"
                     value={formData.date}
                     onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                    className="w-full px-4 py-3.5 border border-neutral-200 rounded-xl text-neutral-900 focus:outline-none focus:ring-2 focus:ring-[#2A7D6E]/20 focus:border-[#2A7D6E] transition-all bg-white"
                   />
                 </div>
-                <div className="md:col-span-1 flex items-end">
-                  <button
-                    type="submit"
-                    className="w-full bg-blue-800 text-white px-6 py-3 rounded-lg hover:bg-blue-900 transition-all font-semibold shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                    </svg>
-                    Search
-                  </button>
-                </div>
+                <button
+                  type="submit"
+                  className="w-full bg-[#2A7D6E] text-white px-6 py-4 rounded-xl hover:bg-[#236859] transition-all font-medium shadow-sm mt-2"
+                >
+                  Search Records
+                </button>
               </div>
             ) : (
               /* Name Search Form */
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <div className="md:col-span-1">
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                    First Name
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="First name"
-                    value={formData.firstName}
-                    onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                  />
+              <div className="space-y-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-2">
+                      First Name
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="First name"
+                      value={formData.firstName}
+                      onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                      className="w-full px-4 py-3.5 border border-neutral-200 rounded-xl text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-[#2A7D6E]/20 focus:border-[#2A7D6E] transition-all bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-2">
+                      Last Name
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Last name"
+                      value={formData.lastName}
+                      onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                      className="w-full px-4 py-3.5 border border-neutral-200 rounded-xl text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-[#2A7D6E]/20 focus:border-[#2A7D6E] transition-all bg-white"
+                    />
+                  </div>
                 </div>
-                <div className="md:col-span-1">
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Last name"
-                    value={formData.lastName}
-                    onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                  />
-                </div>
-                <div className="md:col-span-1">
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                    State (Optional)
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
+                    State <span className="text-neutral-400 font-normal">(optional)</span>
                   </label>
                   <select
                     value={formData.state}
                     onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition appearance-none bg-white"
+                    className="w-full px-4 py-3.5 border border-neutral-200 rounded-xl text-neutral-900 focus:outline-none focus:ring-2 focus:ring-[#2A7D6E]/20 focus:border-[#2A7D6E] transition-all appearance-none bg-white cursor-pointer"
                   >
                     {US_STATES.map((state) => (
                       <option key={state.value} value={state.value}>
@@ -224,48 +224,49 @@ export default function SearchHero() {
                     ))}
                   </select>
                 </div>
-                <div className="md:col-span-1 flex items-end">
-                  <button
-                    type="submit"
-                    className="w-full bg-blue-800 text-white px-6 py-3 rounded-lg hover:bg-blue-900 transition-all font-semibold shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                    </svg>
-                    Search
-                  </button>
-                </div>
+                <button
+                  type="submit"
+                  className="w-full bg-[#2A7D6E] text-white px-6 py-4 rounded-xl hover:bg-[#236859] transition-all font-medium shadow-sm mt-2"
+                >
+                  Search Records
+                </button>
               </div>
             )}
-
-            {/* Disclaimer */}
-            <div className="flex items-center justify-center gap-2 text-xs text-slate-500">
-              <svg className="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd"/>
-              </svg>
-              <span>Your search is private and secure. Information based on publicly available sources.</span>
-            </div>
           </form>
+
+          {/* Privacy Note */}
+          <div className="flex items-center justify-center gap-2 mt-6 pt-6 border-t border-neutral-100">
+            <svg className="w-4 h-4 text-[#2A7D6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
+            </svg>
+            <span className="text-xs text-neutral-500">Your search is private and secure</span>
+          </div>
         </div>
 
-        {/* Quick Stats */}
-        <div className="mt-10 flex flex-wrap justify-center gap-8 text-blue-100">
-          <div className="flex items-center gap-2">
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
-            </svg>
+        {/* Features */}
+        <div className="mt-16 flex flex-wrap justify-center gap-12 text-neutral-500">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center">
+              <svg className="w-5 h-5 text-[#2A7D6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
             <span className="text-sm font-medium">Updated Daily</span>
           </div>
-          <div className="flex items-center gap-2">
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
-            </svg>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center">
+              <svg className="w-5 h-5 text-[#2A7D6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
             <span className="text-sm font-medium">All 50 States</span>
           </div>
-          <div className="flex items-center gap-2">
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
-            </svg>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center">
+              <svg className="w-5 h-5 text-[#2A7D6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
+              </svg>
+            </div>
             <span className="text-sm font-medium">Free to Search</span>
           </div>
         </div>
