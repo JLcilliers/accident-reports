@@ -8,7 +8,7 @@ export default function Header() {
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center hover:opacity-90 transition">
             <Image
-              src="https://i.ibb.co/8D1H26d5/Untitled-design-13.png"
+              src="https://i.ibb.co/h1xrZXZM/Untitled-design-35.png"
               alt="AccidentReports.com"
               width={481}
               height={138}
