@@ -172,42 +172,42 @@ export default function Home() {
           {/* Stats with vertical dividers and neon green accents */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
             {/* Stat 1 */}
-            <div className="bg-[#0C1016] rounded-lg p-8 text-center shadow-[0_10px_30px_rgba(0,0,0,0.35)] border border-[#1C2430] hover:shadow-[0_16px_32px_rgba(0,0,0,0.45)] transition-shadow relative">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-[#B6FF2C] rounded-lg mb-5 shadow-lg">
-                <svg className="w-8 h-8 text-[#05070B]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+            <div className="group bg-[#0C1016] rounded-lg p-8 text-center shadow-[0_10px_30px_rgba(0,0,0,0.35)] border border-[#1C2430] transition-all duration-[220ms] ease-out hover:bg-[#B6FF2C] hover:transform hover:-translate-y-[10px] hover:shadow-[0_22px_45px_rgba(182,255,44,0.55)] hover:border-transparent relative">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-[#B6FF2C] rounded-lg mb-5 shadow-lg group-hover:bg-[#05070B] transition-colors duration-[220ms]">
+                <svg className="w-8 h-8 text-[#05070B] group-hover:text-[#B6FF2C] transition-colors duration-[220ms]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                 </svg>
               </div>
-              <div className="text-5xl font-bold text-[#B6FF2C] mb-2 tracking-tight">10,000+</div>
-              <p className="text-[#A5B1C5] font-semibold text-sm uppercase tracking-wide">Reports Delivered</p>
+              <div className="text-5xl font-bold text-[#B6FF2C] mb-2 tracking-tight group-hover:text-[#05070B] transition-colors duration-[220ms]">10,000+</div>
+              <p className="text-[#A5B1C5] font-semibold text-sm uppercase tracking-wide group-hover:text-[#05070B] transition-colors duration-[220ms]">Reports Delivered</p>
             </div>
 
             {/* Vertical divider - hidden on mobile */}
             <div className="hidden md:block absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-px h-24 bg-[#1C2430]"></div>
 
             {/* Stat 2 */}
-            <div className="bg-[#0C1016] rounded-lg p-8 text-center shadow-[0_10px_30px_rgba(0,0,0,0.35)] border border-[#1C2430] hover:shadow-[0_16px_32px_rgba(0,0,0,0.45)] transition-shadow relative">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-[#B6FF2C] rounded-lg mb-5 shadow-lg">
-                <svg className="w-8 h-8 text-[#05070B]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+            <div className="group bg-[#0C1016] rounded-lg p-8 text-center shadow-[0_10px_30px_rgba(0,0,0,0.35)] border border-[#1C2430] transition-all duration-[220ms] ease-out hover:bg-[#B6FF2C] hover:transform hover:-translate-y-[10px] hover:shadow-[0_22px_45px_rgba(182,255,44,0.55)] hover:border-transparent relative">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-[#B6FF2C] rounded-lg mb-5 shadow-lg group-hover:bg-[#05070B] transition-colors duration-[220ms]">
+                <svg className="w-8 h-8 text-[#05070B] group-hover:text-[#B6FF2C] transition-colors duration-[220ms]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
               </div>
-              <div className="text-5xl font-bold text-[#B6FF2C] mb-2 tracking-tight">24/7</div>
-              <p className="text-[#A5B1C5] font-semibold text-sm uppercase tracking-wide">Support Available</p>
+              <div className="text-5xl font-bold text-[#B6FF2C] mb-2 tracking-tight group-hover:text-[#05070B] transition-colors duration-[220ms]">24/7</div>
+              <p className="text-[#A5B1C5] font-semibold text-sm uppercase tracking-wide group-hover:text-[#05070B] transition-colors duration-[220ms]">Support Available</p>
             </div>
 
             {/* Vertical divider - hidden on mobile */}
             <div className="hidden md:block absolute top-1/2 left-2/3 -translate-x-1/2 -translate-y-1/2 w-px h-24 bg-[#1C2430]"></div>
 
             {/* Stat 3 */}
-            <div className="bg-[#0C1016] rounded-lg p-8 text-center shadow-[0_10px_30px_rgba(0,0,0,0.35)] border border-[#1C2430] hover:shadow-[0_16px_32px_rgba(0,0,0,0.45)] transition-shadow relative">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-[#B6FF2C] rounded-lg mb-5 shadow-lg">
-                <svg className="w-8 h-8 text-[#05070B]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+            <div className="group bg-[#0C1016] rounded-lg p-8 text-center shadow-[0_10px_30px_rgba(0,0,0,0.35)] border border-[#1C2430] transition-all duration-[220ms] ease-out hover:bg-[#B6FF2C] hover:transform hover:-translate-y-[10px] hover:shadow-[0_22px_45px_rgba(182,255,44,0.55)] hover:border-transparent relative">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-[#B6FF2C] rounded-lg mb-5 shadow-lg group-hover:bg-[#05070B] transition-colors duration-[220ms]">
+                <svg className="w-8 h-8 text-[#05070B] group-hover:text-[#B6FF2C] transition-colors duration-[220ms]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
               </div>
-              <div className="text-5xl font-bold text-[#B6FF2C] mb-2 tracking-tight">100%</div>
-              <p className="text-[#A5B1C5] font-semibold text-sm uppercase tracking-wide">Free Service</p>
+              <div className="text-5xl font-bold text-[#B6FF2C] mb-2 tracking-tight group-hover:text-[#05070B] transition-colors duration-[220ms]">100%</div>
+              <p className="text-[#A5B1C5] font-semibold text-sm uppercase tracking-wide group-hover:text-[#05070B] transition-colors duration-[220ms]">Free Service</p>
             </div>
           </div>
         </div>
@@ -229,53 +229,53 @@ export default function Home() {
             {/* Right column - 2x2 benefit grid (65% width) */}
             <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
               {/* Benefit 1 */}
-              <div className="bg-[#0C1016] rounded-lg p-6 border border-[#1C2430] shadow-[0_10px_30px_rgba(0,0,0,0.35)] hover:shadow-[0_16px_32px_rgba(0,0,0,0.45)] transition-shadow">
-                <div className="w-12 h-12 bg-[#B6FF2C] rounded-lg flex items-center justify-center mb-4 shadow">
-                  <svg className="w-6 h-6 text-[#05070B]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+              <div className="group bg-[#0C1016] rounded-lg p-6 border border-[#1C2430] shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-[220ms] ease-out hover:bg-[#B6FF2C] hover:transform hover:-translate-y-[10px] hover:shadow-[0_22px_45px_rgba(182,255,44,0.55)] hover:border-transparent">
+                <div className="w-12 h-12 bg-[#B6FF2C] rounded-lg flex items-center justify-center mb-4 shadow group-hover:bg-[#05070B] transition-colors duration-[220ms]">
+                  <svg className="w-6 h-6 text-[#05070B] group-hover:text-[#B6FF2C] transition-colors duration-[220ms]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                   </svg>
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2">Completely Free</h3>
-                <p className="text-[#A5B1C5] text-base leading-relaxed">
+                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-[#05070B] transition-colors duration-[220ms]">Completely Free</h3>
+                <p className="text-[#A5B1C5] text-base leading-relaxed group-hover:text-[#05070B] transition-colors duration-[220ms]">
                   No hidden fees, no credit card required. Get your accident report at absolutely no cost.
                 </p>
               </div>
 
               {/* Benefit 2 */}
-              <div className="bg-[#0C1016] rounded-lg p-6 border border-[#1C2430] shadow-[0_10px_30px_rgba(0,0,0,0.35)] hover:shadow-[0_16px_32px_rgba(0,0,0,0.45)] transition-shadow">
-                <div className="w-12 h-12 bg-[#B6FF2C] rounded-lg flex items-center justify-center mb-4 shadow">
-                  <svg className="w-6 h-6 text-[#05070B]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+              <div className="group bg-[#0C1016] rounded-lg p-6 border border-[#1C2430] shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-[220ms] ease-out hover:bg-[#B6FF2C] hover:transform hover:-translate-y-[10px] hover:shadow-[0_22px_45px_rgba(182,255,44,0.55)] hover:border-transparent">
+                <div className="w-12 h-12 bg-[#B6FF2C] rounded-lg flex items-center justify-center mb-4 shadow group-hover:bg-[#05070B] transition-colors duration-[220ms]">
+                  <svg className="w-6 h-6 text-[#05070B] group-hover:text-[#B6FF2C] transition-colors duration-[220ms]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                   </svg>
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2">Fast & Easy</h3>
-                <p className="text-[#A5B1C5] text-base leading-relaxed">
+                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-[#05070B] transition-colors duration-[220ms]">Fast & Easy</h3>
+                <p className="text-[#A5B1C5] text-base leading-relaxed group-hover:text-[#05070B] transition-colors duration-[220ms]">
                   Simple online process that takes minutes. No need to visit government offices.
                 </p>
               </div>
 
               {/* Benefit 3 */}
-              <div className="bg-[#0C1016] rounded-lg p-6 border border-[#1C2430] shadow-[0_10px_30px_rgba(0,0,0,0.35)] hover:shadow-[0_16px_32px_rgba(0,0,0,0.45)] transition-shadow">
-                <div className="w-12 h-12 bg-[#B6FF2C] rounded-lg flex items-center justify-center mb-4 shadow">
-                  <svg className="w-6 h-6 text-[#05070B]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+              <div className="group bg-[#0C1016] rounded-lg p-6 border border-[#1C2430] shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-[220ms] ease-out hover:bg-[#B6FF2C] hover:transform hover:-translate-y-[10px] hover:shadow-[0_22px_45px_rgba(182,255,44,0.55)] hover:border-transparent">
+                <div className="w-12 h-12 bg-[#B6FF2C] rounded-lg flex items-center justify-center mb-4 shadow group-hover:bg-[#05070B] transition-colors duration-[220ms]">
+                  <svg className="w-6 h-6 text-[#05070B] group-hover:text-[#B6FF2C] transition-colors duration-[220ms]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                   </svg>
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2">Secure & Confidential</h3>
-                <p className="text-[#A5B1C5] text-base leading-relaxed">
+                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-[#05070B] transition-colors duration-[220ms]">Secure & Confidential</h3>
+                <p className="text-[#A5B1C5] text-base leading-relaxed group-hover:text-[#05070B] transition-colors duration-[220ms]">
                   Your information is protected with industry-standard encryption and security.
                 </p>
               </div>
 
               {/* Benefit 4 */}
-              <div className="bg-[#0C1016] rounded-lg p-6 border border-[#1C2430] shadow-[0_10px_30px_rgba(0,0,0,0.35)] hover:shadow-[0_16px_32px_rgba(0,0,0,0.45)] transition-shadow">
-                <div className="w-12 h-12 bg-[#B6FF2C] rounded-lg flex items-center justify-center mb-4 shadow">
-                  <svg className="w-6 h-6 text-[#05070B]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+              <div className="group bg-[#0C1016] rounded-lg p-6 border border-[#1C2430] shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-[220ms] ease-out hover:bg-[#B6FF2C] hover:transform hover:-translate-y-[10px] hover:shadow-[0_22px_45px_rgba(182,255,44,0.55)] hover:border-transparent">
+                <div className="w-12 h-12 bg-[#B6FF2C] rounded-lg flex items-center justify-center mb-4 shadow group-hover:bg-[#05070B] transition-colors duration-[220ms]">
+                  <svg className="w-6 h-6 text-[#05070B] group-hover:text-[#B6FF2C] transition-colors duration-[220ms]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
                   </svg>
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2">Legal Support Available</h3>
-                <p className="text-[#A5B1C5] text-base leading-relaxed">
+                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-[#05070B] transition-colors duration-[220ms]">Legal Support Available</h3>
+                <p className="text-[#A5B1C5] text-base leading-relaxed group-hover:text-[#05070B] transition-colors duration-[220ms]">
                   Connect with experienced attorneys for a free case review if you were injured.
                 </p>
               </div>
