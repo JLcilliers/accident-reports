@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
@@ -36,16 +37,19 @@ export default function Header() {
     >
       <div className="container mx-auto px-6 lg:px-12 max-w-[1200px]">
         <div className="flex items-center justify-between h-16 lg:h-20">
-          {/* Logo - Simple wordmark */}
+          {/* Logo */}
           <Link
             href="/"
-            className={`flex items-center hover:opacity-80 transition-opacity ${
-              isTransparent ? "text-neutral-900" : "text-neutral-900"
-            }`}
+            className="flex items-center hover:opacity-80 transition-opacity"
           >
-            <span className="text-xl font-medium tracking-tight">
-              AccidentLookup
-            </span>
+            <Image
+              src="https://res.cloudinary.com/dovgh19xr/image/upload/v1764100024/Untitled_design_49_d4kmjg.png"
+              alt="AccidentLookup"
+              width={180}
+              height={40}
+              className="h-8 lg:h-10 w-auto"
+              priority
+            />
           </Link>
 
           {/* Desktop Navigation - Centered */}
