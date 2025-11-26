@@ -4,6 +4,10 @@
     {
       "path": "/api/cron/ingest-news",
       "schedule": "*/20 * * * *"
+    },
+    {
+      "path": "/api/cron/generate-seo?limit=10",
+      "schedule": "0 * * * *"
     }
   ]
 }

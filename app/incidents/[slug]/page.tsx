@@ -1,48 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
+import { stripHtmlAndPublisher, cleanRssSnippet, getHostname } from "@/lib/text";
 
 export const revalidate = 600; // Re-generate every 10 minutes
-
-// Helper to strip HTML entities, publisher names, and other junk from text
-function stripHtmlAndPublisher(raw?: string | null): string | null {
-  if (!raw) return null;
-
-  let text = raw;
-
-  // 1) Replace HTML entities that sneak through
-  text = text.replace(/&nbsp;/gi, " ");
-  text = text.replace(/&amp;/gi, "&");
-  text = text.replace(/&quot;/gi, '"');
-  text = text.replace(/&#\d+;/g, " ");
-
-  // 2) If there are double spaces (often where the station name is tacked on),
-  //    keep only the part before them.
-  const doubleSpaceIndex = text.indexOf("  ");
-  if (doubleSpaceIndex !== -1) {
-    text = text.slice(0, doubleSpaceIndex);
-  }
-
-  // 3) Strip any remaining HTML tags
-  text = text.replace(/<[^>]+>/g, "");
-
-  // 4) Remove URLs
-  text = text.replace(/https?:\/\/\S+/g, "");
-
-  // 5) Remove brackets/braces content
-  text = text.replace(/\[.*?\]/g, "");
-  text = text.replace(/\{.*?\}/g, "");
-
-  // 6) Collapse whitespace and trim
-  text = text.replace(/\s+/g, " ").trim();
-
-  // If it ends up super short, treat as empty
-  if (text.length < 25) {
-    return null;
-  }
-
-  return text;
-}
 
 // Build a proper paragraph summary from incident data
 function buildIncidentSummary(incident: {
@@ -76,15 +37,6 @@ function buildIncidentSummary(incident: {
 
   // No usable summary, fall back to headline + context
   return `${cleanedHeadline}. This incident involves a reported traffic crash in ${location} on ${date}, as described in public news coverage. Exact details may be limited in initial reports.`;
-}
-
-// Helper to extract clean hostname from URL
-function getHostname(url: string): string {
-  try {
-    return new URL(url).hostname.replace(/^www\./, "");
-  } catch {
-    return url;
-  }
 }
 
 async function getIncident(slug: string) {
@@ -128,9 +80,23 @@ export async function generateMetadata({
 
   const location = [incident.city, incident.state].filter(Boolean).join(", ");
 
+  // Use SEO-optimized fields if available, otherwise fall back to defaults
+  const title = incident.seoTitle || `${incident.headline} | AccidentReports`;
+  const description =
+    incident.seoDescription ||
+    incident.summary?.slice(0, 155) ||
+    `Accident report for ${location} on ${incident.occurredAt.toDateString()}`;
+
   return {
-    title: `${incident.headline} | AccidentReports`,
-    description: incident.summary?.slice(0, 155) || `Accident report for ${location} on ${incident.occurredAt.toDateString()}`,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      publishedTime: incident.occurredAt.toISOString(),
+      modifiedTime: (incident.updatedAt ?? incident.occurredAt).toISOString(),
+    },
   };
 }
 
@@ -159,11 +125,16 @@ export default async function IncidentPage({
   const cleanedHeadline = stripHtmlAndPublisher(incident.headline) ?? incident.headline;
 
   // JSON-LD NewsArticle structured data
+  const seoHeadline = incident.seoTitle || incident.headline;
+  const seoDescription =
+    incident.seoDescription || incident.summary || `Traffic accident report for ${location}`;
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
-    headline: incident.headline,
-    description: incident.summary || `Traffic accident report for ${location}`,
+    headline: seoHeadline,
+    description: seoDescription,
+    articleBody: incident.articleBody || undefined,
     datePublished: incident.occurredAt.toISOString(),
     dateModified: (incident.updatedAt ?? incident.occurredAt).toISOString(),
     author: {
@@ -308,6 +279,22 @@ export default async function IncidentPage({
               </p>
             </div>
 
+            {/* Full Incident Overview (SEO Article) */}
+            {incident.articleBody && (
+              <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
+                <h2 className="text-lg font-semibold text-slate-900 mb-4">
+                  Full Incident Overview
+                </h2>
+                <div className="prose prose-slate max-w-none text-slate-700">
+                  {incident.articleBody.split("\n\n").map((paragraph, idx) => (
+                    <p key={idx} className="mb-4 leading-relaxed last:mb-0">
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Key Details from Public Reports */}
             <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
               <h2 className="text-lg font-semibold text-slate-900 mb-4">
@@ -358,54 +345,57 @@ export default async function IncidentPage({
                 News Coverage
               </h2>
               <ul className="space-y-4">
-                {incident.sources.map((source) => (
-                  <li
-                    key={source.id}
-                    className="border-l-2 border-slate-200 pl-4 hover:border-blue-500 transition-colors"
-                  >
-                    <a
-                      href={source.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block group"
+                {incident.sources.map((source) => {
+                  const snippet = cleanRssSnippet(source.snippet);
+                  return (
+                    <li
+                      key={source.id}
+                      className="border-l-2 border-slate-200 pl-4 hover:border-blue-500 transition-colors"
                     >
-                      <h3 className="text-slate-900 font-medium group-hover:text-blue-800 transition break-words">
-                        {source.title}
-                      </h3>
-                      <div className="flex items-center gap-2 text-sm text-slate-500 mt-1">
-                        <svg
-                          className="w-3.5 h-3.5 text-slate-400 flex-shrink-0"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          strokeWidth={2}
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
-                          />
-                        </svg>
-                        <span className="truncate">
-                          {source.publisher || getHostname(source.url)}
-                        </span>
-                        <span>•</span>
-                        <span className="flex-shrink-0">
-                          {source.publishedAt.toLocaleDateString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                          })}
-                        </span>
-                      </div>
-                      {source.snippet && (
-                        <p className="text-sm text-slate-600 mt-2 line-clamp-2 break-words">
-                          {source.snippet}
-                        </p>
-                      )}
-                    </a>
-                  </li>
-                ))}
+                      <a
+                        href={source.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block group"
+                      >
+                        <h3 className="text-slate-900 font-medium group-hover:text-blue-800 transition break-words">
+                          {source.title}
+                        </h3>
+                        <div className="flex items-center gap-2 text-sm text-slate-500 mt-1">
+                          <svg
+                            className="w-3.5 h-3.5 text-slate-400 flex-shrink-0"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            strokeWidth={2}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
+                            />
+                          </svg>
+                          <span className="truncate">
+                            {source.publisher || getHostname(source.url)}
+                          </span>
+                          <span>•</span>
+                          <span className="flex-shrink-0">
+                            {source.publishedAt.toLocaleDateString("en-US", {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            })}
+                          </span>
+                        </div>
+                        {snippet && (
+                          <p className="text-sm text-slate-600 mt-2 line-clamp-2 break-words">
+                            {snippet}
+                          </p>
+                        )}
+                      </a>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
 
