@@ -109,7 +109,7 @@ function LegalHelpForm() {
             </div>
             <h1 className="text-3xl font-medium text-neutral-900 mb-4">Thank You!</h1>
             <p className="text-lg text-neutral-600 mb-8">
-              Your information has been received. An experienced personal injury attorney will contact you within 24 hours to discuss your case.
+              Your information has been received. An experienced personal injury attorney will contact you soon to discuss your case.
             </p>
 
             <div className="bg-[#F7F7F7] rounded-xl p-6 mb-8 text-left">
@@ -125,7 +125,7 @@ function LegalHelpForm() {
                   <svg className="w-5 h-5 text-[#2A7D6E] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
                   </svg>
-                  <span>You&apos;ll receive a call within 24 hours</span>
+                  <span>You&apos;ll receive a call during business hours</span>
                 </li>
                 <li className="flex items-start gap-3 text-neutral-700">
                   <svg className="w-5 h-5 text-[#2A7D6E] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
@@ -178,7 +178,7 @@ function LegalHelpForm() {
           <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-6 md:p-8">
               <h2 className="text-xl font-medium text-neutral-900 mb-2">Get Started Today</h2>
-              <p className="text-neutral-600 mb-6">Fill out the form below and an attorney will contact you within 24 hours.</p>
+              <p className="text-neutral-600 mb-6">Fill out the form below and an attorney will be in touch to discuss your case.</p>
 
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div>

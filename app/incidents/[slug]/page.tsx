@@ -197,9 +197,12 @@ export default async function IncidentPage({
                   </span>
                 )}
               </div>
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4 leading-tight">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-3 leading-tight">
                 {incident.headline}
               </h1>
+              <p className="text-sm text-slate-500 mb-4">
+                {location} • {formattedDate} • Traffic accident summary from public news sources
+              </p>
               <div className="flex flex-wrap gap-4 text-slate-600 text-sm">
                 <span className="flex items-center gap-1.5">
                   <svg
@@ -513,9 +516,12 @@ export default async function IncidentPage({
                 href="/legal-help"
                 className="block w-full bg-white text-blue-800 px-4 py-3 rounded-lg hover:bg-blue-50 transition font-semibold text-center text-sm"
               >
-                Talk to a Local Injury Lawyer
+                Get a Free Case Review
               </Link>
-              <div className="flex items-center gap-2 mt-4 text-blue-200 text-xs">
+              <p className="text-blue-200 text-xs mt-3 text-center leading-relaxed">
+                We&apos;ll connect you with a local injury lawyer who can explain your options.
+              </p>
+              <div className="flex items-center justify-center gap-2 mt-3 text-blue-200 text-xs">
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                   <path
                     fillRule="evenodd"
