@@ -8,21 +8,45 @@ export const revalidate = 600; // Re-generate every 10 minutes
 function cleanSummary(raw?: string | null): string | null {
   if (!raw) return null;
 
-  // Strip anything after a raw URL (often where junk starts)
-  const cutAtHttp = raw.split(/https?:\/\//)[0];
-
-  // Remove any accidental HTML-ish tags
-  const noTags = cutAtHttp.replace(/<[^>]+>/g, "");
-
-  // Remove any leftover prompt-like text or code artifacts
-  const cleaned = noTags
-    .replace(/\[.*?\]/g, "") // Remove bracket content
-    .replace(/\{.*?\}/g, "") // Remove brace content
+  // Remove obvious junk: URLs, HTML tags, brackets/braces
+  let text = raw
+    .replace(/https?:\/\/\S+/g, "")
+    .replace(/<[^>]+>/g, "")
+    .replace(/[\[\]\{\}]/g, "")
     .trim();
 
-  if (!cleaned || cleaned.length < 20) return null;
+  // Collapse multiple spaces
+  text = text.replace(/\s+/g, " ");
 
-  return cleaned;
+  // If it's too short, treat as empty
+  if (text.length < 40) {
+    return null;
+  }
+
+  return text;
+}
+
+// Build a fallback summary when no usable summary exists
+function buildFallbackSummary(incident: {
+  headline: string;
+  city?: string | null;
+  state?: string | null;
+  occurredAt: Date;
+}): string {
+  const location =
+    incident.city && incident.state
+      ? `${incident.city}, ${incident.state}`
+      : incident.state
+        ? incident.state
+        : "this area";
+
+  const date = incident.occurredAt.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+
+  return `This incident involves a reported traffic crash in ${location} on ${date}. It is based on information from publicly available news sources and may be updated as more details become available.`;
 }
 
 // Helper to extract clean hostname from URL
@@ -181,7 +205,7 @@ export default async function IncidentPage({
         </div>
       </div>
 
-      <div className="container mx-auto px-6 lg:px-12 max-w-[1200px] py-8 pb-32 sm:pb-8">
+      <div className="container mx-auto px-6 lg:px-12 max-w-[1200px] py-8 pb-32 sm:pb-32">
         <div className="lg:grid lg:grid-cols-3 lg:gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2">
@@ -246,8 +270,9 @@ export default async function IncidentPage({
 
             {/* Summary Card */}
             {(() => {
-              const summary = cleanSummary(incident.summary);
-              return summary ? (
+              const cleaned = cleanSummary(incident.summary);
+              const summary = cleaned ?? buildFallbackSummary(incident);
+              return (
                 <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
                   <h2 className="text-lg font-semibold text-slate-900 mb-3">
                     Incident Summary
@@ -256,17 +281,39 @@ export default async function IncidentPage({
                     {summary}
                   </p>
                 </div>
-              ) : (
-                <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
-                  <h2 className="text-lg font-semibold text-slate-900 mb-3">
-                    Incident Summary
-                  </h2>
-                  <p className="text-slate-500 italic">
-                    Details are still being confirmed from public news sources.
-                  </p>
-                </div>
               );
             })()}
+
+            {/* Key Details from Public Reports */}
+            <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
+              <h2 className="text-lg font-semibold text-slate-900 mb-4">
+                Key Details from Public Reports
+              </h2>
+              <ul className="list-disc pl-5 space-y-2 text-slate-700">
+                <li>
+                  <span className="font-medium">Location:</span>{" "}
+                  {incident.city && incident.state
+                    ? `${incident.city}, ${incident.state}`
+                    : incident.state ?? "Not specified in reports"}
+                </li>
+                <li>
+                  <span className="font-medium">Date of crash:</span>{" "}
+                  {formattedDate}
+                </li>
+                <li>
+                  <span className="font-medium">Type of incident:</span>{" "}
+                  Traffic accident
+                </li>
+                <li>
+                  <span className="font-medium">Number of news sources:</span>{" "}
+                  {incident.sources.length}
+                </li>
+              </ul>
+              <p className="text-xs text-slate-500 mt-3">
+                These details are taken from publicly available news coverage and may not
+                include every fact in the official police report.
+              </p>
+            </div>
 
             {/* News Sources */}
             <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
@@ -476,6 +523,20 @@ export default async function IncidentPage({
               </div>
             </div>
 
+            {/* How to Use This Information */}
+            <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
+              <h2 className="text-lg font-semibold text-slate-900 mb-4">
+                How to Use This Information
+              </h2>
+              <p className="text-slate-700 leading-relaxed">
+                Use this page to confirm basic details about the crash and understand which
+                agencies are likely to have the official report. If you were involved or
+                lost a family member in this incident, consider requesting the full report
+                and speaking with a qualified attorney before making any major decisions
+                about insurance or legal claims.
+              </p>
+            </div>
+
             {/* Disclaimer */}
             <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
               <p className="text-amber-800 text-sm leading-relaxed">
@@ -503,36 +564,6 @@ export default async function IncidentPage({
 
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            {/* Legal Help CTA Card - Desktop (sticky in sidebar) */}
-            <div className="hidden sm:block bg-gradient-to-br from-blue-800 to-blue-900 rounded-xl p-6 text-white mb-6 sticky top-24">
-              <h3 className="text-lg font-bold mb-3">
-                Were You Involved in This Crash?
-              </h3>
-              <p className="text-blue-100 text-sm mb-4 leading-relaxed">
-                Get a free case evaluation from an experienced personal injury
-                attorney in your area. No fees unless you win.
-              </p>
-              <Link
-                href="/legal-help"
-                className="block w-full bg-white text-blue-800 px-4 py-3 rounded-lg hover:bg-blue-50 transition font-semibold text-center text-sm"
-              >
-                Get a Free Case Review
-              </Link>
-              <p className="text-blue-200 text-xs mt-3 text-center leading-relaxed">
-                We&apos;ll connect you with a local injury lawyer who can explain your options.
-              </p>
-              <div className="flex items-center justify-center gap-2 mt-3 text-blue-200 text-xs">
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path
-                    fillRule="evenodd"
-                    d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <span>Free & Confidential</span>
-              </div>
-            </div>
-
             {/* Quick Facts Card */}
             <div className="bg-white rounded-xl border border-slate-200 p-5 mb-6">
               <h3 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">
@@ -614,18 +645,43 @@ export default async function IncidentPage({
       </div>
     </div>
 
+    {/* Floating Desktop/Tablet CTA Widget - Bottom right on md+ screens */}
+    <div className="hidden md:block fixed bottom-4 right-4 z-50 w-full max-w-sm rounded-2xl border border-slate-200 bg-white shadow-xl p-5">
+      <p className="text-xs font-semibold text-blue-700 uppercase tracking-wide mb-1">
+        Were you involved in this crash?
+      </p>
+      <p className="text-sm text-slate-700 mb-3 leading-relaxed">
+        Get a free consultation from a local injury lawyer about your rights and
+        next steps after this accident.
+      </p>
+      <Link
+        href="/legal-help"
+        className="block w-full rounded-lg bg-blue-600 text-white text-sm font-semibold py-2.5 text-center hover:bg-blue-700 transition"
+      >
+        Talk to a local injury lawyer
+      </Link>
+      <p className="mt-2 text-[11px] leading-snug text-slate-500 text-center">
+        We&apos;ll connect you with a lawyer who handles crashes like this in
+        your area.
+      </p>
+    </div>
+
     {/* Fixed Mobile CTA - Bottom bar on small screens */}
-    <div className="sm:hidden fixed bottom-0 inset-x-0 z-50 bg-gradient-to-r from-blue-800 to-blue-900 border-t border-blue-700 p-4 shadow-lg">
-      <div className="flex items-center justify-between gap-4">
-        <div className="text-white">
-          <p className="text-sm font-semibold">Were you involved?</p>
-          <p className="text-xs text-blue-200">Free case evaluation</p>
+    <div className="md:hidden fixed bottom-0 inset-x-0 z-50 border-t border-slate-200 bg-white px-4 py-3 shadow-lg">
+      <div className="flex items-center gap-3">
+        <div className="flex-1">
+          <p className="text-xs font-semibold text-blue-700 uppercase tracking-wide">
+            Injured in this crash?
+          </p>
+          <p className="text-xs text-slate-600">
+            Tap below to speak with a local injury lawyer about your options.
+          </p>
         </div>
         <Link
           href="/legal-help"
-          className="bg-white text-blue-800 px-4 py-2.5 rounded-lg font-semibold text-sm whitespace-nowrap hover:bg-blue-50 transition"
+          className="shrink-0 rounded-lg bg-blue-600 text-white text-xs font-semibold px-3 py-2 hover:bg-blue-700 transition"
         >
-          Talk to a Lawyer
+          Get Help
         </Link>
       </div>
     </div>
