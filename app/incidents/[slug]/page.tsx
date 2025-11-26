@@ -1,0 +1,477 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import prisma from "@/lib/prisma";
+
+export const revalidate = 600; // Re-generate every 10 minutes
+
+async function getIncident(slug: string) {
+  return prisma.incident.findUnique({
+    where: { slug },
+    include: { sources: true },
+  });
+}
+
+export async function generateStaticParams() {
+  // Pre-render most recent incidents at build time
+  // Return empty array if database is not available (e.g., during initial build)
+  try {
+    const incidents = await prisma.incident.findMany({
+      orderBy: { occurredAt: "desc" },
+      take: 500,
+      select: { slug: true },
+    });
+
+    return incidents.map((incident) => ({ slug: incident.slug }));
+  } catch {
+    // Database not available during build - pages will be generated on-demand
+    console.log("[incidents/[slug]] Database not available during build, using ISR");
+    return [];
+  }
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const incident = await getIncident(slug);
+
+  if (!incident) {
+    return {
+      title: "Incident Not Found | AccidentReports",
+    };
+  }
+
+  const location = [incident.city, incident.state].filter(Boolean).join(", ");
+
+  return {
+    title: `${incident.headline} | AccidentReports`,
+    description: incident.summary?.slice(0, 155) || `Accident report for ${location} on ${incident.occurredAt.toDateString()}`,
+  };
+}
+
+export default async function IncidentPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const incident = await getIncident(slug);
+
+  if (!incident) {
+    return notFound();
+  }
+
+  const location = [incident.city, incident.state].filter(Boolean).join(", ") || "United States";
+  const formattedDate = incident.occurredAt.toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  return (
+    <div className="min-h-screen bg-slate-50">
+      {/* Breadcrumb */}
+      <div className="bg-white border-b border-slate-200">
+        <div className="container mx-auto px-6 lg:px-12 max-w-[1200px] py-4">
+          <nav className="flex items-center gap-2 text-sm text-slate-600">
+            <Link href="/" className="hover:text-blue-800 transition">
+              Home
+            </Link>
+            <span>/</span>
+            <Link href="/accidents" className="hover:text-blue-800 transition">
+              Accidents
+            </Link>
+            {incident.state && (
+              <>
+                <span>/</span>
+                <Link
+                  href={`/accidents/${incident.state.toLowerCase()}`}
+                  className="hover:text-blue-800 transition"
+                >
+                  {incident.state}
+                </Link>
+              </>
+            )}
+            {incident.city && (
+              <>
+                <span>/</span>
+                <span className="text-slate-900 font-medium">{incident.city}</span>
+              </>
+            )}
+          </nav>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-6 lg:px-12 max-w-[1200px] py-8">
+        <div className="lg:grid lg:grid-cols-3 lg:gap-8">
+          {/* Main Content */}
+          <div className="lg:col-span-2">
+            {/* Header */}
+            <div className="mb-6">
+              <div className="flex flex-wrap items-center gap-3 mb-4">
+                <span className="bg-amber-100 text-amber-800 border border-amber-200 text-sm font-semibold px-3 py-1 rounded-full">
+                  Traffic Incident
+                </span>
+                {incident.sources.length > 1 && (
+                  <span className="bg-slate-100 text-slate-700 text-sm font-medium px-3 py-1 rounded-full">
+                    {incident.sources.length} Sources
+                  </span>
+                )}
+              </div>
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4 leading-tight">
+                {incident.headline}
+              </h1>
+              <div className="flex flex-wrap gap-4 text-slate-600 text-sm">
+                <span className="flex items-center gap-1.5">
+                  <svg
+                    className="w-4 h-4 text-slate-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                  </svg>
+                  {location}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <svg
+                    className="w-4 h-4 text-slate-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                  {formattedDate}
+                </span>
+              </div>
+            </div>
+
+            {/* Summary Card */}
+            {incident.summary && (
+              <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
+                <h2 className="text-lg font-semibold text-slate-900 mb-3">
+                  Incident Summary
+                </h2>
+                <p className="text-slate-700 leading-relaxed">{incident.summary}</p>
+              </div>
+            )}
+
+            {/* News Sources */}
+            <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
+              <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                <svg
+                  className="w-5 h-5 text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
+                  />
+                </svg>
+                News Coverage
+              </h2>
+              <ul className="space-y-4">
+                {incident.sources.map((source) => (
+                  <li
+                    key={source.id}
+                    className="border-l-2 border-slate-200 pl-4 hover:border-blue-500 transition-colors"
+                  >
+                    <a
+                      href={source.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block group"
+                    >
+                      <h3 className="text-slate-900 font-medium group-hover:text-blue-800 transition">
+                        {source.title}
+                      </h3>
+                      {source.publisher && (
+                        <p className="text-sm text-slate-500 mt-1">
+                          {source.publisher} •{" "}
+                          {source.publishedAt.toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          })}
+                        </p>
+                      )}
+                      {source.snippet && (
+                        <p className="text-sm text-slate-600 mt-2 line-clamp-2">
+                          {source.snippet}
+                        </p>
+                      )}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* What To Do Section */}
+            <div className="bg-blue-50 rounded-xl border border-blue-200 p-6 mb-6">
+              <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                <svg
+                  className="w-5 h-5 text-blue-600"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                What to Do if You Were Involved
+              </h2>
+              <ol className="space-y-3 text-slate-700">
+                <li className="flex items-start gap-3">
+                  <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0">
+                    1
+                  </span>
+                  <span>
+                    <strong>Seek medical attention</strong> – Even if you feel fine,
+                    some injuries may not be immediately apparent.
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0">
+                    2
+                  </span>
+                  <span>
+                    <strong>Document everything</strong> – Take photos, gather
+                    witness information, and keep all medical records.
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0">
+                    3
+                  </span>
+                  <span>
+                    <strong>Get a copy of the police report</strong> – This is
+                    crucial for insurance claims and any legal action.
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0">
+                    4
+                  </span>
+                  <span>
+                    <strong>Don&apos;t speak to insurance adjusters</strong>{" "}
+                    without understanding your rights first.
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0">
+                    5
+                  </span>
+                  <span>
+                    <strong>Consider consulting an attorney</strong> – Many offer
+                    free consultations to review your case.
+                  </span>
+                </li>
+              </ol>
+            </div>
+
+            {/* Getting Your Report */}
+            <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
+              <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                <svg
+                  className="w-5 h-5 text-slate-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+                Getting Your Police/Accident Report
+              </h2>
+              <p className="text-slate-700 mb-4">
+                If you were involved in this accident, you&apos;ll need a copy of
+                the official police report for your insurance claim or legal case.
+                Reports are typically available within 5-10 business days after the
+                incident.
+              </p>
+              <Link
+                href="/get-report/step-1"
+                className="inline-flex items-center gap-2 bg-slate-900 text-white px-5 py-2.5 rounded-lg hover:bg-slate-800 transition font-medium text-sm"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+                Get Your Police Report
+              </Link>
+            </div>
+
+            {/* Disclaimer */}
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
+              <p className="text-amber-800 text-sm leading-relaxed">
+                <strong>Disclaimer:</strong> This information is compiled from
+                publicly available news sources. Details may be incomplete or
+                change as investigations continue. This is not an official record.
+                For official information, contact the responding law enforcement
+                agency.
+              </p>
+              <p className="text-amber-700 text-xs mt-2">
+                Last updated:{" "}
+                {incident.updatedAt.toLocaleDateString("en-US", {
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                })}{" "}
+                at{" "}
+                {incident.updatedAt.toLocaleTimeString("en-US", {
+                  hour: "numeric",
+                  minute: "2-digit",
+                })}
+              </p>
+            </div>
+          </div>
+
+          {/* Sidebar */}
+          <div className="lg:col-span-1">
+            {/* Legal Help CTA Card */}
+            <div className="bg-gradient-to-br from-blue-800 to-blue-900 rounded-xl p-6 text-white mb-6 sticky top-24">
+              <h3 className="text-lg font-bold mb-3">
+                Were You Involved in This Crash?
+              </h3>
+              <p className="text-blue-100 text-sm mb-4 leading-relaxed">
+                Get a free case evaluation from an experienced personal injury
+                attorney in your area. No fees unless you win.
+              </p>
+              <Link
+                href="/legal-help"
+                className="block w-full bg-white text-blue-800 px-4 py-3 rounded-lg hover:bg-blue-50 transition font-semibold text-center text-sm"
+              >
+                Talk to a Local Injury Lawyer
+              </Link>
+              <div className="flex items-center gap-2 mt-4 text-blue-200 text-xs">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fillRule="evenodd"
+                    d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span>Free & Confidential</span>
+              </div>
+            </div>
+
+            {/* Quick Facts Card */}
+            <div className="bg-white rounded-xl border border-slate-200 p-5 mb-6">
+              <h3 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">
+                Quick Facts
+              </h3>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-slate-600">Location</span>
+                  <span className="text-slate-900 font-medium">{location}</span>
+                </div>
+                <div className="border-t border-slate-100"></div>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-slate-600">Date</span>
+                  <span className="text-slate-900 font-medium">
+                    {incident.occurredAt.toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
+                  </span>
+                </div>
+                <div className="border-t border-slate-100"></div>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-slate-600">News Sources</span>
+                  <span className="text-slate-900 font-medium">
+                    {incident.sources.length}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Related Searches */}
+            <div className="bg-white rounded-xl border border-slate-200 p-5 mb-6">
+              <h3 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">
+                Related Searches
+              </h3>
+              <div className="space-y-2">
+                {incident.city && incident.state && (
+                  <Link
+                    href={`/accidents/${incident.state.toLowerCase()}/${incident.city.toLowerCase().replace(/\s+/g, "-")}`}
+                    className="block text-blue-800 hover:text-blue-900 text-sm hover:underline"
+                  >
+                    More accidents in {incident.city}
+                  </Link>
+                )}
+                {incident.state && (
+                  <Link
+                    href={`/accidents/${incident.state.toLowerCase()}`}
+                    className="block text-blue-800 hover:text-blue-900 text-sm hover:underline"
+                  >
+                    Accidents in {incident.state}
+                  </Link>
+                )}
+                <Link
+                  href="/accidents"
+                  className="block text-blue-800 hover:text-blue-900 text-sm hover:underline"
+                >
+                  Browse all accidents
+                </Link>
+              </div>
+            </div>
+
+            {/* Share Card */}
+            <div className="bg-white rounded-xl border border-slate-200 p-5">
+              <h3 className="text-sm font-semibold text-slate-900 mb-3 uppercase tracking-wide">
+                Share This Report
+              </h3>
+              <div className="flex gap-2">
+                <button className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 rounded-lg transition text-sm font-medium">
+                  Copy Link
+                </button>
+                <button className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 rounded-lg transition text-sm font-medium">
+                  Print
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

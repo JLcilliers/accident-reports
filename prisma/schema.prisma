@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Incident {
+  id         String   @id @default(cuid())
+  slug       String   @unique
+  headline   String
+  summary    String?
+  city       String?
+  state      String?
+  country    String?
+  occurredAt DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  dedupeKey  String   @unique
+
+  sources IncidentSource[]
+
+  @@index([occurredAt])
+  @@index([city, state])
+  @@index([createdAt])
+}
+
+model IncidentSource {
+  id          String   @id @default(cuid())
+  incident    Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  incidentId  String
+
+  sourceType  String   // "google_news"
+  url         String
+  title       String
+  publisher   String?
+  snippet     String?
+  publishedAt DateTime
+
+  @@index([incidentId])
+  @@index([publishedAt])
+}
