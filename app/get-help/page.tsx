@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
-import GetHelpWizard from "@/components/GetHelpWizard";
+import { AccidentOnboardingWizard } from "@/components/AccidentOnboardingWizard";
 
 export const metadata: Metadata = {
-  title: "Get Help After Your Accident | Free Consultation",
+  title: "Find Your Accident Report | Free Search",
   description:
-    "Were you injured in an accident? Get connected with experienced attorneys who can help you understand your rights and get the compensation you deserve.",
+    "Search our database of accident reports to find information about your incident. Get connected with resources and legal help if needed.",
   openGraph: {
-    title: "Get Help After Your Accident | Free Consultation",
+    title: "Find Your Accident Report | Free Search",
     description:
-      "Were you injured in an accident? Get connected with experienced attorneys who can help you understand your rights and get the compensation you deserve.",
+      "Search our database of accident reports to find information about your incident. Get connected with resources and legal help if needed.",
   },
 };
 
 export default function GetHelpPage() {
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       {/* Header */}
-      <div className="border-b border-gray-100">
+      <div className="border-b border-gray-100 bg-white">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <a href="/" className="text-xl font-bold text-black">
             Accident Reports
@@ -25,8 +25,8 @@ export default function GetHelpPage() {
       </div>
 
       {/* Wizard */}
-      <div className="py-8">
-        <GetHelpWizard />
+      <div className="py-12 px-4">
+        <AccidentOnboardingWizard />
       </div>
 
       {/* Trust indicators */}
