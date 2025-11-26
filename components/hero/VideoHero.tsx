@@ -98,7 +98,7 @@ export default function VideoHero() {
   };
 
   return (
-    <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[#F5F5F5]">
+    <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[#F5F5F5] -mt-16 lg:-mt-20 pt-16 lg:pt-20">
       {/* Video Background */}
       <div className="absolute inset-0 z-0">
         <video

@@ -339,6 +339,34 @@ export default async function IncidentPage({
               </Link>
             </div>
 
+            {/* Why the Accident Report Is Important */}
+            <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
+              <h2 className="text-lg font-semibold text-slate-900 mb-4">
+                Why the Accident Report Is Important
+              </h2>
+              <div className="prose prose-slate max-w-none text-slate-700">
+                <p className="mb-4 leading-relaxed">
+                  The official accident report documents key facts about the crash&mdash;who
+                  was involved, where and when it happened, the officer&apos;s determination
+                  of fault, and witness statements. Insurance companies rely on it to process
+                  claims, and attorneys use it to build cases for injured victims.
+                </p>
+                <p className="mb-4 leading-relaxed">
+                  Without this report, proving fault becomes significantly harder. If you
+                  were a driver, passenger, or pedestrian involved in this incident, obtaining
+                  your copy should be a top priority. Most jurisdictions release reports within
+                  5&ndash;14 business days after the crash, though complex investigations can
+                  take longer.
+                </p>
+                <p className="leading-relaxed">
+                  Even if you don&apos;t plan to file a lawsuit, having the official record
+                  protects you if the other party&apos;s insurance tries to dispute your
+                  account or deny coverage. It&apos;s your best evidence of what actually
+                  happened.
+                </p>
+              </div>
+            </div>
+
             {/* Disclaimer */}
             <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
               <p className="text-amber-800 text-sm leading-relaxed">

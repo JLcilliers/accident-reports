@@ -1,106 +1,91 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import prisma from "@/lib/prisma";
 
-// Mock state data
-const STATE_DATA: Record<string, {
-  name: string;
-  abbr: string;
-  totalAccidents: number;
-  lastWeek: number;
-  fatalities: number;
-  description: string;
-  cities: Array<{
-    slug: string;
-    name: string;
-    accidents: number;
-    recent: number;
-  }>;
-}> = {
-  co: {
-    name: "Colorado",
-    abbr: "CO",
-    totalAccidents: 15420,
-    lastWeek: 312,
-    fatalities: 156,
-    description: "Colorado sees significant traffic incidents along its major interstate corridors including I-25, I-70, and I-76. Mountain highways and weather conditions contribute to seasonal variations in accident rates.",
-    cities: [
-      { slug: "denver", name: "Denver", accidents: 847, recent: 23 },
-      { slug: "aurora", name: "Aurora", accidents: 412, recent: 11 },
-      { slug: "boulder", name: "Boulder", accidents: 156, recent: 4 },
-      { slug: "colorado-springs", name: "Colorado Springs", accidents: 523, recent: 15 },
-      { slug: "fort-collins", name: "Fort Collins", accidents: 198, recent: 6 },
-      { slug: "lakewood", name: "Lakewood", accidents: 187, recent: 5 },
-    ],
-  },
+export const revalidate = 600; // Re-generate every 10 minutes
+
+// State abbreviation to full name mapping
+const STATE_NAMES: Record<string, string> = {
+  al: "Alabama", ak: "Alaska", az: "Arizona", ar: "Arkansas", ca: "California",
+  co: "Colorado", ct: "Connecticut", de: "Delaware", fl: "Florida", ga: "Georgia",
+  hi: "Hawaii", id: "Idaho", il: "Illinois", in: "Indiana", ia: "Iowa",
+  ks: "Kansas", ky: "Kentucky", la: "Louisiana", me: "Maine", md: "Maryland",
+  ma: "Massachusetts", mi: "Michigan", mn: "Minnesota", ms: "Mississippi", mo: "Missouri",
+  mt: "Montana", ne: "Nebraska", nv: "Nevada", nh: "New Hampshire", nj: "New Jersey",
+  nm: "New Mexico", ny: "New York", nc: "North Carolina", nd: "North Dakota", oh: "Ohio",
+  ok: "Oklahoma", or: "Oregon", pa: "Pennsylvania", ri: "Rhode Island", sc: "South Carolina",
+  sd: "South Dakota", tn: "Tennessee", tx: "Texas", ut: "Utah", vt: "Vermont",
+  va: "Virginia", wa: "Washington", wv: "West Virginia", wi: "Wisconsin", wy: "Wyoming",
+  dc: "District of Columbia",
 };
 
-// Mock recent incidents for the state
-const STATE_INCIDENTS = [
-  {
-    id: "inc-001",
-    title: "Two-Vehicle Collision on I-25 near Downtown Denver",
-    slug: "i-25-two-vehicle-collision-downtown",
-    city: "denver",
-    cityName: "Denver",
-    location: "I-25 Northbound at Exit 210",
-    date: "2024-01-15",
-    time: "3:45 PM",
-    type: "Multi-vehicle",
-    severity: "Injuries Reported",
-    hoursAgo: 2,
-  },
-  {
-    id: "inc-002",
-    title: "Pedestrian Struck on Colfax Avenue",
-    slug: "colfax-avenue-pedestrian-struck",
-    city: "denver",
-    cityName: "Denver",
-    location: "E Colfax Ave & N Josephine St",
-    date: "2024-01-15",
-    time: "11:20 AM",
-    type: "Pedestrian",
-    severity: "Serious Injuries",
-    hoursAgo: 6,
-  },
-  {
-    id: "inc-003",
-    title: "Multi-Car Pileup on I-70 During Snowstorm",
-    slug: "i-70-multi-car-pileup-snowstorm",
-    city: "aurora",
-    cityName: "Aurora",
-    location: "I-70 Eastbound Mile Marker 285",
-    date: "2024-01-14",
-    time: "7:30 AM",
-    type: "Multi-vehicle",
-    severity: "Multiple Injuries",
-    hoursAgo: 24,
-  },
-  {
-    id: "inc-004",
-    title: "Motorcycle Crash on US-36",
-    slug: "us-36-motorcycle-crash",
-    city: "boulder",
-    cityName: "Boulder",
-    location: "US-36 near Foothills Parkway",
-    date: "2024-01-14",
-    time: "4:15 PM",
-    type: "Motorcycle",
-    severity: "Fatality",
-    hoursAgo: 28,
-  },
-];
+async function getStateData(stateCode: string) {
+  const stateUpper = stateCode.toUpperCase();
 
-function getSeverityColor(severity: string) {
-  if (severity.includes("Fatal")) return "bg-red-100 text-red-800";
-  if (severity.includes("Serious")) return "bg-orange-100 text-orange-800";
-  if (severity.includes("Minor")) return "bg-yellow-100 text-yellow-800";
-  return "bg-amber-100 text-amber-800";
+  try {
+    // Get total incidents for this state
+    const totalIncidents = await prisma.incident.count({
+      where: { state: stateUpper },
+    });
+
+    // If no incidents, return null
+    if (totalIncidents === 0) {
+      return null;
+    }
+
+    // Get incidents from last 7 days
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const lastWeek = await prisma.incident.count({
+      where: {
+        state: stateUpper,
+        occurredAt: { gte: sevenDaysAgo },
+      },
+    });
+
+    // Get city breakdown
+    const cityData = await prisma.incident.groupBy({
+      by: ["city"],
+      _count: { id: true },
+      where: {
+        state: stateUpper,
+        city: { not: null },
+      },
+      orderBy: { _count: { id: "desc" } },
+      take: 12,
+    });
+
+    // Get recent incidents
+    const recentIncidents = await prisma.incident.findMany({
+      where: { state: stateUpper },
+      orderBy: { occurredAt: "desc" },
+      take: 10,
+      include: { sources: true },
+    });
+
+    return {
+      stateCode: stateUpper,
+      stateName: STATE_NAMES[stateCode.toLowerCase()] || stateCode,
+      totalIncidents,
+      lastWeek,
+      cityData,
+      recentIncidents,
+    };
+  } catch (error) {
+    console.error(`[accidents/${stateCode}] Failed to fetch state data:`, error);
+    return null;
+  }
 }
 
-function formatTimeAgo(hours: number) {
-  if (hours < 24) return `${hours} hours ago`;
-  if (hours < 48) return "Yesterday";
-  return `${Math.floor(hours / 24)} days ago`;
+function formatTimeAgo(date: Date) {
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+
+  if (diffHours < 1) return "Just now";
+  if (diffHours < 24) return `${diffHours} hours ago`;
+  if (diffHours < 48) return "Yesterday";
+  return `${Math.floor(diffHours / 24)} days ago`;
 }
 
 export default async function StateAccidentsPage({
@@ -109,7 +94,7 @@ export default async function StateAccidentsPage({
   params: Promise<{ state: string }>;
 }) {
   const { state } = await params;
-  const stateData = STATE_DATA[state];
+  const stateData = await getStateData(state);
 
   if (!stateData) {
     notFound();
@@ -126,22 +111,23 @@ export default async function StateAccidentsPage({
             <span>/</span>
             <Link href="/accidents" className="hover:text-neutral-600 transition">Accidents</Link>
             <span>/</span>
-            <span className="text-neutral-900 font-medium">{stateData.name}</span>
+            <span className="text-neutral-900 font-medium">{stateData.stateName}</span>
           </nav>
 
           <h1 className="text-4xl md:text-5xl font-medium text-neutral-900 mb-4 tracking-tight">
-            Traffic Accidents in {stateData.name}
+            Traffic Accidents in {stateData.stateName}
           </h1>
           <p className="text-lg text-neutral-500 max-w-3xl mb-8 leading-relaxed">
-            {stateData.description}
+            Browse recent traffic accidents in {stateData.stateName} compiled from publicly available news sources.
+            Find detailed reports about crashes by city and understand your options if you were involved.
           </p>
 
-          {/* Stats Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {/* Stats Grid - Real data only */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5">
-              <p className="text-neutral-500 text-sm mb-1">This Year</p>
-              <p className="text-3xl font-medium text-neutral-900">{stateData.totalAccidents.toLocaleString()}</p>
-              <p className="text-neutral-500 text-xs">Total Accidents</p>
+              <p className="text-neutral-500 text-sm mb-1">Total Tracked</p>
+              <p className="text-3xl font-medium text-neutral-900">{stateData.totalIncidents.toLocaleString()}</p>
+              <p className="text-neutral-500 text-xs">Accidents</p>
             </div>
             <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5">
               <p className="text-neutral-500 text-sm mb-1">Last 7 Days</p>
@@ -149,63 +135,62 @@ export default async function StateAccidentsPage({
               <p className="text-neutral-500 text-xs">New Reports</p>
             </div>
             <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5">
-              <p className="text-neutral-500 text-sm mb-1">Year to Date</p>
-              <p className="text-3xl font-medium text-neutral-900">{stateData.fatalities}</p>
-              <p className="text-neutral-500 text-xs">Fatalities</p>
-            </div>
-            <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5">
-              <p className="text-neutral-500 text-sm mb-1">Major Cities</p>
-              <p className="text-3xl font-medium text-neutral-900">{stateData.cities.length}</p>
-              <p className="text-neutral-500 text-xs">Covered</p>
+              <p className="text-neutral-500 text-sm mb-1">Cities</p>
+              <p className="text-3xl font-medium text-neutral-900">{stateData.cityData.length}</p>
+              <p className="text-neutral-500 text-xs">With Data</p>
             </div>
           </div>
         </div>
+
         {/* Cities Grid */}
-        <div className="mb-12">
-          <h2 className="text-xl font-medium text-neutral-900 mb-6">Browse by City</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {stateData.cities.map((city) => (
-              <Link
-                key={city.slug}
-                href={`/accidents/${state}/${city.slug}`}
-                className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-4 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] hover:border-[#2A7D6E]/30 transition-all duration-300 text-center"
-              >
-                <h3 className="font-medium text-neutral-900 mb-1">{city.name}</h3>
-                <p className="text-sm text-neutral-600">{city.recent} this week</p>
-                <p className="text-xs text-neutral-500 mt-1">{city.accidents} total</p>
-              </Link>
-            ))}
+        {stateData.cityData.length > 0 && (
+          <div className="mb-12">
+            <h2 className="text-xl font-medium text-neutral-900 mb-6">Browse by City</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {stateData.cityData.map((city) => (
+                <Link
+                  key={city.city}
+                  href={`/accidents/${state}/${city.city?.toLowerCase().replace(/\s+/g, "-")}`}
+                  className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-4 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] hover:border-[#2A7D6E]/30 transition-all duration-300 text-center"
+                >
+                  <h3 className="font-medium text-neutral-900 mb-1">{city.city}</h3>
+                  <p className="text-sm text-neutral-600">{city._count.id} accidents</p>
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="lg:grid lg:grid-cols-3 lg:gap-8">
           {/* Recent Incidents */}
           <div className="lg:col-span-2">
-            <h2 className="text-xl font-medium text-neutral-900 mb-6">Recent Accidents in {stateData.name}</h2>
+            <h2 className="text-xl font-medium text-neutral-900 mb-6">Recent Accidents in {stateData.stateName}</h2>
 
             <div className="space-y-4">
-              {STATE_INCIDENTS.map((incident) => (
+              {stateData.recentIncidents.map((incident) => (
                 <div
                   key={incident.id}
                   className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all duration-300"
                 >
                   <div className="flex items-start justify-between gap-4 mb-3">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${getSeverityColor(incident.severity)}`}>
-                        {incident.severity}
+                      <span className="bg-amber-100 text-amber-800 text-xs font-medium px-2.5 py-1 rounded-full">
+                        Traffic Incident
                       </span>
                       <span className="text-neutral-500 text-sm">
-                        {formatTimeAgo(incident.hoursAgo)}
+                        {formatTimeAgo(incident.occurredAt)}
                       </span>
                     </div>
-                    <span className="bg-neutral-100 text-neutral-700 text-xs font-medium px-2.5 py-1 rounded-full">
-                      {incident.type}
-                    </span>
+                    {incident.sources.length > 1 && (
+                      <span className="bg-neutral-100 text-neutral-700 text-xs font-medium px-2.5 py-1 rounded-full">
+                        {incident.sources.length} sources
+                      </span>
+                    )}
                   </div>
 
                   <h3 className="text-lg font-medium text-neutral-900 mb-2 hover:text-[#2A7D6E] transition">
-                    <Link href={`/accidents/${state}/${incident.city}/${incident.slug}`}>
-                      {incident.title}
+                    <Link href={`/incidents/${incident.slug}`}>
+                      {incident.headline}
                     </Link>
                   </h3>
 
@@ -215,18 +200,22 @@ export default async function StateAccidentsPage({
                         <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                       </svg>
-                      {incident.cityName} - {incident.location}
+                      {[incident.city, incident.state].filter(Boolean).join(", ")}
                     </span>
                     <span className="flex items-center gap-1.5">
                       <svg className="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                       </svg>
-                      {incident.date} at {incident.time}
+                      {incident.occurredAt.toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
                     </span>
                   </div>
 
                   <Link
-                    href={`/accidents/${state}/${incident.city}/${incident.slug}`}
+                    href={`/incidents/${incident.slug}`}
                     className="text-[#2A7D6E] hover:text-[#236859] font-medium text-sm flex items-center gap-1"
                   >
                     View Full Details
@@ -241,14 +230,120 @@ export default async function StateAccidentsPage({
             {/* View More */}
             <div className="text-center mt-8">
               <Link
-                href={`/search?state=${state}`}
+                href="/incidents"
                 className="inline-flex items-center gap-2 bg-neutral-900 text-white px-6 py-3 rounded-xl hover:bg-neutral-800 transition font-medium"
               >
-                View All {stateData.name} Accidents
+                View All {stateData.stateName} Accidents
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                 </svg>
               </Link>
+            </div>
+
+            {/* SEO Content - State-specific guidance */}
+            <div className="mt-12 space-y-8">
+              <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-6">
+                <h2 className="text-xl font-medium text-neutral-900 mb-4">
+                  How to Get an Official {stateData.stateName} Crash Report
+                </h2>
+                <div className="prose prose-neutral max-w-none text-neutral-600 space-y-4">
+                  <p className="leading-relaxed">
+                    If you were involved in a crash in {stateData.stateName}, your official crash report is
+                    typically kept by either the state highway patrol, the local police department or
+                    sheriff&apos;s office that responded, or the state&apos;s Department of Motor Vehicles.
+                  </p>
+
+                  <h3 className="text-lg font-medium text-neutral-800 mt-6 mb-2">
+                    1. Crashes on Highways and State Roads
+                  </h3>
+                  <p className="leading-relaxed">
+                    For crashes handled on highways and state roads, you can usually request a basic crash
+                    report through the state patrol&apos;s central records unit. You&apos;ll need the driver name,
+                    crash date, case number, and crash location. Requests may take several business days to process.
+                  </p>
+
+                  <h3 className="text-lg font-medium text-neutral-800 mt-6 mb-2">
+                    2. Crashes Inside Cities and Counties
+                  </h3>
+                  <p className="leading-relaxed">
+                    If your crash happened inside city or county limits, the local police department or
+                    sheriff&apos;s office is usually the custodian of the report. Most agencies allow you
+                    to request reports online, in person, or by mail, and they charge a small fee.
+                  </p>
+
+                  <h3 className="text-lg font-medium text-neutral-800 mt-6 mb-2">
+                    3. State DMV Records
+                  </h3>
+                  <p className="leading-relaxed">
+                    The state Department of Motor Vehicles or equivalent agency maintains statewide crash
+                    records for driver-history purposes. Processing can take several weeks as reports
+                    are entered into the state system.
+                  </p>
+
+                  <p className="text-sm text-neutral-500 mt-6 leading-relaxed">
+                    This site is not affiliated with any state patrol, department of motor vehicles, or
+                    local law-enforcement agency. We provide general guidance and summaries only. Always
+                    use the official state or local portals to request certified copies of crash reports.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-6">
+                <h2 className="text-xl font-medium text-neutral-900 mb-4">
+                  {stateData.stateName} Accident Report FAQs
+                </h2>
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="font-medium text-neutral-800 mb-2">
+                      How long does it take for a crash report to be available?
+                    </h3>
+                    <p className="text-neutral-600 leading-relaxed">
+                      Processing times vary by agency, but it often takes several days to a few weeks
+                      before a crash report is available for request. Some statewide records can take
+                      up to a few months to appear in the driver record system, especially if the
+                      crash was recently reported.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h3 className="font-medium text-neutral-800 mb-2">
+                      Do I need a report if it was a minor accident?
+                    </h3>
+                    <p className="text-neutral-600 leading-relaxed">
+                      Even for minor crashes, an official report can be important for insurance claims
+                      and protecting your rights if injuries or vehicle damage turn out to be more
+                      serious than they first appeared.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h3 className="font-medium text-neutral-800 mb-2">
+                      Can this website give me the official report?
+                    </h3>
+                    <p className="text-neutral-600 leading-relaxed">
+                      No. We help you understand which agency likely has your report and how to request
+                      it. Official copies are only available from government agencies such as the state
+                      patrol, local police departments, sheriff&apos;s offices, or the state DMV.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-6">
+                <h2 className="text-xl font-medium text-neutral-900 mb-4">About Our {stateData.stateName} Coverage</h2>
+                <div className="prose prose-neutral max-w-none text-neutral-600">
+                  <p className="leading-relaxed">
+                    This page currently shows a selection of recent {stateData.stateName} traffic accidents
+                    from publicly available news sources. It is not a complete list of all crashes in
+                    the state. We track {stateData.totalIncidents.toLocaleString()} incidents
+                    across {stateData.cityData.length} cities in {stateData.stateName}.
+                  </p>
+                  <p className="leading-relaxed mt-4">
+                    Our data comes from news reports and public announcements. For official statewide
+                    statistics, contact your state&apos;s Department of Transportation or highway safety office.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -256,7 +351,7 @@ export default async function StateAccidentsPage({
           <div className="lg:col-span-1 mt-8 lg:mt-0">
             {/* Legal Help CTA */}
             <div className="bg-neutral-900 rounded-2xl p-6 text-white mb-6">
-              <h3 className="text-lg font-medium mb-3">Injured in a {stateData.name} Accident?</h3>
+              <h3 className="text-lg font-medium mb-3">Injured in a {stateData.stateName} Accident?</h3>
               <p className="text-neutral-400 text-sm mb-4 leading-relaxed">
                 Get a free case evaluation from an experienced personal injury attorney. No fees unless you win.
               </p>
@@ -272,39 +367,36 @@ export default async function StateAccidentsPage({
             <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5 mb-6">
               <h3 className="text-sm font-medium text-neutral-900 mb-3 uppercase tracking-wide">Search Accidents</h3>
               <p className="text-neutral-600 text-sm mb-4">
-                Looking for a specific accident in {stateData.name}?
+                Looking for a specific accident in {stateData.stateName}?
               </p>
               <Link
-                href={`/search?state=${state.toUpperCase()}`}
+                href="/search"
                 className="block w-full bg-neutral-900 text-white px-4 py-3 rounded-xl hover:bg-neutral-800 transition font-medium text-center text-sm"
               >
-                Search {stateData.name} Accidents
+                Search {stateData.stateName} Accidents
               </Link>
             </div>
 
-            {/* Major Highways */}
+            {/* Get Report CTA */}
             <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5 mb-6">
-              <h3 className="text-sm font-medium text-neutral-900 mb-4 uppercase tracking-wide">Major Highways</h3>
-              <div className="space-y-2">
-                <Link href={`/search?state=${state}&road=i-25`} className="block text-[#2A7D6E] hover:text-[#236859] text-sm hover:underline">
-                  I-25 Accidents
-                </Link>
-                <Link href={`/search?state=${state}&road=i-70`} className="block text-[#2A7D6E] hover:text-[#236859] text-sm hover:underline">
-                  I-70 Accidents
-                </Link>
-                <Link href={`/search?state=${state}&road=i-76`} className="block text-[#2A7D6E] hover:text-[#236859] text-sm hover:underline">
-                  I-76 Accidents
-                </Link>
-                <Link href={`/search?state=${state}&road=us-36`} className="block text-[#2A7D6E] hover:text-[#236859] text-sm hover:underline">
-                  US-36 Accidents
-                </Link>
-              </div>
+              <h3 className="text-sm font-medium text-neutral-900 mb-3 uppercase tracking-wide">Need Your Report?</h3>
+              <p className="text-neutral-600 text-sm mb-4">
+                Learn how to obtain the official accident report from your local agency.
+              </p>
+              <Link
+                href="/get-report/step-1"
+                className="block w-full bg-[#2A7D6E] text-white px-4 py-3 rounded-xl hover:bg-[#236859] transition font-medium text-center text-sm"
+              >
+                Get Your Police Report
+              </Link>
             </div>
 
             {/* Disclaimer */}
             <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
               <p className="text-amber-800 text-xs leading-relaxed">
-                <strong>Disclaimer:</strong> Statistics are based on publicly available data and may not represent all accidents. For official statistics, contact CDOT or local law enforcement.
+                <strong>Disclaimer:</strong> Information is based on publicly available data and
+                may not represent all accidents. For official statistics, contact the state
+                Department of Transportation or local law enforcement.
               </p>
             </div>
           </div>
@@ -321,16 +413,10 @@ export async function generateMetadata({
   params: Promise<{ state: string }>;
 }) {
   const { state } = await params;
-  const stateData = STATE_DATA[state];
-
-  if (!stateData) {
-    return {
-      title: "State Not Found | AccidentLookup",
-    };
-  }
+  const stateName = STATE_NAMES[state.toLowerCase()] || state.toUpperCase();
 
   return {
-    title: `${stateData.name} Traffic Accidents Today | AccidentLookup`,
-    description: `View recent traffic accidents in ${stateData.name}. Search accident reports by city, find crash locations, and get legal help.`,
+    title: `${stateName} Traffic Accidents Today | AccidentLookup`,
+    description: `View recent traffic accidents in ${stateName}. Search accident reports by city, find crash locations, and learn how to get your official police report.`,
   };
 }
