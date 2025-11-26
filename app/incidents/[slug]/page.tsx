@@ -4,6 +4,36 @@ import prisma from "@/lib/prisma";
 
 export const revalidate = 600; // Re-generate every 10 minutes
 
+// Helper to clean summary text - removes junk URLs, HTML tags, and other artifacts
+function cleanSummary(raw?: string | null): string | null {
+  if (!raw) return null;
+
+  // Strip anything after a raw URL (often where junk starts)
+  const cutAtHttp = raw.split(/https?:\/\//)[0];
+
+  // Remove any accidental HTML-ish tags
+  const noTags = cutAtHttp.replace(/<[^>]+>/g, "");
+
+  // Remove any leftover prompt-like text or code artifacts
+  const cleaned = noTags
+    .replace(/\[.*?\]/g, "") // Remove bracket content
+    .replace(/\{.*?\}/g, "") // Remove brace content
+    .trim();
+
+  if (!cleaned || cleaned.length < 20) return null;
+
+  return cleaned;
+}
+
+// Helper to extract clean hostname from URL
+function getHostname(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
+}
+
 async function getIncident(slug: string) {
   return prisma.incident.findUnique({
     where: { slug },
@@ -151,7 +181,7 @@ export default async function IncidentPage({
         </div>
       </div>
 
-      <div className="container mx-auto px-6 lg:px-12 max-w-[1200px] py-8">
+      <div className="container mx-auto px-6 lg:px-12 max-w-[1200px] py-8 pb-32 sm:pb-8">
         <div className="lg:grid lg:grid-cols-3 lg:gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2">
@@ -212,14 +242,28 @@ export default async function IncidentPage({
             </div>
 
             {/* Summary Card */}
-            {incident.summary && (
-              <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
-                <h2 className="text-lg font-semibold text-slate-900 mb-3">
-                  Incident Summary
-                </h2>
-                <p className="text-slate-700 leading-relaxed">{incident.summary}</p>
-              </div>
-            )}
+            {(() => {
+              const summary = cleanSummary(incident.summary);
+              return summary ? (
+                <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
+                  <h2 className="text-lg font-semibold text-slate-900 mb-3">
+                    Incident Summary
+                  </h2>
+                  <p className="text-slate-700 leading-relaxed whitespace-normal break-words">
+                    {summary}
+                  </p>
+                </div>
+              ) : (
+                <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
+                  <h2 className="text-lg font-semibold text-slate-900 mb-3">
+                    Incident Summary
+                  </h2>
+                  <p className="text-slate-500 italic">
+                    Details are still being confirmed from public news sources.
+                  </p>
+                </div>
+              );
+            })()}
 
             {/* News Sources */}
             <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
@@ -251,21 +295,37 @@ export default async function IncidentPage({
                       rel="noopener noreferrer"
                       className="block group"
                     >
-                      <h3 className="text-slate-900 font-medium group-hover:text-blue-800 transition">
+                      <h3 className="text-slate-900 font-medium group-hover:text-blue-800 transition break-words">
                         {source.title}
                       </h3>
-                      {source.publisher && (
-                        <p className="text-sm text-slate-500 mt-1">
-                          {source.publisher} •{" "}
+                      <div className="flex items-center gap-2 text-sm text-slate-500 mt-1">
+                        <svg
+                          className="w-3.5 h-3.5 text-slate-400 flex-shrink-0"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          strokeWidth={2}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
+                          />
+                        </svg>
+                        <span className="truncate">
+                          {source.publisher || getHostname(source.url)}
+                        </span>
+                        <span>•</span>
+                        <span className="flex-shrink-0">
                           {source.publishedAt.toLocaleDateString("en-US", {
                             month: "short",
                             day: "numeric",
                             year: "numeric",
                           })}
-                        </p>
-                      )}
+                        </span>
+                      </div>
                       {source.snippet && (
-                        <p className="text-sm text-slate-600 mt-2 line-clamp-2">
+                        <p className="text-sm text-slate-600 mt-2 line-clamp-2 break-words">
                           {source.snippet}
                         </p>
                       )}
@@ -359,7 +419,7 @@ export default async function IncidentPage({
                 Getting Your Police/Accident Report
               </h2>
               <p className="text-slate-700 mb-4">
-                If you were involved in this accident, you&apos;ll need a copy of
+                If you were involved in this accident, you&apos;ll usually need a copy of
                 the official police report for your insurance claim or legal case.
                 Reports are typically available within 5-10 business days after the
                 incident.
@@ -417,10 +477,10 @@ export default async function IncidentPage({
             <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
               <p className="text-amber-800 text-sm leading-relaxed">
                 <strong>Disclaimer:</strong> This information is compiled from
-                publicly available news sources. Details may be incomplete or
-                change as investigations continue. This is not an official record.
-                For official information, contact the responding law enforcement
-                agency.
+                publicly available news sources. It may be incomplete or updated
+                later as investigations continue. This is not an official record.
+                For official records, contact the law-enforcement agency that
+                handled the crash.
               </p>
               <p className="text-amber-700 text-xs mt-2">
                 Last updated:{" "}
@@ -440,8 +500,8 @@ export default async function IncidentPage({
 
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            {/* Legal Help CTA Card */}
-            <div className="bg-gradient-to-br from-blue-800 to-blue-900 rounded-xl p-6 text-white mb-6 sticky top-24">
+            {/* Legal Help CTA Card - Desktop (sticky in sidebar) */}
+            <div className="hidden sm:block bg-gradient-to-br from-blue-800 to-blue-900 rounded-xl p-6 text-white mb-6 sticky top-24">
               <h3 className="text-lg font-bold mb-3">
                 Were You Involved in This Crash?
               </h3>
@@ -545,6 +605,22 @@ export default async function IncidentPage({
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+    {/* Fixed Mobile CTA - Bottom bar on small screens */}
+    <div className="sm:hidden fixed bottom-0 inset-x-0 z-50 bg-gradient-to-r from-blue-800 to-blue-900 border-t border-blue-700 p-4 shadow-lg">
+      <div className="flex items-center justify-between gap-4">
+        <div className="text-white">
+          <p className="text-sm font-semibold">Were you involved?</p>
+          <p className="text-xs text-blue-200">Free case evaluation</p>
+        </div>
+        <Link
+          href="/legal-help"
+          className="bg-white text-blue-800 px-4 py-2.5 rounded-lg font-semibold text-sm whitespace-nowrap hover:bg-blue-50 transition"
+        >
+          Talk to a Lawyer
+        </Link>
       </div>
     </div>
     </>
