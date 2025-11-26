@@ -4,35 +4,58 @@ import prisma from "@/lib/prisma";
 
 export const revalidate = 600; // Re-generate every 10 minutes
 
-// Helper to clean summary text - removes junk URLs, HTML tags, and other artifacts
-function cleanSummary(raw?: string | null): string | null {
+// Helper to strip HTML entities, publisher names, and other junk from text
+function stripHtmlAndPublisher(raw?: string | null): string | null {
   if (!raw) return null;
 
-  // Remove obvious junk: URLs, HTML tags, brackets/braces
-  let text = raw
-    .replace(/https?:\/\/\S+/g, "")
-    .replace(/<[^>]+>/g, "")
-    .replace(/[\[\]\{\}]/g, "")
-    .trim();
+  let text = raw;
 
-  // Collapse multiple spaces
-  text = text.replace(/\s+/g, " ");
+  // 1) Replace HTML entities that sneak through
+  text = text.replace(/&nbsp;/gi, " ");
+  text = text.replace(/&amp;/gi, "&");
+  text = text.replace(/&quot;/gi, '"');
+  text = text.replace(/&#\d+;/g, " ");
 
-  // If it's too short, treat as empty
-  if (text.length < 40) {
+  // 2) If there are double spaces (often where the station name is tacked on),
+  //    keep only the part before them.
+  const doubleSpaceIndex = text.indexOf("  ");
+  if (doubleSpaceIndex !== -1) {
+    text = text.slice(0, doubleSpaceIndex);
+  }
+
+  // 3) Strip any remaining HTML tags
+  text = text.replace(/<[^>]+>/g, "");
+
+  // 4) Remove URLs
+  text = text.replace(/https?:\/\/\S+/g, "");
+
+  // 5) Remove brackets/braces content
+  text = text.replace(/\[.*?\]/g, "");
+  text = text.replace(/\{.*?\}/g, "");
+
+  // 6) Collapse whitespace and trim
+  text = text.replace(/\s+/g, " ").trim();
+
+  // If it ends up super short, treat as empty
+  if (text.length < 25) {
     return null;
   }
 
   return text;
 }
 
-// Build a fallback summary when no usable summary exists
-function buildFallbackSummary(incident: {
+// Build a proper paragraph summary from incident data
+function buildIncidentSummary(incident: {
   headline: string;
+  summary?: string | null;
   city?: string | null;
   state?: string | null;
   occurredAt: Date;
 }): string {
+  // Try to clean the DB summary first
+  const cleanedFromDb = stripHtmlAndPublisher(incident.summary);
+  const cleanedHeadline = stripHtmlAndPublisher(incident.headline) ?? incident.headline;
+
   const location =
     incident.city && incident.state
       ? `${incident.city}, ${incident.state}`
@@ -46,7 +69,13 @@ function buildFallbackSummary(incident: {
     year: "numeric",
   });
 
-  return `This incident involves a reported traffic crash in ${location} on ${date}. It is based on information from publicly available news sources and may be updated as more details become available.`;
+  if (cleanedFromDb && cleanedFromDb.length > 60) {
+    // We have a usable summary — wrap it in context
+    return `${cleanedFromDb} This incident was reported in ${location} on ${date}, based on information from publicly available news sources. Details may be updated as more information is released.`;
+  }
+
+  // No usable summary, fall back to headline + context
+  return `${cleanedHeadline}. This incident involves a reported traffic crash in ${location} on ${date}, as described in public news coverage. Exact details may be limited in initial reports.`;
 }
 
 // Helper to extract clean hostname from URL
@@ -127,6 +156,7 @@ export default async function IncidentPage({
     month: "long",
     day: "numeric",
   });
+  const cleanedHeadline = stripHtmlAndPublisher(incident.headline) ?? incident.headline;
 
   // JSON-LD NewsArticle structured data
   const jsonLd = {
@@ -222,7 +252,7 @@ export default async function IncidentPage({
                 )}
               </div>
               <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-3 leading-tight">
-                {incident.headline}
+                {cleanedHeadline}
               </h1>
               <p className="text-sm text-slate-500 mb-4">
                 {location} • {formattedDate} • Traffic accident summary from public news sources
@@ -269,20 +299,14 @@ export default async function IncidentPage({
             </div>
 
             {/* Summary Card */}
-            {(() => {
-              const cleaned = cleanSummary(incident.summary);
-              const summary = cleaned ?? buildFallbackSummary(incident);
-              return (
-                <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
-                  <h2 className="text-lg font-semibold text-slate-900 mb-3">
-                    Incident Summary
-                  </h2>
-                  <p className="text-slate-700 leading-relaxed whitespace-normal break-words">
-                    {summary}
-                  </p>
-                </div>
-              );
-            })()}
+            <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
+              <h2 className="text-lg font-semibold text-slate-900 mb-3">
+                Incident Summary
+              </h2>
+              <p className="text-slate-700 leading-relaxed whitespace-normal break-words">
+                {buildIncidentSummary(incident)}
+              </p>
+            </div>
 
             {/* Key Details from Public Reports */}
             <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
