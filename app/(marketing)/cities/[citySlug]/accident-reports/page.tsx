@@ -124,9 +124,9 @@ export default async function CityAccidentReportsPage({
                     </svg>
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-1">Fast Delivery</h3>
+                    <h3 className="font-semibold mb-1">Instant Search</h3>
                     <p className="text-sm text-gray-600">
-                      Most reports delivered within 24-48 hours
+                      Search news coverage of local accidents
                     </p>
                   </div>
                 </div>
@@ -141,12 +141,12 @@ export default async function CityAccidentReportsPage({
               <div className="space-y-4">
                 <div>
                   <h3 className="font-semibold mb-2">
-                    How soon after an accident can I get the report?
+                    How soon after an accident can I find information?
                   </h3>
                   <p className="text-gray-600">
-                    Reports are typically available 5-14 days after the accident, depending on
-                    how quickly the police department processes them. Once available, we can
-                    deliver it to you within 24-48 hours.
+                    News coverage typically appears within days of an incident. Official police
+                    reports are available 5-14 business days after the accident from your local
+                    law enforcement agency.
                   </p>
                 </div>
                 <div>
@@ -220,8 +220,8 @@ export default async function CityAccidentReportsPage({
                     </p>
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-blue-600">24-48hrs</div>
-                    <p className="text-sm text-gray-600">Average delivery time</p>
+                    <div className="text-2xl font-bold text-blue-600">Instant</div>
+                    <p className="text-sm text-gray-600">Search results</p>
                   </div>
                   <div>
                     <div className="text-2xl font-bold text-blue-600">100%</div>

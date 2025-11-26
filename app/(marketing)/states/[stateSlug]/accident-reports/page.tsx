@@ -103,9 +103,9 @@ export default async function StateAccidentReportsPage({
                   <p className="text-gray-600">Report processed and entered into database</p>
                 </div>
                 <div className="border-l-4 border-blue-200 pl-4">
-                  <h3 className="font-semibold">Within 24-48 Hours</h3>
+                  <h3 className="font-semibold">Search Our Database</h3>
                   <p className="text-gray-600">
-                    We locate and deliver your report after you submit your request
+                    Check if your accident appears in news coverage we've compiled
                   </p>
                 </div>
               </div>
@@ -119,12 +119,12 @@ export default async function StateAccidentReportsPage({
               <div className="space-y-4">
                 <div>
                   <h3 className="font-semibold mb-2">
-                    How long does it take to get my {state.name} accident report?
+                    How can I find information about my {state.name} accident?
                   </h3>
                   <p className="text-gray-600">
-                    Most reports are available within 24-48 hours after you submit your request.
-                    Some reports may take longer if they're still being processed by the police
-                    department.
+                    Our search shows news coverage immediately. For the official police report,
+                    contact your local law enforcement agency—reports are typically available
+                    5-14 business days after the incident.
                   </p>
                 </div>
                 <div>
@@ -175,7 +175,7 @@ export default async function StateAccidentReportsPage({
                   </li>
                   <li className="flex items-start">
                     <span className="text-green-500 mr-2">✓</span>
-                    <span>Fast - Reports in 24-48 hours</span>
+                    <span>Fast - Instant search results</span>
                   </li>
                   <li className="flex items-start">
                     <span className="text-green-500 mr-2">✓</span>

@@ -51,6 +51,9 @@ export async function generateMetadata({
   };
 }
 
+const BASE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://accident-reports.vercel.app";
+
 export default async function IncidentPage({
   params,
 }: {
@@ -71,8 +74,51 @@ export default async function IncidentPage({
     day: "numeric",
   });
 
+  // JSON-LD NewsArticle structured data
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: incident.headline,
+    description: incident.summary || `Traffic accident report for ${location}`,
+    datePublished: incident.occurredAt.toISOString(),
+    dateModified: (incident.updatedAt ?? incident.occurredAt).toISOString(),
+    author: {
+      "@type": "Organization",
+      name: "AccidentReports",
+      url: BASE_URL,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "AccidentReports",
+      url: BASE_URL,
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${BASE_URL}/incidents/${incident.slug}`,
+    },
+    ...(incident.city && incident.state
+      ? {
+          contentLocation: {
+            "@type": "Place",
+            name: location,
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: incident.city,
+              addressRegion: incident.state,
+              addressCountry: "US",
+            },
+          },
+        }
+      : {}),
+  };
+
   return (
-    <div className="min-h-screen bg-slate-50">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="min-h-screen bg-slate-50">
       {/* Breadcrumb */}
       <div className="bg-white border-b border-slate-200">
         <div className="container mx-auto px-6 lg:px-12 max-w-[1200px] py-4">
@@ -501,5 +547,6 @@ export default async function IncidentPage({
         </div>
       </div>
     </div>
+    </>
   );
 }

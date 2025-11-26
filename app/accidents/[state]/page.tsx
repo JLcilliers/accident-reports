@@ -4,6 +4,9 @@ import prisma from "@/lib/prisma";
 
 export const revalidate = 600; // Re-generate every 10 minutes
 
+const BASE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://accident-reports.vercel.app";
+
 // State abbreviation to full name mapping
 const STATE_NAMES: Record<string, string> = {
   al: "Alabama", ak: "Alaska", az: "Arizona", ar: "Arkansas", ca: "California",
@@ -100,8 +103,45 @@ export default async function StateAccidentsPage({
     notFound();
   }
 
+  // JSON-LD FAQPage structured data
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "How long does it take for a crash report to be available?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Processing times vary by agency, but it often takes several days to a few weeks before a crash report is available for request. Some statewide records can take up to a few months to appear in the driver record system.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Do I need a report if it was a minor accident?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Even for minor crashes, an official report can be important for insurance claims and protecting your rights if injuries or vehicle damage turn out to be more serious than they first appeared.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Can this website give me the official report?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "No. We help you understand which agency likely has your report and how to request it. Official copies are only available from government agencies such as the state patrol, local police departments, sheriff's offices, or the state DMV.",
+        },
+      },
+    ],
+  };
+
   return (
-    <div className="min-h-screen bg-[#F7F7F7]">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <div className="min-h-screen bg-[#F7F7F7]">
       <div className="container mx-auto px-6 lg:px-12 max-w-[1200px] py-12 lg:py-16">
         {/* Page Header */}
         <div className="mb-12">
@@ -403,6 +443,7 @@ export default async function StateAccidentsPage({
         </div>
       </div>
     </div>
+    </>
   );
 }
 

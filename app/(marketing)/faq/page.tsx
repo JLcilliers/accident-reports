@@ -12,8 +12,8 @@ export default function FAQPage() {
       answer: "We compile accident information from publicly available news sources, including local news outlets and press releases. Our system organizes this information by location and date so you can find relevant accidents in your area.",
     },
     {
-      question: "How long does it take to get a report?",
-      answer: "Most accident reports are found within minutes using our automated system. If manual lookup is required, it typically takes 24-48 hours. We'll notify you via email or SMS when your report is ready.",
+      question: "How long does it take to find information?",
+      answer: "Our search shows available information from news sources immediately. Official police reports must be obtained from the responding law enforcement agency, typically 5-14 business days after the incident.",
     },
     {
       question: "Will a lawyer contact me?",
@@ -24,8 +24,8 @@ export default function FAQPage() {
       answer: "You'll need basic details about the accident: the date it occurred, the location (city/county and state), and the type of incident. The more details you provide, the faster we can locate your report.",
     },
     {
-      question: "What if my accident report isn't found?",
-      answer: "If our automated system can't find your report, we'll queue it for manual lookup by our team. Reports are typically available 5-14 days after an accident. We'll notify you as soon as it becomes available.",
+      question: "What if my accident isn't in your system?",
+      answer: "Our database only includes accidents covered by news sources. If your accident isn't listed, you'll need to contact your local police department or sheriff's office directly for the official police report.",
     },
     {
       question: "Can I use this report for insurance claims?",

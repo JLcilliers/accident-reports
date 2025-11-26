@@ -195,7 +195,7 @@ export default function Step3Page() {
                       <li className="flex items-start">
                         <span className="text-blue-600 mr-2">•</span>
                         <span className="text-gray-700">
-                          Most reports are available within 24-48 hours
+                          We'll check our news sources for matching incidents
                         </span>
                       </li>
                     </ul>

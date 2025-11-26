@@ -347,9 +347,9 @@ export default function HowItWorksPage() {
         </h2>
         <div className="space-y-4">
           <div className="bg-white rounded-2xl p-6 border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
-            <h4 className="text-neutral-900 font-medium mb-2">How long does it take to get my summary?</h4>
+            <h4 className="text-neutral-900 font-medium mb-2">How long does it take to find information?</h4>
             <p className="text-neutral-600 leading-relaxed">
-              Most people see potential matches within a few minutes. If we need to do a manual lookup, we&apos;ll show an estimated time and update you by text or email.
+              Search results from our news database appear instantly. Official police reports must be requested directly from local law enforcement and typically take 5-14 business days.
             </p>
           </div>
           <div className="bg-white rounded-2xl p-6 border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">

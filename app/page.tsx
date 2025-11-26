@@ -1,9 +1,27 @@
 import Link from "next/link";
 import VideoHero from "@/components/hero/VideoHero";
 
+const BASE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://accident-reports.vercel.app";
+
+// JSON-LD Organization structured data
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "AccidentReports",
+  url: BASE_URL,
+  description:
+    "Search recent traffic accidents compiled from publicly available news sources. Find accident information by location, date, and road.",
+  sameAs: [],
+};
+
 export default function Home() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+      />
       {/* HERO SECTION with Video Background */}
       <VideoHero />
 
