@@ -1,6 +1,8 @@
+import { Prisma } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { buildIncidentSlug } from "./slug";
 import { makeIncidentKey } from "./dedupe";
+import { extractAccidentFacts } from "@/lib/seo/extractAccidentFacts";
 import { generateIncidentArticle } from "@/lib/seo/generateIncidentArticle";
 import type { IncidentCandidate } from "./types";
 
@@ -114,30 +116,49 @@ export async function upsertIncidentFromCandidate(
   });
 
   // Generate SEO content for new incidents (async, non-blocking)
-  generateIncidentArticle({
-    headline: candidate.headline,
-    summary: candidate.snippet,
-    city: candidate.city,
-    state: candidate.state,
-    occurredAt: candidate.occurredAt,
-    sources: [{ title: candidate.headline, snippet: candidate.snippet }],
-  })
-    .then(async (seoContent) => {
-      if (seoContent) {
+  // Two-step process: 1) Extract facts, 2) Generate article using facts
+  (async () => {
+    try {
+      // Build combined text from the candidate for fact extraction
+      const combinedText = `${candidate.headline}. ${candidate.snippet || ""}`;
+
+      // Step 1: Extract structured facts from the news coverage
+      console.log(`[FactExtraction] Extracting facts for: ${incident.slug}`);
+      const facts = await extractAccidentFacts(candidate.headline, combinedText);
+
+      // Step 2: Generate SEO article using the extracted facts
+      console.log(`[SEO] Generating article for: ${incident.slug}`);
+      const seoContent = await generateIncidentArticle(
+        {
+          headline: candidate.headline,
+          summary: candidate.snippet,
+          city: candidate.city,
+          state: candidate.state,
+          occurredAt: candidate.occurredAt,
+          sources: [{ title: candidate.headline, snippet: candidate.snippet }],
+        },
+        facts // Pass extracted facts to enrich the article
+      );
+
+      // Update incident with both facts and SEO content
+      if (facts || seoContent) {
         await prisma.incident.update({
           where: { id: incident.id },
           data: {
-            seoTitle: seoContent.seoTitle,
-            seoDescription: seoContent.seoDescription,
-            articleBody: seoContent.articleBody,
+            ...(facts && { extractedFacts: facts as unknown as Prisma.InputJsonValue }),
+            ...(seoContent && {
+              seoTitle: seoContent.seoTitle,
+              seoDescription: seoContent.seoDescription,
+              articleBody: seoContent.articleBody,
+            }),
           },
         });
-        console.log(`[SEO] Generated article for incident: ${incident.slug}`);
+        console.log(`[SEO] Generated content for incident: ${incident.slug}`);
       }
-    })
-    .catch((err) => {
-      console.error(`[SEO] Failed to generate article for ${incident.slug}:`, err);
-    });
+    } catch (err) {
+      console.error(`[SEO] Failed to generate content for ${incident.slug}:`, err);
+    }
+  })();
 
   return {
     incidentId: incident.id,

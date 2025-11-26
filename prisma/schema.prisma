@@ -29,6 +29,9 @@ model Incident {
   seoTitle       String?  // SEO-optimized title (50-60 chars)
   seoDescription String?  // Meta description (150-160 chars)
 
+  // Structured facts extracted from news sources (JSON)
+  extractedFacts Json?    // Companies, vehicles, people, agencies, etc.
+
   sources IncidentSource[]
 
   @@index([occurredAt])
@@ -50,4 +53,27 @@ model IncidentSource {
 
   @@index([incidentId])
   @@index([publishedAt])
+}
+
+model Lead {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Contact information
+  name    String
+  phone   String?
+  email   String?
+  details String?  // Optional free-text details
+
+  // Wizard answers (stored as JSON)
+  answers Json     // { who, accidentType, state, accidentDateBucket, accidentYear, injurySeverity, hasLawyer }
+
+  // Tracking
+  source    String?  // Where the lead came from (e.g., "get-help-wizard")
+  ipAddress String?
+  userAgent String?
+
+  @@index([createdAt])
+  @@index([email])
 }

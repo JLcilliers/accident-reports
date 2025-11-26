@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { stripHtmlAndPublisher, cleanRssSnippet, getHostname } from "@/lib/text";
+import type { AccidentFacts } from "@/lib/seo/extractAccidentFacts";
 
 export const revalidate = 600; // Re-generate every 10 minutes
 
@@ -129,6 +130,30 @@ export default async function IncidentPage({
   const seoDescription =
     incident.seoDescription || incident.summary || `Traffic accident report for ${location}`;
 
+  // Extract facts for JSON-LD enrichment
+  const extractedFacts = incident.extractedFacts as AccidentFacts | null;
+
+  // Build about entities from extracted facts (companies, agencies, vehicles)
+  const aboutEntities: { "@type": string; name: string }[] = [];
+  if (extractedFacts?.companiesMentioned) {
+    extractedFacts.companiesMentioned.forEach((company) => {
+      aboutEntities.push({ "@type": "Organization", name: company });
+    });
+  }
+  if (extractedFacts?.agenciesInvolved) {
+    extractedFacts.agenciesInvolved.forEach((agency) => {
+      aboutEntities.push({ "@type": "GovernmentOrganization", name: agency });
+    });
+  }
+  if (extractedFacts?.vehicles) {
+    extractedFacts.vehicles.forEach((vehicle) => {
+      const vehicleName = vehicle.ownerCompany
+        ? `${vehicle.type} (${vehicle.ownerCompany})`
+        : vehicle.type;
+      aboutEntities.push({ "@type": "Vehicle", name: vehicleName });
+    });
+  }
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
@@ -155,7 +180,7 @@ export default async function IncidentPage({
       ? {
           contentLocation: {
             "@type": "Place",
-            name: location,
+            name: extractedFacts?.primaryLocation || location,
             address: {
               "@type": "PostalAddress",
               addressLocality: incident.city,
@@ -165,6 +190,7 @@ export default async function IncidentPage({
           },
         }
       : {}),
+    ...(aboutEntities.length > 0 ? { about: aboutEntities } : {}),
   };
 
   return (
@@ -296,35 +322,78 @@ export default async function IncidentPage({
             )}
 
             {/* Key Details from Public Reports */}
-            <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
-              <h2 className="text-lg font-semibold text-slate-900 mb-4">
-                Key Details from Public Reports
-              </h2>
-              <ul className="list-disc pl-5 space-y-2 text-slate-700">
-                <li>
-                  <span className="font-medium">Location:</span>{" "}
-                  {incident.city && incident.state
-                    ? `${incident.city}, ${incident.state}`
-                    : incident.state ?? "Not specified in reports"}
-                </li>
-                <li>
-                  <span className="font-medium">Date of crash:</span>{" "}
-                  {formattedDate}
-                </li>
-                <li>
-                  <span className="font-medium">Type of incident:</span>{" "}
-                  Traffic accident
-                </li>
-                <li>
-                  <span className="font-medium">Number of news sources:</span>{" "}
-                  {incident.sources.length}
-                </li>
-              </ul>
-              <p className="text-xs text-slate-500 mt-3">
-                These details are taken from publicly available news coverage and may not
-                include every fact in the official police report.
-              </p>
-            </div>
+            {(() => {
+              const facts = incident.extractedFacts as AccidentFacts | null;
+              return (
+                <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
+                  <h2 className="text-lg font-semibold text-slate-900 mb-4">
+                    Key Details from Public Reports
+                  </h2>
+                  <ul className="list-disc pl-5 space-y-2 text-slate-700">
+                    <li>
+                      <span className="font-medium">Location:</span>{" "}
+                      {facts?.primaryLocation ||
+                        (incident.city && incident.state
+                          ? `${incident.city}, ${incident.state}`
+                          : incident.state ?? "Not specified in reports")}
+                    </li>
+                    {facts?.roads && facts.roads.length > 0 && (
+                      <li>
+                        <span className="font-medium">Roads/Highways:</span>{" "}
+                        {facts.roads.join(", ")}
+                      </li>
+                    )}
+                    <li>
+                      <span className="font-medium">Date of crash:</span>{" "}
+                      {formattedDate}
+                      {facts?.timeOfCrashApprox && ` (${facts.timeOfCrashApprox})`}
+                    </li>
+                    {facts?.vehicles && facts.vehicles.length > 0 && (
+                      <li>
+                        <span className="font-medium">Vehicles involved:</span>{" "}
+                        {facts.vehicles
+                          .map((v) =>
+                            v.ownerCompany ? `${v.type} (${v.ownerCompany})` : v.type
+                          )
+                          .join(", ")}
+                      </li>
+                    )}
+                    {facts?.injuriesCount && (
+                      <li>
+                        <span className="font-medium">Injuries:</span>{" "}
+                        {facts.injuriesCount}
+                      </li>
+                    )}
+                    {facts?.fatalitiesCount && (
+                      <li>
+                        <span className="font-medium">Fatalities:</span>{" "}
+                        {facts.fatalitiesCount}
+                      </li>
+                    )}
+                    {facts?.agenciesInvolved && facts.agenciesInvolved.length > 0 && (
+                      <li>
+                        <span className="font-medium">Responding agencies:</span>{" "}
+                        {facts.agenciesInvolved.join(", ")}
+                      </li>
+                    )}
+                    {facts?.companiesMentioned && facts.companiesMentioned.length > 0 && (
+                      <li>
+                        <span className="font-medium">Companies involved:</span>{" "}
+                        {facts.companiesMentioned.join(", ")}
+                      </li>
+                    )}
+                    <li>
+                      <span className="font-medium">Number of news sources:</span>{" "}
+                      {incident.sources.length}
+                    </li>
+                  </ul>
+                  <p className="text-xs text-slate-500 mt-3">
+                    These details are taken from publicly available news coverage and may not
+                    include every fact in the official police report.
+                  </p>
+                </div>
+              );
+            })()}
 
             {/* News Sources */}
             <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
