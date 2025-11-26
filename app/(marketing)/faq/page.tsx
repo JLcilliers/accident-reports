@@ -9,7 +9,7 @@ export default function FAQPage() {
     },
     {
       question: "Where do you get your data?",
-      answer: "We search multiple public databases, partner data sources, and official records to locate your accident report. Our system cross-references information to find the most accurate match.",
+      answer: "We compile accident information from publicly available news sources, including local news outlets and press releases. Our system organizes this information by location and date so you can find relevant accidents in your area.",
     },
     {
       question: "How long does it take to get a report?",
@@ -33,7 +33,7 @@ export default function FAQPage() {
     },
     {
       question: "What states do you cover?",
-      answer: "We currently provide accident report lookup services for all 50 states. Our system searches multiple databases to locate reports from local police departments, state highway patrols, and other law enforcement agencies nationwide.",
+      answer: "We're actively expanding our coverage across the United States. Currently, we have accident information for select states and cities where we have reliable public data sources. Visit our Accidents page to see which states currently have coverage. We add new regions as more data sources become available.",
     },
     {
       question: "Is my information secure?",

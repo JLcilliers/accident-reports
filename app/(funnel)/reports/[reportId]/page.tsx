@@ -198,7 +198,7 @@ export default async function ReportPage({
         <div className="mt-12 bg-blue-600 rounded-lg p-8 text-white text-center">
           <h2 className="text-3xl font-bold mb-4">Need Another Report?</h2>
           <p className="text-xl mb-6 text-blue-100">
-            We can help you find any accident or police report - 100% free
+            Search for accident information in our database - free to use
           </p>
           <Link
             href="/get-report/step-1"

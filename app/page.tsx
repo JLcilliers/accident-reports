@@ -112,7 +112,7 @@ export default function Home() {
                 Stay Informed About Local Accidents
               </h2>
               <p className="text-neutral-500 leading-relaxed mb-8">
-                We monitor public reports and official records to bring you timely, factual information about traffic accidents in your area.
+                We compile information from publicly available news sources to bring you timely, factual summaries about traffic accidents in your area.
               </p>
               <ul className="space-y-4 mb-8">
                 <li className="flex items-start gap-3">
@@ -137,7 +137,7 @@ export default function Home() {
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
                     </svg>
                   </div>
-                  <span className="text-neutral-600 text-sm">Coverage across all 50 states</span>
+                  <span className="text-neutral-600 text-sm">Growing coverage across multiple states</span>
                 </li>
               </ul>
               <Link

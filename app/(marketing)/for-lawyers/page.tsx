@@ -65,7 +65,7 @@ export default function ForLawyersPage() {
               <div>
                 <h3 className="font-medium text-neutral-900 mb-1">Nationwide Coverage</h3>
                 <p className="text-neutral-600 text-sm">
-                  We generate leads from all 50 states, allowing you to expand your practice area
+                  We generate leads from multiple states and are actively expanding coverage
                 </p>
               </div>
             </div>
