@@ -27,6 +27,47 @@ const STEP_IDS = [
 
 type StepId = (typeof STEP_IDS)[number];
 
+/* ---------- Step-Specific AI Transition Copy ---------- */
+
+type TransitionCopy = {
+  title: string;
+  body: string;
+  icon: "location" | "person" | "medical" | "legal" | "profile";
+};
+
+const TRANSITIONS: Record<StepId, TransitionCopy> = {
+  location: {
+    title: "Searching crashes in your area",
+    body: "Your location helps us match you with the right accident reports and local resources.",
+    icon: "location",
+  },
+  involvement: {
+    title: "Tailoring results to your situation",
+    body: "Understanding your role helps us prioritize information that matters most to you.",
+    icon: "person",
+  },
+  medical: {
+    title: "Checking injury-related reports",
+    body: "Medical details help identify which accidents may be relevant to your case.",
+    icon: "medical",
+  },
+  lawyer: {
+    title: "Reviewing legal resource options",
+    body: "We're preparing information about legal support and next steps for your situation.",
+    icon: "legal",
+  },
+  name: {
+    title: "Personalizing your accident report",
+    body: "Your information helps us create a customized summary just for you.",
+    icon: "profile",
+  },
+  email: {
+    title: "Preparing your report",
+    body: "We're compiling all matching accidents to send to your inbox.",
+    icon: "profile",
+  },
+};
+
 export function HomeAccidentWizard() {
   const [stepIndex, setStepIndex] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
@@ -273,7 +314,7 @@ export function HomeAccidentWizard() {
                 )}
               </motion.div>
             ) : (
-              <SearchingAnimation />
+              <SearchingAnimation stepId={currentStepId} />
             )}
           </AnimatePresence>
         </div>
@@ -332,30 +373,95 @@ export function HomeAccidentWizard() {
 
 /* ---------- Searching Animation ---------- */
 
-function SearchingAnimation() {
+function TransitionIcon({ type }: { type: TransitionCopy["icon"] }) {
+  const iconClass = "w-8 h-8 text-[#2A7D6E]";
+
+  switch (type) {
+    case "location":
+      return (
+        <svg className={iconClass} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      );
+    case "person":
+      return (
+        <svg className={iconClass} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        </svg>
+      );
+    case "medical":
+      return (
+        <svg className={iconClass} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        </svg>
+      );
+    case "legal":
+      return (
+        <svg className={iconClass} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+        </svg>
+      );
+    case "profile":
+      return (
+        <svg className={iconClass} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+}
+
+function SearchingAnimation({ stepId }: { stepId: StepId }) {
+  const transition = TRANSITIONS[stepId];
+
   return (
     <motion.div
-      key="searching"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
+      key={`searching-${stepId}`}
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      transition={{ duration: 0.25 }}
       className="flex h-[320px] flex-col items-center justify-center space-y-5 text-center px-4"
     >
-      {/* Animated spinner */}
+      {/* Icon with animated ring */}
       <div className="relative">
-        <div className="h-14 w-14 animate-spin rounded-full border-3 border-neutral-200 border-t-[#2A7D6E]" />
-        <div className="absolute inset-0 h-14 w-14 animate-ping rounded-full border border-[#2A7D6E] opacity-20" />
+        <motion.div
+          className="w-20 h-20 bg-[#E8F5F2] rounded-full flex items-center justify-center"
+          animate={{ scale: [1, 1.05, 1] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <TransitionIcon type={transition.icon} />
+        </motion.div>
+        {/* Animated outer ring */}
+        <motion.div
+          className="absolute inset-0 w-20 h-20 rounded-full border-2 border-[#2A7D6E]"
+          animate={{ scale: [1, 1.3], opacity: [0.6, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeOut" }}
+        />
       </div>
+
+      {/* Step-specific copy */}
       <div className="space-y-2">
-        <p className="text-lg font-semibold text-neutral-900">
-          Searching accident records...
-        </p>
-        <p className="max-w-sm text-sm text-neutral-500 leading-relaxed">
-          We&apos;re scanning thousands of public accident reports and news sources
-          to find crashes matching your answers.
-        </p>
+        <motion.p
+          className="text-xl font-semibold text-neutral-900"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          {transition.title}
+        </motion.p>
+        <motion.p
+          className="max-w-sm text-sm text-neutral-500 leading-relaxed"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          {transition.body}
+        </motion.p>
       </div>
+
       {/* Animated dots */}
       <div className="flex space-x-1.5">
         {[0, 1, 2].map((i) => (
