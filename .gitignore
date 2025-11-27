@@ -44,3 +44,5 @@ next-env.d.ts
 
 # Playwright MCP test artifacts
 .playwright-mcp/
+
+.vercel
