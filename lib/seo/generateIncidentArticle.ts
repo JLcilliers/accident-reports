@@ -67,8 +67,133 @@ export async function generateIncidentArticle(
   // Build the prompt - richer when facts are available
   let prompt: string;
 
+  const articleFormatInstructions = `
+================================
+ARTICLE FORMAT - OUTPUT MUST FOLLOW THIS EXACTLY
+================================
+
+Your articleBody must contain ONLY these two sections, in this exact order:
+
+1) A "Key Takeaways" section
+2) A "Summary of the Incident" section
+
+Do NOT add any other sections, headings, conclusions, or commentary.
+
+================================
+SECTION 1: "Key Takeaways"
+================================
+
+- Start with this exact H2 heading:
+  ## Key Takeaways
+
+- Under it, write 4–6 short bullet points.
+
+- Use this pattern for the bullets (labels in **bold** followed by concise explanation):
+
+  • **Where & when:**
+    - Clear location and time.
+    - Include road name/number, direction if given, nearest exit or landmark, city, state, and approximate time with time zone if available.
+
+  • **What happened:**
+    - 1–2 sentences summarising the basic sequence of events in plain language.
+    - Clearly identify key vehicles (with year/make/model if provided) and the order of impacts.
+
+  • **Casualties:**
+    - Who was killed or injured and how many.
+    - Use available details such as "pronounced dead at the scene," "taken to hospital in critical condition," "non-life-threatening injuries," etc.
+    - If casualty information is unknown or not released, state that without guessing.
+
+  • **Notable details:**
+    - Optional bullet, only if relevant.
+    - Include any detail that increases public interest:
+      - involvement of law enforcement,
+      - commercial vehicles (e.g., FedEx, UPS),
+      - hazardous materials,
+      - children, school buses, etc.
+
+  • **Response:**
+    - Reference statements or actions from:
+      - local police, fire/EMS, DOT, or
+      - companies/agencies involved (e.g., a trucking company issuing condolences and confirming cooperation).
+    - If no statement is known, say that authorities state the investigation is ongoing.
+
+- Each bullet should be 1–2 sentences.
+- Tone: neutral, factual, and respectful.
+- Do NOT speculate about fault or causes.
+
+================================
+SECTION 2: "Summary of the Incident"
+================================
+
+- Use this exact H2 heading:
+  ## Summary of the Incident
+
+- Write 2–5 short paragraphs in neutral, factual language.
+
+- First paragraph:
+  - Attribute the information to named authorities if provided (e.g., "According to the Memphis Police Department (MPD) and the Tennessee Department of Transportation (TDOT)…").
+  - Clearly state:
+    - the type of crash (multi-vehicle, rear-end, rollover, etc., if known),
+    - the road, direction, and nearest interchange/landmark,
+    - the city and state,
+    - the date and approximate time in local time.
+
+- Middle paragraphs:
+  - Describe the sequence of events in chronological order:
+    - what first happened,
+    - how other vehicles became involved,
+    - whether any vehicles were already stopped from a prior crash,
+    - any secondary collisions.
+  - Clarify which vehicle struck which vehicle(s) and in what order, based on the provided facts.
+  - Include:
+    - the number of people injured or killed,
+    - their conditions (fatal, critical, serious, minor, unknown),
+    - whether they were inside vehicles or standing outside when they were struck.
+  - Mention impacts on traffic where known:
+    - lane closures,
+    - full interstate shutdowns,
+    - approximate duration or "for several hours" if no exact time is given.
+
+- If a company or agency is involved (e.g., FedEx truck, police vehicle, federal agent, school district bus):
+  - Integrate any public statements such as condolences or confirmation of cooperation with investigators.
+  - Note law-enforcement or public-interest angles factually.
+
+- Final paragraph:
+  - Briefly describe the current status:
+    - "The crash remains under investigation,"
+    - "No charges have been announced,"
+    - or similar.
+  - Do NOT assign blame or speculate about liability, intoxication, speeding, or distraction unless that is explicitly included in the provided facts.
+
+================================
+TONE, FACTUAL LIMITS, AND SEO BEHAVIOR
+================================
+
+- Tone:
+  - Neutral, factual, respectful.
+  - No sensational language.
+  - No graphic descriptions of injuries.
+
+- Facts:
+  - Use ONLY information provided in the input or clearly implied by it.
+  - If something is not known (e.g., identities not released, exact cause), say so plainly.
+  - Never invent names, ages, vehicle models, or quotes.
+
+- SEO (internal guidance — do NOT mention SEO in the article):
+  - Naturally weave in:
+    - road name/number (e.g., "I-240 East"),
+    - nearby junctions (e.g., "near Airways Boulevard"),
+    - city and state,
+    - company names (e.g., "FedEx truck"),
+    - vehicle makes/models/years (e.g., "2024 Toyota Corolla"),
+    - outcome terms like "crash," "collision," "fatality," "critical injury," "semi-truck," etc.
+  - Keep sentences readable and normal; do not repeat phrases awkwardly just for keywords.
+`;
+
   if (facts) {
-    prompt = `You are writing a factual, SEO-friendly article about a specific traffic accident for people searching online.
+    prompt = `You are an AI writer for a traffic-incident reporting website.
+
+Your job is to take structured crash facts and turn them into a clear, SEO-aware public incident report.
 
 INCIDENT HEADLINE:
 ${incident.headline}
@@ -85,16 +210,12 @@ BASIC INFO:
 - Agencies: ${agencies}
 - Injuries: ${facts.injuriesCount || "not specified"}
 - Fatalities: ${facts.fatalitiesCount || "not specified"}
+- Time of crash: ${facts.timeOfCrashApprox || "not specified"}
 
 NEWS SOURCES:
 ${sourceContext || "No additional sources"}
 
-RULES:
-- Use ONLY facts from the headline or extracted facts. Do NOT invent details.
-- Mention important entities for legal/news interest: companies (${companies}), vehicles, agencies.
-- If something is not in the facts, say "not specified in initial reports".
-- Do NOT assign legal fault or liability.
-- Avoid clickbait; keep a neutral, informative tone.
+${articleFormatInstructions}
 
 TASKS:
 1. seoTitle (max ~65 chars): Include location and key entities when present.
@@ -102,30 +223,14 @@ TASKS:
 
 2. seoDescription (max ~155 chars): Include location, crash type, and companies if mentioned.
 
-3. articleBody (500-800 words) with these sections (use paragraph breaks, no markdown headers):
-
-   WHAT HAPPENED IN THE CRASH
-   - Describe the incident using only stated facts
-   - Mention time of crash if known: "${facts.timeOfCrashApprox || "not specified"}"
-   - Include roads/location details
-
-   VEHICLES AND PEOPLE INVOLVED
-   - List company vehicles (e.g., FedEx truck) if mentioned
-   - Count of people injured/killed, even if approximate
-   - Describe roles of people involved
-
-   EMERGENCY RESPONSE AND TRAFFIC IMPACT
-   - Agencies that responded: ${agencies}
-   - Any road closures or traffic impacts mentioned
-
-   WHAT THIS MEANS FOR DRIVERS AND FAMILIES
-   - General post-accident advice: medical care, preserving evidence, requesting reports
-   - Suggest contacting a lawyer if injuries occurred
+3. articleBody: Follow the ARTICLE FORMAT instructions above EXACTLY. Output only the two sections: Key Takeaways and Summary of the Incident.
 
 Return strict JSON: { "seoTitle": string, "seoDescription": string, "articleBody": string }`;
   } else {
     // Fallback prompt when no facts are available
-    prompt = `You are a professional news writer for an accident reporting website. Generate SEO-optimized content for the following traffic accident.
+    prompt = `You are an AI writer for a traffic-incident reporting website.
+
+Your job is to take crash information and turn it into a clear, SEO-aware public incident report.
 
 INCIDENT DETAILS:
 - Headline: ${incident.headline}
@@ -136,22 +241,16 @@ INCIDENT DETAILS:
 NEWS SOURCES:
 ${sourceContext || "No additional sources"}
 
-Generate the following in JSON format:
+${articleFormatInstructions}
 
-1. seoTitle: An SEO-optimized title (50-60 characters) that includes the location and key details. Should be compelling for search results.
+TASKS:
+1. seoTitle: An SEO-optimized title (50-60 characters) that includes the location and key details.
 
-2. seoDescription: A meta description (150-160 characters) summarizing the incident. Should include location and encourage clicks.
+2. seoDescription: A meta description (150-160 characters) summarizing the incident.
 
-3. articleBody: A comprehensive 400-700 word article covering:
-   - What happened (based on available information)
-   - When and where it occurred
-   - Impact on the community and traffic
-   - General safety tips relevant to this type of incident
-   - Information about seeking legal help if injured
+3. articleBody: Follow the ARTICLE FORMAT instructions above EXACTLY. Output only the two sections: Key Takeaways and Summary of the Incident.
 
-   Write in a professional, informative tone. Do NOT make up specific details like names, exact injuries, or outcomes that aren't in the source material. Use phrases like "according to reports" or "authorities are investigating" when appropriate.
-
-   Format the article with proper paragraphs. Do not use markdown headers or bullet points.
+   Use ONLY information from the headline, summary, and news sources. Do NOT make up specific details like names, exact injuries, or outcomes that aren't in the source material. If something is not known, say so plainly (e.g., "identities have not been released" or "authorities are investigating").
 
 Respond with valid JSON only: { "seoTitle": string, "seoDescription": string, "articleBody": string }`;
   }
@@ -162,7 +261,7 @@ Respond with valid JSON only: { "seoTitle": string, "seoDescription": string, "a
       messages: [
         {
           role: "system",
-          content: "You are a professional news article writer specializing in traffic accident reporting. Always respond with valid JSON only. Be factual and never invent details.",
+          content: "You are an AI writer for a traffic-incident reporting website. You write clear, SEO-aware public incident reports with exactly two sections: Key Takeaways (bullet points) and Summary of the Incident (paragraphs). Always respond with valid JSON only. Be factual, neutral, and respectful. Never invent details or speculate about fault.",
         },
         {
           role: "user",
@@ -170,8 +269,8 @@ Respond with valid JSON only: { "seoTitle": string, "seoDescription": string, "a
         },
       ],
       response_format: { type: "json_object" },
-      max_tokens: 2000, // Increased for longer articles
-      temperature: 0.5, // Slightly lower for more consistent output
+      max_tokens: 2500, // Increased for structured two-section format
+      temperature: 0.5,
     });
 
     const content = response.choices[0]?.message?.content;

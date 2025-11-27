@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import ReactMarkdown from "react-markdown";
 import prisma from "@/lib/prisma";
 import { stripHtmlAndPublisher, cleanRssSnippet, getHostname } from "@/lib/text";
 import type { AccidentFacts } from "@/lib/seo/extractAccidentFacts";
@@ -308,15 +309,8 @@ export default async function IncidentPage({
             {/* Full Incident Overview (SEO Article) */}
             {incident.articleBody && (
               <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
-                <h2 className="text-lg font-semibold text-slate-900 mb-4">
-                  Full Incident Overview
-                </h2>
-                <div className="prose prose-slate max-w-none text-slate-700">
-                  {incident.articleBody.split("\n\n").map((paragraph, idx) => (
-                    <p key={idx} className="mb-4 leading-relaxed last:mb-0">
-                      {paragraph}
-                    </p>
-                  ))}
+                <div className="prose prose-slate max-w-none text-slate-700 prose-headings:text-slate-900 prose-h2:text-xl prose-h2:font-semibold prose-h2:mt-0 prose-h2:mb-4 prose-ul:my-3 prose-li:my-1 prose-p:my-3 prose-strong:text-slate-800">
+                  <ReactMarkdown>{incident.articleBody}</ReactMarkdown>
                 </div>
               </div>
             )}
