@@ -223,9 +223,16 @@ TASKS:
 
 2. seoDescription (max ~155 chars): Include location, crash type, and companies if mentioned.
 
-3. articleBody: Follow the ARTICLE FORMAT instructions above EXACTLY. Output only the two sections: Key Takeaways and Summary of the Incident.
+3. articleBody: A SINGLE MARKDOWN STRING containing the full article text with both sections.
+   The string should contain markdown headings (## Key Takeaways and ## Summary of the Incident).
+   Include bullet points using • or - characters.
+   DO NOT return an object with separate keys - return ONE string with the full formatted article.
 
-Return strict JSON: { "seoTitle": string, "seoDescription": string, "articleBody": string }`;
+   Example articleBody format (as a single string):
+   "## Key Takeaways\\n\\n• **Where & when:** Details here.\\n\\n• **What happened:** Details here.\\n\\n## Summary of the Incident\\n\\nParagraph one...\\n\\nParagraph two..."
+
+Return strict JSON: { "seoTitle": string, "seoDescription": string, "articleBody": string }
+IMPORTANT: articleBody MUST be a string, not an object.`;
   } else {
     // Fallback prompt when no facts are available
     prompt = `You are an AI writer for a traffic-incident reporting website.
@@ -248,11 +255,18 @@ TASKS:
 
 2. seoDescription: A meta description (150-160 characters) summarizing the incident.
 
-3. articleBody: Follow the ARTICLE FORMAT instructions above EXACTLY. Output only the two sections: Key Takeaways and Summary of the Incident.
+3. articleBody: A SINGLE MARKDOWN STRING containing the full article text with both sections.
+   The string should contain markdown headings (## Key Takeaways and ## Summary of the Incident).
+   Include bullet points using • or - characters.
+   DO NOT return an object with separate keys - return ONE string with the full formatted article.
 
    Use ONLY information from the headline, summary, and news sources. Do NOT make up specific details like names, exact injuries, or outcomes that aren't in the source material. If something is not known, say so plainly (e.g., "identities have not been released" or "authorities are investigating").
 
-Respond with valid JSON only: { "seoTitle": string, "seoDescription": string, "articleBody": string }`;
+   Example articleBody format (as a single string):
+   "## Key Takeaways\\n\\n• **Where & when:** Details here.\\n\\n• **What happened:** Details here.\\n\\n## Summary of the Incident\\n\\nParagraph one...\\n\\nParagraph two..."
+
+Respond with valid JSON only: { "seoTitle": string, "seoDescription": string, "articleBody": string }
+IMPORTANT: articleBody MUST be a string, not an object.`;
   }
 
   try {
@@ -261,7 +275,7 @@ Respond with valid JSON only: { "seoTitle": string, "seoDescription": string, "a
       messages: [
         {
           role: "system",
-          content: "You are an AI writer for a traffic-incident reporting website. You write clear, SEO-aware public incident reports with exactly two sections: Key Takeaways (bullet points) and Summary of the Incident (paragraphs). Always respond with valid JSON only. Be factual, neutral, and respectful. Never invent details or speculate about fault.",
+          content: "You are an AI writer for a traffic-incident reporting website. You write clear, SEO-aware public incident reports. Always respond with valid JSON containing exactly three string fields: seoTitle, seoDescription, and articleBody. The articleBody field MUST be a single markdown-formatted string (not an object) containing two sections: '## Key Takeaways' with bullet points and '## Summary of the Incident' with paragraphs. Be factual, neutral, and respectful. Never invent details or speculate about fault.",
         },
         {
           role: "user",
@@ -279,17 +293,50 @@ Respond with valid JSON only: { "seoTitle": string, "seoDescription": string, "a
       return null;
     }
 
-    const parsed = JSON.parse(content) as SeoContent;
+    const parsed = JSON.parse(content);
 
     if (!parsed.seoTitle || !parsed.seoDescription || !parsed.articleBody) {
       console.error("[SEO] Missing required fields in OpenAI response");
       return null;
     }
 
+    // Handle case where articleBody is returned as an object instead of a string
+    let articleBody: string;
+    if (typeof parsed.articleBody === 'string') {
+      articleBody = parsed.articleBody;
+    } else if (typeof parsed.articleBody === 'object') {
+      // Convert object format to markdown string
+      const parts: string[] = [];
+
+      // Handle "Key Takeaways" section
+      const keyTakeaways = parsed.articleBody['Key Takeaways'] || parsed.articleBody['keyTakeaways'];
+      if (keyTakeaways) {
+        parts.push('## Key Takeaways\n');
+        if (Array.isArray(keyTakeaways)) {
+          parts.push(keyTakeaways.join('\n\n'));
+        } else {
+          parts.push(String(keyTakeaways));
+        }
+      }
+
+      // Handle "Summary of the Incident" section
+      const summary = parsed.articleBody['Summary of the Incident'] || parsed.articleBody['summaryOfTheIncident'] || parsed.articleBody['summary'];
+      if (summary) {
+        parts.push('\n\n## Summary of the Incident\n');
+        parts.push(String(summary));
+      }
+
+      articleBody = parts.join('\n');
+      console.log("[SEO] Converted object articleBody to string");
+    } else {
+      console.error("[SEO] articleBody has unexpected type:", typeof parsed.articleBody);
+      return null;
+    }
+
     return {
       seoTitle: parsed.seoTitle.slice(0, 70),
       seoDescription: parsed.seoDescription.slice(0, 170),
-      articleBody: parsed.articleBody,
+      articleBody,
     };
   } catch (error) {
     console.error("[SEO] Failed to generate article:", error);
