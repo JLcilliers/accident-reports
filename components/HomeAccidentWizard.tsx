@@ -125,7 +125,7 @@ export function HomeAccidentWizard() {
     // Show "searching database" animation between steps
     if (!isLastStep) {
       setIsSearching(true);
-      await new Promise((resolve) => setTimeout(resolve, 1100));
+      await new Promise((resolve) => setTimeout(resolve, 2500));
       setIsSearching(false);
       setStepIndex((prev) => prev + 1);
     }
