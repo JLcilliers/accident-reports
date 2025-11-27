@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -10,7 +10,7 @@ async function clearArticles() {
       articleBody: null,
       seoTitle: null,
       seoDescription: null,
-      extractedFacts: null,
+      extractedFacts: Prisma.DbNull,
     },
   });
 
