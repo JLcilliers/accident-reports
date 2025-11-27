@@ -1,75 +1,26 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
-
-const US_STATES = [
-  { value: "", label: "Select State" },
-  { value: "AL", label: "Alabama" },
-  { value: "AK", label: "Alaska" },
-  { value: "AZ", label: "Arizona" },
-  { value: "AR", label: "Arkansas" },
-  { value: "CA", label: "California" },
-  { value: "CO", label: "Colorado" },
-  { value: "CT", label: "Connecticut" },
-  { value: "DE", label: "Delaware" },
-  { value: "FL", label: "Florida" },
-  { value: "GA", label: "Georgia" },
-  { value: "HI", label: "Hawaii" },
-  { value: "ID", label: "Idaho" },
-  { value: "IL", label: "Illinois" },
-  { value: "IN", label: "Indiana" },
-  { value: "IA", label: "Iowa" },
-  { value: "KS", label: "Kansas" },
-  { value: "KY", label: "Kentucky" },
-  { value: "LA", label: "Louisiana" },
-  { value: "ME", label: "Maine" },
-  { value: "MD", label: "Maryland" },
-  { value: "MA", label: "Massachusetts" },
-  { value: "MI", label: "Michigan" },
-  { value: "MN", label: "Minnesota" },
-  { value: "MS", label: "Mississippi" },
-  { value: "MO", label: "Missouri" },
-  { value: "MT", label: "Montana" },
-  { value: "NE", label: "Nebraska" },
-  { value: "NV", label: "Nevada" },
-  { value: "NH", label: "New Hampshire" },
-  { value: "NJ", label: "New Jersey" },
-  { value: "NM", label: "New Mexico" },
-  { value: "NY", label: "New York" },
-  { value: "NC", label: "North Carolina" },
-  { value: "ND", label: "North Dakota" },
-  { value: "OH", label: "Ohio" },
-  { value: "OK", label: "Oklahoma" },
-  { value: "OR", label: "Oregon" },
-  { value: "PA", label: "Pennsylvania" },
-  { value: "RI", label: "Rhode Island" },
-  { value: "SC", label: "South Carolina" },
-  { value: "SD", label: "South Dakota" },
-  { value: "TN", label: "Tennessee" },
-  { value: "TX", label: "Texas" },
-  { value: "UT", label: "Utah" },
-  { value: "VT", label: "Vermont" },
-  { value: "VA", label: "Virginia" },
-  { value: "WA", label: "Washington" },
-  { value: "WV", label: "West Virginia" },
-  { value: "WI", label: "Wisconsin" },
-  { value: "WY", label: "Wyoming" },
-];
+import { STATE_OPTIONS, STATE_CITIES } from "@/lib/locationData";
 
 export default function VideoHero() {
   const router = useRouter();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [searchTab, setSearchTab] = useState<"location" | "name">("location");
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
     city: "",
     state: "",
-    date: "",
+    month: "", // YYYY-MM format
   });
+
+  // Get cities for selected state
+  const citiesForState = useMemo(
+    () => (formData.state ? STATE_CITIES[formData.state] ?? [] : []),
+    [formData.state]
+  );
 
   useEffect(() => {
     // Trigger animations after mount
@@ -77,24 +28,42 @@ export default function VideoHero() {
     return () => clearTimeout(timer);
   }, []);
 
+  // Reset city when state changes
+  const handleStateChange = (newState: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      state: newState,
+      city: "", // Reset city when state changes
+    }));
+    setError(null);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+
+    // Validation
+    if (!formData.state) {
+      setError("Please select a state.");
+      return;
+    }
+    if (!formData.city) {
+      setError("Please select a city.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     const params = new URLSearchParams();
-    if (searchTab === "location") {
-      if (formData.city) params.set("city", formData.city);
-      if (formData.state) params.set("state", formData.state);
-      if (formData.date) params.set("date", formData.date);
-    } else {
-      if (formData.firstName) params.set("firstName", formData.firstName);
-      if (formData.lastName) params.set("lastName", formData.lastName);
-      if (formData.state) params.set("state", formData.state);
+    params.set("state", formData.state);
+    params.set("city", formData.city);
+    if (formData.month) {
+      params.set("month", formData.month);
     }
 
     // Simulate brief loading then redirect
     await new Promise((resolve) => setTimeout(resolve, 400));
-    router.push(`/search/progress?${params.toString()}`);
+    router.push(`/search?${params.toString()}`);
   };
 
   return (
@@ -135,7 +104,7 @@ export default function VideoHero() {
               Find Information About Recent Traffic Accidents
             </h1>
             <p className="text-lg md:text-xl text-neutral-600 leading-relaxed">
-              Search by name, date, and location to find crashes that may involve you or someone you care about.
+              Search by location and date to find crashes in your area.
             </p>
           </div>
 
@@ -148,179 +117,85 @@ export default function VideoHero() {
             }`}
           >
             <div className="bg-white rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.08)] border border-neutral-100 p-6 md:p-8 hover:shadow-[0_12px_50px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-300">
-              {/* Tab Pills */}
-              <div className="flex gap-1 mb-6 bg-neutral-100 p-1 rounded-full w-fit">
-                <button
-                  type="button"
-                  onClick={() => setSearchTab("location")}
-                  className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
-                    searchTab === "location"
-                      ? "bg-white text-neutral-900 shadow-sm"
-                      : "text-neutral-500 hover:text-neutral-700"
-                  }`}
-                >
-                  Accident Search
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSearchTab("name")}
-                  className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
-                    searchTab === "name"
-                      ? "bg-white text-neutral-900 shadow-sm"
-                      : "text-neutral-500 hover:text-neutral-700"
-                  }`}
-                >
-                  Search by Name
-                </button>
-              </div>
+              {/* Title */}
+              <h2 className="text-lg font-semibold text-neutral-900 mb-6">
+                Accident Search
+              </h2>
 
               {/* Form */}
               <form onSubmit={handleSubmit}>
-                {searchTab === "location" ? (
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-1.5">
-                          City
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="Enter city"
-                          value={formData.city}
-                          onChange={(e) =>
-                            setFormData({ ...formData, city: e.target.value })
-                          }
-                          className="w-full px-4 py-3.5 border border-neutral-200 rounded-xl text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-[#2A7D6E]/20 focus:border-[#2A7D6E] transition-all bg-white"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-1.5">
-                          State
-                        </label>
-                        <select
-                          value={formData.state}
-                          onChange={(e) =>
-                            setFormData({ ...formData, state: e.target.value })
-                          }
-                          className="w-full px-4 py-3.5 border border-neutral-200 rounded-xl text-neutral-900 focus:outline-none focus:ring-2 focus:ring-[#2A7D6E]/20 focus:border-[#2A7D6E] transition-all appearance-none bg-white cursor-pointer"
-                        >
-                          {US_STATES.map((state) => (
-                            <option key={state.value} value={state.value}>
-                              {state.label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* State Dropdown */}
                     <div>
                       <label className="block text-sm font-medium text-neutral-700 mb-1.5">
-                        Date{" "}
-                        <span className="text-neutral-400 font-normal">
-                          (optional)
-                        </span>
+                        State
                       </label>
-                      <input
-                        type="date"
-                        value={formData.date}
-                        onChange={(e) =>
-                          setFormData({ ...formData, date: e.target.value })
-                        }
-                        className="w-full px-4 py-3.5 border border-neutral-200 rounded-xl text-neutral-900 focus:outline-none focus:ring-2 focus:ring-[#2A7D6E]/20 focus:border-[#2A7D6E] transition-all bg-white"
-                      />
+                      <select
+                        value={formData.state}
+                        onChange={(e) => handleStateChange(e.target.value)}
+                        className="w-full px-4 py-3.5 border border-neutral-200 rounded-xl text-neutral-900 focus:outline-none focus:ring-2 focus:ring-[#2A7D6E]/20 focus:border-[#2A7D6E] transition-all appearance-none bg-white cursor-pointer"
+                      >
+                        {STATE_OPTIONS.map((state) => (
+                          <option key={state.value || "blank"} value={state.value}>
+                            {state.label}
+                          </option>
+                        ))}
+                      </select>
                     </div>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-1.5">
-                          First Name{" "}
-                          <span className="text-neutral-400 font-normal">
-                            (optional)
-                          </span>
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="First name"
-                          value={formData.firstName}
-                          onChange={(e) =>
-                            setFormData({ ...formData, firstName: e.target.value })
-                          }
-                          className="w-full px-4 py-3.5 border border-neutral-200 rounded-xl text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-[#2A7D6E]/20 focus:border-[#2A7D6E] transition-all bg-white"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-1.5">
-                          Last Name{" "}
-                          <span className="text-neutral-400 font-normal">
-                            (optional)
-                          </span>
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="Last name"
-                          value={formData.lastName}
-                          onChange={(e) =>
-                            setFormData({ ...formData, lastName: e.target.value })
-                          }
-                          className="w-full px-4 py-3.5 border border-neutral-200 rounded-xl text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-[#2A7D6E]/20 focus:border-[#2A7D6E] transition-all bg-white"
-                        />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-1.5">
-                          City{" "}
-                          <span className="text-neutral-400 font-normal">
-                            (optional)
-                          </span>
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="Enter city"
-                          value={formData.city}
-                          onChange={(e) =>
-                            setFormData({ ...formData, city: e.target.value })
-                          }
-                          className="w-full px-4 py-3.5 border border-neutral-200 rounded-xl text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-[#2A7D6E]/20 focus:border-[#2A7D6E] transition-all bg-white"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-1.5">
-                          State
-                        </label>
-                        <select
-                          value={formData.state}
-                          onChange={(e) =>
-                            setFormData({ ...formData, state: e.target.value })
-                          }
-                          className="w-full px-4 py-3.5 border border-neutral-200 rounded-xl text-neutral-900 focus:outline-none focus:ring-2 focus:ring-[#2A7D6E]/20 focus:border-[#2A7D6E] transition-all appearance-none bg-white cursor-pointer"
-                        >
-                          {US_STATES.map((state) => (
-                            <option key={state.value} value={state.value}>
-                              {state.label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
+
+                    {/* City Dropdown */}
                     <div>
                       <label className="block text-sm font-medium text-neutral-700 mb-1.5">
-                        Date{" "}
-                        <span className="text-neutral-400 font-normal">
-                          (optional)
-                        </span>
+                        City
                       </label>
-                      <input
-                        type="date"
-                        value={formData.date}
-                        onChange={(e) =>
-                          setFormData({ ...formData, date: e.target.value })
-                        }
-                        className="w-full px-4 py-3.5 border border-neutral-200 rounded-xl text-neutral-900 focus:outline-none focus:ring-2 focus:ring-[#2A7D6E]/20 focus:border-[#2A7D6E] transition-all bg-white"
-                      />
+                      <select
+                        value={formData.city}
+                        onChange={(e) => {
+                          setFormData({ ...formData, city: e.target.value });
+                          setError(null);
+                        }}
+                        disabled={!formData.state}
+                        className="w-full px-4 py-3.5 border border-neutral-200 rounded-xl text-neutral-900 focus:outline-none focus:ring-2 focus:ring-[#2A7D6E]/20 focus:border-[#2A7D6E] transition-all appearance-none bg-white cursor-pointer disabled:bg-neutral-100 disabled:text-neutral-400 disabled:cursor-not-allowed"
+                      >
+                        {!formData.state ? (
+                          <option value="">Select a state first</option>
+                        ) : (
+                          <>
+                            <option value="">Select city</option>
+                            {citiesForState.map((city) => (
+                              <option key={city} value={city}>
+                                {city}
+                              </option>
+                            ))}
+                          </>
+                        )}
+                      </select>
                     </div>
                   </div>
+
+                  {/* Month Picker */}
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+                      Month of Accident{" "}
+                      <span className="text-neutral-400 font-normal">
+                        (optional)
+                      </span>
+                    </label>
+                    <input
+                      type="month"
+                      value={formData.month}
+                      onChange={(e) =>
+                        setFormData({ ...formData, month: e.target.value })
+                      }
+                      className="w-full px-4 py-3.5 border border-neutral-200 rounded-xl text-neutral-900 focus:outline-none focus:ring-2 focus:ring-[#2A7D6E]/20 focus:border-[#2A7D6E] transition-all bg-white"
+                    />
+                  </div>
+                </div>
+
+                {/* Error Message */}
+                {error && (
+                  <p className="text-red-600 text-sm mt-3">{error}</p>
                 )}
 
                 {/* Submit Button */}
