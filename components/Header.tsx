@@ -35,7 +35,7 @@ export default function Header() {
           : "bg-white/95 backdrop-blur-md border-b border-neutral-100 shadow-sm"
       }`}
     >
-      <div className="container mx-auto px-6 lg:px-12 max-w-[1200px]">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-12 max-w-[1200px]">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <Link
@@ -130,10 +130,10 @@ export default function Header() {
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button - 44x44px minimum tap target */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className={`lg:hidden p-2 transition-colors ${
+            className={`lg:hidden min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors ${
               isTransparent
                 ? "text-neutral-700 hover:text-neutral-900"
                 : "text-neutral-600 hover:text-neutral-900"

@@ -11,6 +11,12 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+enum ArticleQualityStatus {
+  OK
+  NEEDS_REVIEW
+  FAILED
+}
+
 model Incident {
   id         String   @id @default(cuid())
   slug       String   @unique
@@ -28,6 +34,10 @@ model Incident {
   articleBody    String?  // Full 400-700 word SEO article
   seoTitle       String?  // SEO-optimized title (50-60 chars)
   seoDescription String?  // Meta description (150-160 chars)
+
+  // Article quality tracking
+  articleQualityStatus ArticleQualityStatus? @default(OK)
+  articleQualityNotes  String?               // Validation warnings or error details
 
   // Structured facts extracted from news sources (JSON)
   extractedFacts Json?    // Companies, vehicles, people, agencies, etc.

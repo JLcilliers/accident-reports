@@ -2,26 +2,26 @@ import OpenAI from "openai";
 import { readFileSync } from "fs";
 import { join } from "path";
 import type { AccidentFacts } from "./extractAccidentFacts";
+import {
+  validateIncidentArticle,
+  type ArticleValidationResult,
+} from "./validateIncidentArticle";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Lazy-initialized OpenAI client (created on first use to allow dotenv to run first)
+let openaiClient: OpenAI | null = null;
+
+function getOpenAI(): OpenAI {
+  if (!openaiClient) {
+    openaiClient = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+  }
+  return openaiClient;
+}
 
 // Configuration constants
 const SITE_NAME = "AccidentFacts";
 const REPORT_SERVICE_PHRASE = `${SITE_NAME} is not a law firm and does not create official police reports. Our free service helps you find and request the official crash report from the correct agency and connect with additional resources if needed.`;
-
-// Required headings for validation (in order)
-const REQUIRED_HEADINGS = [
-  "## Key Facts",
-  "## What We Know About the Crash",
-  "## People Involved and Injuries",
-  "## Investigation and Possible Contributing Factors",
-  "## Traffic Impact",
-  "## What to Do If You Were Involved in This Crash",
-  "## How to Get the Official Crash Report",
-  "## Legal Disclaimer and Sources",
-];
 
 interface IncidentData {
   headline: string;
@@ -38,6 +38,7 @@ interface SeoContent {
   articleBody: string;
   primaryKeyword?: string;
   secondaryKeywords?: string[];
+  validation?: ArticleValidationResult;
 }
 
 interface ArticleMetaBlock {
@@ -62,21 +63,6 @@ function loadPromptTemplate(): string {
   return template;
 }
 
-/**
- * Validate that the generated article contains all required headings.
- * Returns an array of missing headings, or empty array if all present.
- */
-function validateHeadings(articleBody: string): string[] {
-  const missing: string[] = [];
-
-  for (const heading of REQUIRED_HEADINGS) {
-    if (!articleBody.includes(heading)) {
-      missing.push(heading);
-    }
-  }
-
-  return missing;
-}
 
 /**
  * Parse the AI response to extract the JSON meta block and markdown body.
@@ -229,7 +215,7 @@ Remember:
   }
 
   try {
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: "gpt-4o",
       messages: [
         {
@@ -254,25 +240,46 @@ Remember:
     // Parse the response
     const { meta, body } = parseArticleResponse(content);
 
-    // Validate required headings
-    const missingHeadings = validateHeadings(body);
-    if (missingHeadings.length > 0) {
-      console.warn("[SEO] Missing required headings:", missingHeadings);
+    // Validate article using central validator
+    const validation = validateIncidentArticle(body);
 
-      // Retry once if headings are missing
+    if (!validation.ok) {
+      console.warn("[SEO] Article validation failed:", {
+        errors: validation.errors,
+        warnings: validation.warnings,
+        headline: incident.headline,
+      });
+
+      // Retry once if validation fails
       if (retryCount < 1) {
         console.log("[SEO] Retrying article generation...");
         return generateIncidentArticle(incident, facts, retryCount + 1);
       }
 
-      console.error("[SEO] Article validation failed after retry, proceeding with partial article");
+      // After retry, throw error so caller can handle it
+      throw new Error(
+        `Generated article failed validation: ${validation.errors.join("; ")}`
+      );
+    }
+
+    // Log warnings for tracking (but don't fail)
+    if (validation.warnings.length > 0) {
+      console.log("[SEO] Article warnings (review recommended):", {
+        warnings: validation.warnings,
+        headline: incident.headline,
+      });
     }
 
     // Extract SEO fields from meta block or generate fallbacks
-    const seoTitle = meta?.seo_title ||
+    const seoTitle =
+      meta?.seo_title ||
       `${incident.city || "Local"} Crash Report - ${dateStr}`.slice(0, 70);
-    const seoDescription = meta?.meta_description ||
-      `Details about a crash in ${location} on ${dateStr}. Learn what happened and how to get the official report.`.slice(0, 170);
+    const seoDescription =
+      meta?.meta_description ||
+      `Details about a crash in ${location} on ${dateStr}. Learn what happened and how to get the official report.`.slice(
+        0,
+        170
+      );
 
     return {
       seoTitle: seoTitle.slice(0, 70),
@@ -280,9 +287,11 @@ Remember:
       articleBody: body,
       primaryKeyword: meta?.primary_keyword,
       secondaryKeywords: meta?.secondary_keywords,
+      // Include validation result for caller to use
+      validation,
     };
   } catch (error) {
     console.error("[SEO] Failed to generate article:", error);
-    return null;
+    throw error; // Re-throw so caller can handle
   }
 }

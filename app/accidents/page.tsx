@@ -93,7 +93,7 @@ export default async function AccidentsIndexPage() {
 
   return (
     <div className="min-h-screen bg-[#F7F7F7]">
-      <div className="container mx-auto px-6 lg:px-12 max-w-[1200px] py-12 lg:py-16">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-12 max-w-[1200px] py-8 sm:py-10 md:py-12 lg:py-16">
         {/* Page Header */}
         <div className="mb-12">
           <h1 className="text-4xl md:text-5xl font-medium text-neutral-900 mb-4 tracking-tight">
@@ -158,9 +158,9 @@ export default async function AccidentsIndexPage() {
           </div>
         )}
 
-        <div className="lg:grid lg:grid-cols-3 lg:gap-8">
+        <div className="md:grid md:grid-cols-3 md:gap-6 lg:gap-8">
           {/* Recent Accidents */}
-          <div className="lg:col-span-2">
+          <div className="md:col-span-2">
             <h2 className="text-xl font-medium text-neutral-900 mb-6">Latest Accidents Nationwide</h2>
 
             {stats.recentIncidents.length > 0 ? (
@@ -290,7 +290,7 @@ export default async function AccidentsIndexPage() {
           </div>
 
           {/* Sidebar */}
-          <div className="lg:col-span-1 mt-8 lg:mt-0">
+          <div className="md:col-span-1 mt-8 md:mt-0">
             {/* Search CTA */}
             <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5 mb-6">
               <h3 className="font-medium text-neutral-900 mb-3">Search Accidents</h3>

@@ -83,8 +83,8 @@ export default function Step1Page() {
       <div className="max-w-2xl mx-auto py-8">
         <StepIndicator currentStep={1} />
 
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <h1 className="text-3xl font-bold mb-2">Accident Details</h1>
+        <div className="bg-white rounded-lg shadow-md p-5 sm:p-6 md:p-8">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2">Accident Details</h1>
           <p className="text-gray-600 mb-6">
             Tell us about your accident so we can locate your report
           </p>

@@ -113,8 +113,8 @@ export default function Step2Page() {
       <div className="max-w-2xl mx-auto py-8">
         <StepIndicator currentStep={2} />
 
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <h1 className="text-3xl font-bold mb-2">Contact Information</h1>
+        <div className="bg-white rounded-lg shadow-md p-5 sm:p-6 md:p-8">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2">Contact Information</h1>
           <p className="text-gray-600 mb-6">
             We'll use this information to deliver your free accident report
           </p>

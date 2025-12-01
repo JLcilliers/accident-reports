@@ -4,10 +4,10 @@ import ReactMarkdown from "react-markdown";
 import prisma from "@/lib/prisma";
 import { stripHtmlAndPublisher, cleanRssSnippet, getHostname } from "@/lib/text";
 import type { AccidentFacts } from "@/lib/seo/extractAccidentFacts";
+import { parseArticleMeta, buildKeywordsString } from "@/lib/seo/parseArticleMeta";
 import {
   buildLocationInfo,
   logLocationResolution,
-  type LocationInfo,
 } from "@/lib/location";
 
 export const revalidate = 600; // Re-generate every 10 minutes
@@ -50,6 +50,9 @@ async function getIncident(slug: string) {
   return prisma.incident.findUnique({
     where: { slug },
     include: { sources: true },
+    // Note: articleQualityStatus and articleQualityNotes are included
+    // automatically as scalar fields. These can be used for admin UI
+    // to display quality badges or regeneration controls.
   });
 }
 
@@ -93,22 +96,34 @@ export async function generateMetadata({
     dbState: incident.state,
   });
 
-  // Use SEO-optimized fields if available, otherwise build with location
-  let title = incident.seoTitle || `${incident.headline} | AccidentReports`;
+  // Parse SEO meta from articleBody JSON block (primary source)
+  const parsedMeta = parseArticleMeta(incident.articleBody);
 
-  // Append location to title if not already present and location is meaningful
+  // Title priority: parsed from articleBody → DB seoTitle → fallback with location
+  let title =
+    parsedMeta.seoTitle ||
+    incident.seoTitle ||
+    `${incident.headline} | AccidentReports`;
+
+  // Append location to title if using fallback and location is meaningful
   if (
+    !parsedMeta.seoTitle &&
     !incident.seoTitle &&
     locationInfo.resolutionTier <= 3 &&
     !title.toLowerCase().includes(locationInfo.displayLocation.toLowerCase())
   ) {
-    // Truncate if needed to keep under 70 chars
     const titleWithLocation = `${incident.headline} – ${locationInfo.shortLocation || locationInfo.displayLocation}`;
     title = titleWithLocation.length <= 70 ? titleWithLocation : title;
   }
 
-  // Build description with location context
-  let description = incident.seoDescription;
+  // Ensure title is within 70 chars
+  title = title.slice(0, 70);
+
+  // Description priority: parsed from articleBody → DB seoDescription → location-based fallback
+  let description =
+    parsedMeta.metaDescription ||
+    incident.seoDescription;
+
   if (!description) {
     if (locationInfo.resolutionTier <= 3) {
       description = `Details about a traffic crash near ${locationInfo.displayLocation} on ${incident.occurredAt.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}. Learn what happened and how to get the official report.`;
@@ -119,12 +134,17 @@ export async function generateMetadata({
     }
   }
 
-  // Ensure description is within limits
+  // Ensure description is within 160 chars
   description = description.slice(0, 160);
+
+  // Build keywords from parsed meta
+  const keywords = buildKeywordsString(parsedMeta);
 
   return {
     title,
     description,
+    // Include keywords meta tag if available
+    ...(keywords && { keywords }),
     openGraph: {
       title,
       description,
@@ -244,16 +264,27 @@ export default async function IncidentPage({
     ...(aboutEntities.length > 0 ? { about: aboutEntities } : {}),
   };
 
+  // Extract quality status for admin tooling (not visible to users)
+  const qualityStatus = incident.articleQualityStatus ?? "OK";
+  const qualityNotes = incident.articleQualityNotes;
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {/* Hidden data for admin tooling - quality status */}
+      <div
+        data-article-quality={qualityStatus}
+        data-article-quality-notes={qualityNotes ?? ""}
+        className="hidden"
+        aria-hidden="true"
+      />
       <div className="min-h-screen bg-slate-50">
       {/* Breadcrumb */}
       <div className="bg-white border-b border-slate-200">
-        <div className="container mx-auto px-6 lg:px-12 max-w-[1200px] py-4">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-12 max-w-[1200px] py-4">
           <nav className="flex items-center gap-2 text-sm text-slate-600">
             <Link href="/" className="hover:text-blue-800 transition">
               Home
@@ -283,10 +314,10 @@ export default async function IncidentPage({
         </div>
       </div>
 
-      <div className="container mx-auto px-6 lg:px-12 max-w-[1200px] py-8 pb-32 sm:pb-32">
-        <div className="lg:grid lg:grid-cols-3 lg:gap-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-12 max-w-[1200px] py-6 sm:py-8 pb-32 sm:pb-32">
+        <div className="md:grid md:grid-cols-3 md:gap-6 lg:gap-8">
           {/* Main Content */}
-          <div className="lg:col-span-2">
+          <div className="md:col-span-2">
             {/* Header */}
             <div className="mb-6">
               <div className="flex flex-wrap items-center gap-3 mb-4">
@@ -690,7 +721,7 @@ export default async function IncidentPage({
           </div>
 
           {/* Sidebar */}
-          <div className="lg:col-span-1">
+          <div className="md:col-span-1 mt-8 md:mt-0">
             {/* Quick Facts Card */}
             <div className="bg-white rounded-xl border border-slate-200 p-5 mb-6">
               <h3 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">

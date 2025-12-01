@@ -152,7 +152,7 @@ function SearchResultsContent() {
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
       <div className="bg-white border-b border-slate-200">
-        <div className="container mx-auto px-6 lg:px-12 max-w-[1200px] py-8">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-12 max-w-[1200px] py-6 sm:py-8">
           <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
             Accident Search Results
           </h1>
@@ -168,10 +168,10 @@ function SearchResultsContent() {
         </div>
       </div>
 
-      <div className="container mx-auto px-6 lg:px-12 max-w-[1200px] py-8">
-        <div className="lg:grid lg:grid-cols-4 lg:gap-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-12 max-w-[1200px] py-6 sm:py-8">
+        <div className="md:grid md:grid-cols-4 md:gap-6 lg:gap-8">
           {/* Filters Sidebar */}
-          <div className="lg:col-span-1 mb-6 lg:mb-0">
+          <div className="md:col-span-1 mb-6 md:mb-0">
             <div className="bg-white rounded-xl border border-slate-200 p-5 sticky top-24">
               <h2 className="text-lg font-semibold text-slate-900 mb-4">Filters</h2>
 
@@ -229,7 +229,7 @@ function SearchResultsContent() {
           </div>
 
           {/* Results List */}
-          <div className="lg:col-span-3">
+          <div className="md:col-span-3">
             {/* Results Count */}
             <div className="flex items-center justify-between mb-4">
               <p className="text-slate-600 text-sm">

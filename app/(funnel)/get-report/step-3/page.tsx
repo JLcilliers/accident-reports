@@ -66,7 +66,7 @@ export default function Step3Page() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="md:col-span-2">
-            <div className="bg-white rounded-lg shadow-md p-8">
+            <div className="bg-white rounded-lg shadow-md p-5 sm:p-6 md:p-8">
               {hasReport && report ? (
                 <>
                   <div className="flex items-center mb-6">
