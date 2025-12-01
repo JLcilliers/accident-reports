@@ -208,6 +208,23 @@ function isLikelyAccident(title: string, description?: string): boolean {
 }
 
 /**
+ * Set of valid US state abbreviations for quick lookup.
+ */
+const US_STATE_ABBREVIATIONS = new Set(Object.values(US_STATES));
+
+/**
+ * Checks if extracted location data indicates a US-based incident.
+ * Only returns true if we have explicit US location evidence (city or state).
+ */
+function isUSLocation(location: { city?: string; state?: string }): boolean {
+  // Must have at least a state to be considered US
+  if (location.state && US_STATE_ABBREVIATIONS.has(location.state)) {
+    return true;
+  }
+  return false;
+}
+
+/**
  * Extracts city and state from text using known locations.
  */
 function extractLocation(text: string): { city?: string; state?: string } {
@@ -249,29 +266,47 @@ function extractLocation(text: string): { city?: string; state?: string } {
 
 /**
  * Converts Google News items to incident candidates.
- * Filters for likely accidents and extracts location data.
+ * Filters for likely accidents, extracts location data, and ensures US-only items.
  *
  * @param items - Raw Google News items
- * @returns Filtered and normalized incident candidates
+ * @returns Filtered and normalized incident candidates (US-only)
  */
 export function toIncidentCandidates(
   items: GoogleNewsItem[]
 ): IncidentCandidate[] {
-  return items
-    .filter((item) => isLikelyAccident(item.title, item.description))
-    .map((item) => {
-      const occurredAt = new Date(item.pubDate);
-      const fullText = item.title + " " + (item.description ?? "");
-      const location = extractLocation(fullText);
+  const candidates: IncidentCandidate[] = [];
+  let filteredNonUS = 0;
 
-      return {
-        headline: item.title.trim(),
-        link: item.link,
-        publisher: item.source,
-        occurredAt,
-        snippet: item.description,
-        ...location,
-        country: "US",
-      };
+  for (const item of items) {
+    // First filter: must be about an accident
+    if (!isLikelyAccident(item.title, item.description)) {
+      continue;
+    }
+
+    const occurredAt = new Date(item.pubDate);
+    const fullText = item.title + " " + (item.description ?? "");
+    const location = extractLocation(fullText);
+
+    // Second filter: must have confirmed US location (city/state)
+    if (!isUSLocation(location)) {
+      filteredNonUS++;
+      continue;
+    }
+
+    candidates.push({
+      headline: item.title.trim(),
+      link: item.link,
+      publisher: item.source,
+      occurredAt,
+      snippet: item.description,
+      ...location,
+      country: "US",
     });
+  }
+
+  if (filteredNonUS > 0) {
+    console.log(`[US Filter] Filtered out ${filteredNonUS} non-US news items`);
+  }
+
+  return candidates;
 }
