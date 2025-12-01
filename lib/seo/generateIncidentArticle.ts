@@ -1,9 +1,27 @@
 import OpenAI from "openai";
+import { readFileSync } from "fs";
+import { join } from "path";
 import type { AccidentFacts } from "./extractAccidentFacts";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
+
+// Configuration constants
+const SITE_NAME = "AccidentFacts";
+const REPORT_SERVICE_PHRASE = `${SITE_NAME} is not a law firm and does not create official police reports. Our free service helps you find and request the official crash report from the correct agency and connect with additional resources if needed.`;
+
+// Required headings for validation (in order)
+const REQUIRED_HEADINGS = [
+  "## Key Facts",
+  "## What We Know About the Crash",
+  "## People Involved and Injuries",
+  "## Investigation and Possible Contributing Factors",
+  "## Traffic Impact",
+  "## What to Do If You Were Involved in This Crash",
+  "## How to Get the Official Crash Report",
+  "## Legal Disclaimer and Sources",
+];
 
 interface IncidentData {
   headline: string;
@@ -18,23 +36,108 @@ interface SeoContent {
   seoTitle: string;
   seoDescription: string;
   articleBody: string;
+  primaryKeyword?: string;
+  secondaryKeywords?: string[];
+}
+
+interface ArticleMetaBlock {
+  seo_title: string;
+  meta_description: string;
+  primary_keyword: string;
+  secondary_keywords: string[];
+}
+
+/**
+ * Load the article prompt template from the prompts directory.
+ * Replaces placeholders with actual values.
+ */
+function loadPromptTemplate(): string {
+  const promptPath = join(process.cwd(), "lib/seo/prompts/article-prompt.md");
+  let template = readFileSync(promptPath, "utf-8");
+
+  // Replace placeholders
+  template = template.replace(/\{\{SITE_NAME\}\}/g, SITE_NAME);
+  template = template.replace(/\{\{REPORT_SERVICE_PHRASE\}\}/g, REPORT_SERVICE_PHRASE);
+
+  return template;
+}
+
+/**
+ * Validate that the generated article contains all required headings.
+ * Returns an array of missing headings, or empty array if all present.
+ */
+function validateHeadings(articleBody: string): string[] {
+  const missing: string[] = [];
+
+  for (const heading of REQUIRED_HEADINGS) {
+    if (!articleBody.includes(heading)) {
+      missing.push(heading);
+    }
+  }
+
+  return missing;
+}
+
+/**
+ * Parse the AI response to extract the JSON meta block and markdown body.
+ * The response format is:
+ * ```json
+ * { "seo_title": "...", ... }
+ * ```
+ * # Headline
+ * ... rest of article ...
+ */
+function parseArticleResponse(content: string): {
+  meta: ArticleMetaBlock | null;
+  body: string;
+} {
+  // Try to extract JSON block from the beginning
+  const jsonBlockRegex = /```json\s*([\s\S]*?)\s*```/;
+  const jsonMatch = content.match(jsonBlockRegex);
+
+  let meta: ArticleMetaBlock | null = null;
+  let body = content;
+
+  if (jsonMatch) {
+    try {
+      meta = JSON.parse(jsonMatch[1]) as ArticleMetaBlock;
+      // Remove the JSON block from the body
+      body = content.replace(jsonBlockRegex, "").trim();
+    } catch (e) {
+      console.error("[SEO] Failed to parse meta JSON block:", e);
+    }
+  }
+
+  return { meta, body };
 }
 
 /**
  * Generate SEO-optimized article content for an incident using OpenAI.
  *
+ * Uses the 12-section article format defined in lib/seo/prompts/article-prompt.md.
  * When extractedFacts are provided, the article will include specific details
  * about companies, vehicles, people, agencies, and other case-relevant information.
  *
  * @param incident - Basic incident data
  * @param facts - Optional extracted facts for richer content
+ * @param retryCount - Internal retry counter (max 1 retry on validation failure)
  */
 export async function generateIncidentArticle(
   incident: IncidentData,
-  facts?: AccidentFacts | null
+  facts?: AccidentFacts | null,
+  retryCount: number = 0
 ): Promise<SeoContent | null> {
   if (!process.env.OPENAI_API_KEY) {
     console.log("[SEO] OpenAI API key not configured, skipping article generation");
+    return null;
+  }
+
+  // Load the prompt template
+  let promptTemplate: string;
+  try {
+    promptTemplate = loadPromptTemplate();
+  } catch (error) {
+    console.error("[SEO] Failed to load prompt template:", error);
     return null;
   }
 
@@ -63,137 +166,19 @@ export async function generateIncidentArticle(
   ).join(", ") || "not specified";
   const agencies = facts?.agenciesInvolved?.join(", ") || "not specified";
   const roads = facts?.roads?.join(", ") || "not specified";
+  const peopleDescriptions = facts?.peopleInvolved?.map((p) => {
+    const parts = [p.role];
+    if (p.description) parts.push(p.description);
+    if (p.age) parts.push(`age ${p.age}`);
+    if (p.status) parts.push(`(${p.status})`);
+    return parts.join(", ");
+  }).join("; ") || "not specified";
 
-  // Build the prompt - richer when facts are available
-  let prompt: string;
-
-  const articleFormatInstructions = `
-================================
-ARTICLE FORMAT - OUTPUT MUST FOLLOW THIS EXACTLY
-================================
-
-Your articleBody must contain ONLY these two sections, in this exact order:
-
-1) A "Key Takeaways" section
-2) A "Summary of the Incident" section
-
-Do NOT add any other sections, headings, conclusions, or commentary.
-
-================================
-SECTION 1: "Key Takeaways"
-================================
-
-- Start with this exact H2 heading:
-  ## Key Takeaways
-
-- Under it, write 4–6 short bullet points.
-
-- Use this pattern for the bullets (labels in **bold** followed by concise explanation):
-
-  • **Where & when:**
-    - Clear location and time.
-    - Include road name/number, direction if given, nearest exit or landmark, city, state, and approximate time with time zone if available.
-
-  • **What happened:**
-    - 1–2 sentences summarising the basic sequence of events in plain language.
-    - Clearly identify key vehicles (with year/make/model if provided) and the order of impacts.
-
-  • **Casualties:**
-    - Who was killed or injured and how many.
-    - Use available details such as "pronounced dead at the scene," "taken to hospital in critical condition," "non-life-threatening injuries," etc.
-    - If casualty information is unknown or not released, state that without guessing.
-
-  • **Notable details:**
-    - Optional bullet, only if relevant.
-    - Include any detail that increases public interest:
-      - involvement of law enforcement,
-      - commercial vehicles (e.g., FedEx, UPS),
-      - hazardous materials,
-      - children, school buses, etc.
-
-  • **Response:**
-    - Reference statements or actions from:
-      - local police, fire/EMS, DOT, or
-      - companies/agencies involved (e.g., a trucking company issuing condolences and confirming cooperation).
-    - If no statement is known, say that authorities state the investigation is ongoing.
-
-- Each bullet should be 1–2 sentences.
-- Tone: neutral, factual, and respectful.
-- Do NOT speculate about fault or causes.
-
-================================
-SECTION 2: "Summary of the Incident"
-================================
-
-- Use this exact H2 heading:
-  ## Summary of the Incident
-
-- Write 2–5 short paragraphs in neutral, factual language.
-
-- First paragraph:
-  - Attribute the information to named authorities if provided (e.g., "According to the Memphis Police Department (MPD) and the Tennessee Department of Transportation (TDOT)…").
-  - Clearly state:
-    - the type of crash (multi-vehicle, rear-end, rollover, etc., if known),
-    - the road, direction, and nearest interchange/landmark,
-    - the city and state,
-    - the date and approximate time in local time.
-
-- Middle paragraphs:
-  - Describe the sequence of events in chronological order:
-    - what first happened,
-    - how other vehicles became involved,
-    - whether any vehicles were already stopped from a prior crash,
-    - any secondary collisions.
-  - Clarify which vehicle struck which vehicle(s) and in what order, based on the provided facts.
-  - Include:
-    - the number of people injured or killed,
-    - their conditions (fatal, critical, serious, minor, unknown),
-    - whether they were inside vehicles or standing outside when they were struck.
-  - Mention impacts on traffic where known:
-    - lane closures,
-    - full interstate shutdowns,
-    - approximate duration or "for several hours" if no exact time is given.
-
-- If a company or agency is involved (e.g., FedEx truck, police vehicle, federal agent, school district bus):
-  - Integrate any public statements such as condolences or confirmation of cooperation with investigators.
-  - Note law-enforcement or public-interest angles factually.
-
-- Final paragraph:
-  - Briefly describe the current status:
-    - "The crash remains under investigation,"
-    - "No charges have been announced,"
-    - or similar.
-  - Do NOT assign blame or speculate about liability, intoxication, speeding, or distraction unless that is explicitly included in the provided facts.
-
-================================
-TONE, FACTUAL LIMITS, AND SEO BEHAVIOR
-================================
-
-- Tone:
-  - Neutral, factual, respectful.
-  - No sensational language.
-  - No graphic descriptions of injuries.
-
-- Facts:
-  - Use ONLY information provided in the input or clearly implied by it.
-  - If something is not known (e.g., identities not released, exact cause), say so plainly.
-  - Never invent names, ages, vehicle models, or quotes.
-
-- SEO (internal guidance — do NOT mention SEO in the article):
-  - Naturally weave in:
-    - road name/number (e.g., "I-240 East"),
-    - nearby junctions (e.g., "near Airways Boulevard"),
-    - city and state,
-    - company names (e.g., "FedEx truck"),
-    - vehicle makes/models/years (e.g., "2024 Toyota Corolla"),
-    - outcome terms like "crash," "collision," "fatality," "critical injury," "semi-truck," etc.
-  - Keep sentences readable and normal; do not repeat phrases awkwardly just for keywords.
-`;
+  // Build the user prompt with incident data
+  let userPrompt: string;
 
   if (facts) {
-    prompt = `You are an AI writer for a traffic-incident reporting website.
-
-Your job is to take structured crash facts and turn them into a clear, SEO-aware public incident report.
+    userPrompt = `Generate a complete article following the exact format specified in your instructions.
 
 INCIDENT HEADLINE:
 ${incident.headline}
@@ -208,36 +193,23 @@ BASIC INFO:
 - Vehicles involved: ${vehicles}
 - Roads: ${roads}
 - Agencies: ${agencies}
+- People involved: ${peopleDescriptions}
 - Injuries: ${facts.injuriesCount || "not specified"}
 - Fatalities: ${facts.fatalitiesCount || "not specified"}
 - Time of crash: ${facts.timeOfCrashApprox || "not specified"}
+- Cause/allegations: ${facts.causeOrAllegations || "not specified"}
 
 NEWS SOURCES:
 ${sourceContext || "No additional sources"}
 
-${articleFormatInstructions}
-
-TASKS:
-1. seoTitle (max ~65 chars): Include location and key entities when present.
-   Example: "FedEx Truck Crash on I-95 in Georgia Injures 3 Drivers"
-
-2. seoDescription (max ~155 chars): Include location, crash type, and companies if mentioned.
-
-3. articleBody: A SINGLE MARKDOWN STRING containing the full article text with both sections.
-   The string should contain markdown headings (## Key Takeaways and ## Summary of the Incident).
-   Include bullet points using • or - characters.
-   DO NOT return an object with separate keys - return ONE string with the full formatted article.
-
-   Example articleBody format (as a single string):
-   "## Key Takeaways\\n\\n• **Where & when:** Details here.\\n\\n• **What happened:** Details here.\\n\\n## Summary of the Incident\\n\\nParagraph one...\\n\\nParagraph two..."
-
-Return strict JSON: { "seoTitle": string, "seoDescription": string, "articleBody": string }
-IMPORTANT: articleBody MUST be a string, not an object.`;
+Remember:
+1. Start with the JSON meta block inside \`\`\`json ... \`\`\`
+2. Then the # Headline
+3. Then all required sections with exact headings
+4. Use only facts provided - do not invent details`;
   } else {
     // Fallback prompt when no facts are available
-    prompt = `You are an AI writer for a traffic-incident reporting website.
-
-Your job is to take crash information and turn it into a clear, SEO-aware public incident report.
+    userPrompt = `Generate a complete article following the exact format specified in your instructions.
 
 INCIDENT DETAILS:
 - Headline: ${incident.headline}
@@ -248,43 +220,29 @@ INCIDENT DETAILS:
 NEWS SOURCES:
 ${sourceContext || "No additional sources"}
 
-${articleFormatInstructions}
-
-TASKS:
-1. seoTitle: An SEO-optimized title (50-60 characters) that includes the location and key details.
-
-2. seoDescription: A meta description (150-160 characters) summarizing the incident.
-
-3. articleBody: A SINGLE MARKDOWN STRING containing the full article text with both sections.
-   The string should contain markdown headings (## Key Takeaways and ## Summary of the Incident).
-   Include bullet points using • or - characters.
-   DO NOT return an object with separate keys - return ONE string with the full formatted article.
-
-   Use ONLY information from the headline, summary, and news sources. Do NOT make up specific details like names, exact injuries, or outcomes that aren't in the source material. If something is not known, say so plainly (e.g., "identities have not been released" or "authorities are investigating").
-
-   Example articleBody format (as a single string):
-   "## Key Takeaways\\n\\n• **Where & when:** Details here.\\n\\n• **What happened:** Details here.\\n\\n## Summary of the Incident\\n\\nParagraph one...\\n\\nParagraph two..."
-
-Respond with valid JSON only: { "seoTitle": string, "seoDescription": string, "articleBody": string }
-IMPORTANT: articleBody MUST be a string, not an object.`;
+Remember:
+1. Start with the JSON meta block inside \`\`\`json ... \`\`\`
+2. Then the # Headline
+3. Then all required sections with exact headings
+4. Use ONLY information from the headline, summary, and news sources
+5. If something is not known, say so plainly (e.g., "identities have not been released")`;
   }
 
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-4o",
       messages: [
         {
           role: "system",
-          content: "You are an AI writer for a traffic-incident reporting website. You write clear, SEO-aware public incident reports. Always respond with valid JSON containing exactly three string fields: seoTitle, seoDescription, and articleBody. The articleBody field MUST be a single markdown-formatted string (not an object) containing two sections: '## Key Takeaways' with bullet points and '## Summary of the Incident' with paragraphs. Be factual, neutral, and respectful. Never invent details or speculate about fault.",
+          content: promptTemplate,
         },
         {
           role: "user",
-          content: prompt,
+          content: userPrompt,
         },
       ],
-      response_format: { type: "json_object" },
-      max_tokens: 2500, // Increased for structured two-section format
-      temperature: 0.5,
+      max_tokens: 5500,
+      temperature: 0.4,
     });
 
     const content = response.choices[0]?.message?.content;
@@ -293,50 +251,35 @@ IMPORTANT: articleBody MUST be a string, not an object.`;
       return null;
     }
 
-    const parsed = JSON.parse(content);
+    // Parse the response
+    const { meta, body } = parseArticleResponse(content);
 
-    if (!parsed.seoTitle || !parsed.seoDescription || !parsed.articleBody) {
-      console.error("[SEO] Missing required fields in OpenAI response");
-      return null;
-    }
+    // Validate required headings
+    const missingHeadings = validateHeadings(body);
+    if (missingHeadings.length > 0) {
+      console.warn("[SEO] Missing required headings:", missingHeadings);
 
-    // Handle case where articleBody is returned as an object instead of a string
-    let articleBody: string;
-    if (typeof parsed.articleBody === 'string') {
-      articleBody = parsed.articleBody;
-    } else if (typeof parsed.articleBody === 'object') {
-      // Convert object format to markdown string
-      const parts: string[] = [];
-
-      // Handle "Key Takeaways" section
-      const keyTakeaways = parsed.articleBody['Key Takeaways'] || parsed.articleBody['keyTakeaways'];
-      if (keyTakeaways) {
-        parts.push('## Key Takeaways\n');
-        if (Array.isArray(keyTakeaways)) {
-          parts.push(keyTakeaways.join('\n\n'));
-        } else {
-          parts.push(String(keyTakeaways));
-        }
+      // Retry once if headings are missing
+      if (retryCount < 1) {
+        console.log("[SEO] Retrying article generation...");
+        return generateIncidentArticle(incident, facts, retryCount + 1);
       }
 
-      // Handle "Summary of the Incident" section
-      const summary = parsed.articleBody['Summary of the Incident'] || parsed.articleBody['summaryOfTheIncident'] || parsed.articleBody['summary'];
-      if (summary) {
-        parts.push('\n\n## Summary of the Incident\n');
-        parts.push(String(summary));
-      }
-
-      articleBody = parts.join('\n');
-      console.log("[SEO] Converted object articleBody to string");
-    } else {
-      console.error("[SEO] articleBody has unexpected type:", typeof parsed.articleBody);
-      return null;
+      console.error("[SEO] Article validation failed after retry, proceeding with partial article");
     }
+
+    // Extract SEO fields from meta block or generate fallbacks
+    const seoTitle = meta?.seo_title ||
+      `${incident.city || "Local"} Crash Report - ${dateStr}`.slice(0, 70);
+    const seoDescription = meta?.meta_description ||
+      `Details about a crash in ${location} on ${dateStr}. Learn what happened and how to get the official report.`.slice(0, 170);
 
     return {
-      seoTitle: parsed.seoTitle.slice(0, 70),
-      seoDescription: parsed.seoDescription.slice(0, 170),
-      articleBody,
+      seoTitle: seoTitle.slice(0, 70),
+      seoDescription: seoDescription.slice(0, 170),
+      articleBody: body,
+      primaryKeyword: meta?.primary_keyword,
+      secondaryKeywords: meta?.secondary_keywords,
     };
   } catch (error) {
     console.error("[SEO] Failed to generate article:", error);
