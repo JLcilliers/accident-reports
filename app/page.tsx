@@ -467,7 +467,7 @@ export default function Home() {
               <h2 className="text-2xl md:text-3xl font-medium text-white mb-4 tracking-tight">
                 Need Legal Help After an Accident?
               </h2>
-              <p className="text-neutral-400 leading-relaxed">
+              <p className="text-neutral-300 leading-relaxed">
                 Connect with personal injury attorneys who can review your case. Free consultation, no obligation.
               </p>
             </div>
