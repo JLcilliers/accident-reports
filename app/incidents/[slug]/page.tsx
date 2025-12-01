@@ -117,7 +117,49 @@ export default async function IncidentPage({
     return notFound();
   }
 
-  const location = [incident.city, incident.state].filter(Boolean).join(", ") || "United States";
+  // Extract facts early so we can use them for location
+  const extractedFacts = incident.extractedFacts as AccidentFacts | null;
+
+  // Build location string with priority: extractedFacts.primaryLocation > city/state > roads > fallback
+  const buildLocation = (): string => {
+    // First priority: extracted primary location (most specific, e.g., "Near Exit 23 on I-240 in Memphis, Tennessee")
+    if (extractedFacts?.primaryLocation) {
+      return extractedFacts.primaryLocation;
+    }
+
+    // Second priority: city and state from database
+    const cityState = [incident.city, incident.state].filter(Boolean).join(", ");
+    if (cityState) {
+      // Enhance with roads if available
+      if (extractedFacts?.roads && extractedFacts.roads.length > 0) {
+        return `${extractedFacts.roads[0]}, ${cityState}`;
+      }
+      return cityState;
+    }
+
+    // Third priority: just roads if available
+    if (extractedFacts?.roads && extractedFacts.roads.length > 0) {
+      const state = extractedFacts.state || "";
+      const city = extractedFacts.city || "";
+      const cityStateFromFacts = [city, state].filter(Boolean).join(", ");
+      if (cityStateFromFacts) {
+        return `${extractedFacts.roads[0]}, ${cityStateFromFacts}`;
+      }
+      return extractedFacts.roads.join(", ");
+    }
+
+    // Fourth priority: city/state from extracted facts
+    const factsLocation = [extractedFacts?.city, extractedFacts?.state].filter(Boolean).join(", ");
+    if (factsLocation) {
+      return factsLocation;
+    }
+
+    // Last resort
+    return "Location not specified";
+  };
+
+  const location = buildLocation();
+
   const formattedDate = incident.occurredAt.toLocaleDateString("en-US", {
     weekday: "long",
     year: "numeric",
@@ -130,9 +172,6 @@ export default async function IncidentPage({
   const seoHeadline = incident.seoTitle || incident.headline;
   const seoDescription =
     incident.seoDescription || incident.summary || `Traffic accident report for ${location}`;
-
-  // Extract facts for JSON-LD enrichment
-  const extractedFacts = incident.extractedFacts as AccidentFacts | null;
 
   // Build about entities from extracted facts (companies, agencies, vehicles)
   const aboutEntities: { "@type": string; name: string }[] = [];
