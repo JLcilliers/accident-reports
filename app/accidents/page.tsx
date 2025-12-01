@@ -1,5 +1,6 @@
 import Link from "next/link";
 import prisma from "@/lib/prisma";
+import { buildLocationInfo, type ExtractedFactsInput } from "@/lib/location";
 
 export const revalidate = 600; // Re-generate every 10 minutes
 
@@ -85,53 +86,6 @@ function formatTimeAgo(date: Date) {
   if (diffHours < 24) return `${diffHours} hours ago`;
   if (diffHours < 48) return "Yesterday";
   return `${Math.floor(diffHours / 24)} days ago`;
-}
-
-// Build location string with priority-based resolution
-interface ExtractedFacts {
-  primaryLocation?: string;
-  roads?: string[];
-  city?: string;
-  state?: string;
-}
-
-function buildLocation(
-  city: string | null,
-  state: string | null,
-  extractedFacts: ExtractedFacts | null
-): string {
-  // First priority: extracted primary location
-  if (extractedFacts?.primaryLocation) {
-    return extractedFacts.primaryLocation;
-  }
-
-  // Second priority: city and state from database
-  const cityState = [city, state].filter(Boolean).join(", ");
-  if (cityState) {
-    // Add road info if available
-    if (extractedFacts?.roads && extractedFacts.roads.length > 0) {
-      return `${extractedFacts.roads[0]}, ${cityState}`;
-    }
-    return cityState;
-  }
-
-  // Third priority: roads from extracted facts
-  if (extractedFacts?.roads && extractedFacts.roads.length > 0) {
-    const factsLocation = [extractedFacts.city, extractedFacts.state].filter(Boolean).join(", ");
-    if (factsLocation) {
-      return `${extractedFacts.roads[0]}, ${factsLocation}`;
-    }
-    return extractedFacts.roads.join(", ");
-  }
-
-  // Fourth priority: city/state from extracted facts
-  const factsLocation = [extractedFacts?.city, extractedFacts?.state].filter(Boolean).join(", ");
-  if (factsLocation) {
-    return factsLocation;
-  }
-
-  // Last resort
-  return "Location not specified";
 }
 
 export default async function AccidentsIndexPage() {
@@ -244,7 +198,11 @@ export default async function AccidentsIndexPage() {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                       </svg>
                       <span>
-                        {buildLocation(incident.city, incident.state, incident.extractedFacts as ExtractedFacts | null)}
+                        {buildLocationInfo({
+                          extractedFacts: incident.extractedFacts as ExtractedFactsInput | null,
+                          dbCity: incident.city,
+                          dbState: incident.state,
+                        }).displayLocation}
                       </span>
                     </div>
 

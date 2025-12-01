@@ -1,5 +1,6 @@
 import Link from "next/link";
 import prisma from "@/lib/prisma";
+import { stripHtmlAndPublisher, cleanRssSnippet } from "@/lib/text";
 
 export const revalidate = 300; // Re-generate every 5 minutes
 
@@ -99,7 +100,7 @@ export default async function IncidentsPage() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-8">
           <div className="bg-white rounded-xl border border-slate-200 p-4 text-center">
             <p className="text-2xl font-bold text-slate-900">{stats.todayCount}</p>
             <p className="text-sm text-slate-600">Today</p>
@@ -144,6 +145,10 @@ export default async function IncidentsPage() {
                 .filter(Boolean)
                 .join(", ");
 
+              // Clean headline and summary to remove raw HTML/RSS content
+              const cleanHeadline = stripHtmlAndPublisher(incident.headline) || incident.headline;
+              const cleanSummary = cleanRssSnippet(incident.summary);
+
               return (
                 <Link
                   key={incident.id}
@@ -153,11 +158,11 @@ export default async function IncidentsPage() {
                   <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                     <div className="flex-1">
                       <h2 className="text-lg font-semibold text-slate-900 group-hover:text-blue-800 transition mb-2">
-                        {incident.headline}
+                        {cleanHeadline}
                       </h2>
-                      {incident.summary && (
+                      {cleanSummary && (
                         <p className="text-slate-600 text-sm line-clamp-2 mb-3">
-                          {incident.summary}
+                          {cleanSummary}
                         </p>
                       )}
                       <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500">

@@ -4,6 +4,11 @@ import ReactMarkdown from "react-markdown";
 import prisma from "@/lib/prisma";
 import { stripHtmlAndPublisher, cleanRssSnippet, getHostname } from "@/lib/text";
 import type { AccidentFacts } from "@/lib/seo/extractAccidentFacts";
+import {
+  buildLocationInfo,
+  logLocationResolution,
+  type LocationInfo,
+} from "@/lib/location";
 
 export const revalidate = 600; // Re-generate every 10 minutes
 
@@ -80,14 +85,42 @@ export async function generateMetadata({
     };
   }
 
-  const location = [incident.city, incident.state].filter(Boolean).join(", ");
+  // Get location info using the centralized helper
+  const extractedFacts = incident.extractedFacts as AccidentFacts | null;
+  const locationInfo = buildLocationInfo({
+    extractedFacts,
+    dbCity: incident.city,
+    dbState: incident.state,
+  });
 
-  // Use SEO-optimized fields if available, otherwise fall back to defaults
-  const title = incident.seoTitle || `${incident.headline} | AccidentReports`;
-  const description =
-    incident.seoDescription ||
-    incident.summary?.slice(0, 155) ||
-    `Accident report for ${location} on ${incident.occurredAt.toDateString()}`;
+  // Use SEO-optimized fields if available, otherwise build with location
+  let title = incident.seoTitle || `${incident.headline} | AccidentReports`;
+
+  // Append location to title if not already present and location is meaningful
+  if (
+    !incident.seoTitle &&
+    locationInfo.resolutionTier <= 3 &&
+    !title.toLowerCase().includes(locationInfo.displayLocation.toLowerCase())
+  ) {
+    // Truncate if needed to keep under 70 chars
+    const titleWithLocation = `${incident.headline} – ${locationInfo.shortLocation || locationInfo.displayLocation}`;
+    title = titleWithLocation.length <= 70 ? titleWithLocation : title;
+  }
+
+  // Build description with location context
+  let description = incident.seoDescription;
+  if (!description) {
+    if (locationInfo.resolutionTier <= 3) {
+      description = `Details about a traffic crash near ${locationInfo.displayLocation} on ${incident.occurredAt.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}. Learn what happened and how to get the official report.`;
+    } else {
+      description =
+        incident.summary?.slice(0, 155) ||
+        `Accident report from ${incident.occurredAt.toDateString()}. Find details and learn how to get the official crash report.`;
+    }
+  }
+
+  // Ensure description is within limits
+  description = description.slice(0, 160);
 
   return {
     title,
@@ -120,45 +153,17 @@ export default async function IncidentPage({
   // Extract facts early so we can use them for location
   const extractedFacts = incident.extractedFacts as AccidentFacts | null;
 
-  // Build location string with priority: extractedFacts.primaryLocation > city/state > roads > fallback
-  const buildLocation = (): string => {
-    // First priority: extracted primary location (most specific, e.g., "Near Exit 23 on I-240 in Memphis, Tennessee")
-    if (extractedFacts?.primaryLocation) {
-      return extractedFacts.primaryLocation;
-    }
+  // Build location info using the centralized helper
+  const locationInfo = buildLocationInfo({
+    extractedFacts,
+    dbCity: incident.city,
+    dbState: incident.state,
+  });
 
-    // Second priority: city and state from database
-    const cityState = [incident.city, incident.state].filter(Boolean).join(", ");
-    if (cityState) {
-      // Enhance with roads if available
-      if (extractedFacts?.roads && extractedFacts.roads.length > 0) {
-        return `${extractedFacts.roads[0]}, ${cityState}`;
-      }
-      return cityState;
-    }
+  // Log location resolution for analytics/debugging
+  logLocationResolution(incident.slug, locationInfo);
 
-    // Third priority: just roads if available
-    if (extractedFacts?.roads && extractedFacts.roads.length > 0) {
-      const state = extractedFacts.state || "";
-      const city = extractedFacts.city || "";
-      const cityStateFromFacts = [city, state].filter(Boolean).join(", ");
-      if (cityStateFromFacts) {
-        return `${extractedFacts.roads[0]}, ${cityStateFromFacts}`;
-      }
-      return extractedFacts.roads.join(", ");
-    }
-
-    // Fourth priority: city/state from extracted facts
-    const factsLocation = [extractedFacts?.city, extractedFacts?.state].filter(Boolean).join(", ");
-    if (factsLocation) {
-      return factsLocation;
-    }
-
-    // Last resort
-    return "Location not specified";
-  };
-
-  const location = buildLocation();
+  const location = locationInfo.displayLocation;
 
   const formattedDate = incident.occurredAt.toLocaleDateString("en-US", {
     weekday: "long",
@@ -194,6 +199,7 @@ export default async function IncidentPage({
     });
   }
 
+  // Build JSON-LD with enhanced location data
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
@@ -216,17 +222,22 @@ export default async function IncidentPage({
       "@type": "WebPage",
       "@id": `${BASE_URL}/incidents/${incident.slug}`,
     },
-    ...(incident.city && incident.state
+    // Always include contentLocation when we have meaningful location data (tier 1-4)
+    ...(locationInfo.resolutionTier < 5
       ? {
           contentLocation: {
             "@type": "Place",
-            name: extractedFacts?.primaryLocation || location,
-            address: {
-              "@type": "PostalAddress",
-              addressLocality: incident.city,
-              addressRegion: incident.state,
-              addressCountry: "US",
-            },
+            name: locationInfo.displayLocation,
+            ...(locationInfo.city || locationInfo.state
+              ? {
+                  address: {
+                    "@type": "PostalAddress",
+                    ...(locationInfo.city && { addressLocality: locationInfo.city }),
+                    ...(locationInfo.state && { addressRegion: locationInfo.state }),
+                    addressCountry: "US",
+                  },
+                }
+              : {}),
           },
         }
       : {}),
