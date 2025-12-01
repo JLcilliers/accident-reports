@@ -2,6 +2,7 @@ import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { buildLocationInfo, type ExtractedFactsInput } from "@/lib/location";
 import { SearchFilters } from "./SearchFilters";
+import { stripHtmlAndPublisher } from "@/lib/text";
 
 export const revalidate = 60; // Re-generate every minute
 
@@ -342,11 +343,14 @@ export default async function SearchPage({
                         </span>
                       </div>
 
-                      {incident.summary && (
-                        <p className="text-neutral-600 text-sm leading-relaxed mb-4 line-clamp-2">
-                          {incident.summary}
-                        </p>
-                      )}
+                      {(() => {
+                        const cleanSummary = stripHtmlAndPublisher(incident.summary);
+                        return cleanSummary ? (
+                          <p className="text-neutral-600 text-sm leading-relaxed mb-4 line-clamp-2">
+                            {cleanSummary}
+                          </p>
+                        ) : null;
+                      })()}
 
                       <div className="flex items-center justify-between">
                         <Link

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { stripHtmlAndPublisher } from "@/lib/text";
 
 // Mock incident data - in production this would come from a database/API
 const MOCK_INCIDENTS: Record<string, {
@@ -284,7 +285,7 @@ export default async function IncidentPage({
             {/* Summary Card */}
             <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
               <h2 className="text-lg font-semibold text-slate-900 mb-3">Incident Summary</h2>
-              <p className="text-slate-700 leading-relaxed">{incident.summary}</p>
+              <p className="text-slate-700 leading-relaxed">{stripHtmlAndPublisher(incident.summary) || incident.summary}</p>
             </div>
 
             {/* What We Know */}

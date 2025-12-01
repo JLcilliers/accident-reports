@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { stripHtmlAndPublisher } from "@/lib/text";
 
 // Mock data for city-level accidents
 const CITY_DATA: Record<string, {
@@ -260,9 +261,14 @@ export default async function CityAccidentsPage({
                       </span>
                     </div>
 
-                    <p className="text-slate-600 text-sm leading-relaxed mb-4">
-                      {incident.summary}
-                    </p>
+                    {(() => {
+                      const cleanSummary = stripHtmlAndPublisher(incident.summary);
+                      return cleanSummary ? (
+                        <p className="text-slate-600 text-sm leading-relaxed mb-4">
+                          {cleanSummary}
+                        </p>
+                      ) : null;
+                    })()}
 
                     <div className="flex items-center justify-between">
                       <Link
