@@ -6,8 +6,8 @@
       "schedule": "*/20 * * * *"
     },
     {
-      "path": "/api/cron/generate-seo?limit=10",
-      "schedule": "0 * * * *"
+      "path": "/api/cron/generate-seo?limit=20",
+      "schedule": "*/10 * * * *"
     }
   ]
 }
