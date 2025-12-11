@@ -95,6 +95,16 @@ export default function Header() {
               How It Works
             </Link>
             <Link
+              href="/blog"
+              className={`text-sm font-medium transition-colors ${
+                isTransparent
+                  ? "text-neutral-700 hover:text-neutral-900"
+                  : "text-neutral-500 hover:text-neutral-900"
+              }`}
+            >
+              Blog
+            </Link>
+            <Link
               href="/legal-help"
               className={`text-sm font-medium transition-colors ${
                 isTransparent
@@ -203,6 +213,13 @@ export default function Header() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 How It Works
+              </Link>
+              <Link
+                href="/blog"
+                className="px-4 py-3 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 rounded-lg transition-colors text-sm font-medium"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Blog
               </Link>
               <Link
                 href="/legal-help"
