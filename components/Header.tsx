@@ -105,16 +105,6 @@ export default function Header() {
               Blog
             </Link>
             <Link
-              href="/legal-help"
-              className={`text-sm font-medium transition-colors ${
-                isTransparent
-                  ? "text-neutral-700 hover:text-neutral-900"
-                  : "text-neutral-500 hover:text-neutral-900"
-              }`}
-            >
-              Legal Help
-            </Link>
-            <Link
               href="/about"
               className={`text-sm font-medium transition-colors ${
                 isTransparent
@@ -129,14 +119,14 @@ export default function Header() {
           {/* Desktop CTA - Outlined button */}
           <div className="hidden lg:flex items-center">
             <Link
-              href="/legal-help"
+              href="/incidents"
               className={`px-5 py-2 text-sm font-medium rounded-full transition-colors ${
                 isTransparent
                   ? "text-neutral-900 border border-neutral-400 hover:border-neutral-900 hover:bg-white/50"
                   : "text-neutral-900 border border-neutral-300 hover:border-neutral-900"
               }`}
             >
-              Get Help
+              Latest Accidents
             </Link>
           </div>
 
@@ -222,13 +212,6 @@ export default function Header() {
                 Blog
               </Link>
               <Link
-                href="/legal-help"
-                className="px-4 py-3 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 rounded-lg transition-colors text-sm font-medium"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Legal Help
-              </Link>
-              <Link
                 href="/about"
                 className="px-4 py-3 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 rounded-lg transition-colors text-sm font-medium"
                 onClick={() => setMobileMenuOpen(false)}
@@ -237,11 +220,11 @@ export default function Header() {
               </Link>
               <div className="pt-4 px-4">
                 <Link
-                  href="/legal-help"
+                  href="/incidents"
                   className="block w-full text-center px-5 py-3 text-sm font-medium text-neutral-900 border border-neutral-300 rounded-full hover:border-neutral-900 transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  Get Help
+                  Latest Accidents
                 </Link>
               </div>
             </nav>

@@ -126,12 +126,6 @@ export default function BlogPage() {
             >
               Search Accident Records
             </Link>
-            <Link
-              href="/legal-help"
-              className="inline-flex items-center justify-center bg-transparent text-white px-8 py-4 rounded-xl font-medium hover:bg-white/10 transition-all border border-neutral-700"
-            >
-              Get Legal Help
-            </Link>
           </div>
         </section>
       </PageContainer>

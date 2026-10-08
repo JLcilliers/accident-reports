@@ -260,10 +260,8 @@ export default async function AccidentsIndexPage() {
                 <h2 className="text-xl font-medium text-neutral-900 mb-4">What You Can Do Here</h2>
                 <div className="prose prose-neutral max-w-none text-neutral-600">
                   <p className="mb-4 leading-relaxed">
-                    You can use this site to locate traffic accidents near you, understand the
-                    basic facts of a crash, and learn how to request the official police report.
-                    If you were injured, we can also connect you with personal injury lawyers
-                    who handle these cases every day.
+                    You can use this site to locate traffic accidents near you and understand the
+                    basic facts of a crash, with links to the news reports each summary is based on.
                   </p>
                   <p className="leading-relaxed">
                     Because we rely on public information, some details may be missing or updated
@@ -302,34 +300,6 @@ export default async function AccidentsIndexPage() {
                 className="block w-full bg-[#2A7D6E] text-white px-4 py-3 rounded-xl hover:bg-[#236859] transition font-medium text-center text-sm"
               >
                 Search Accidents
-              </Link>
-            </div>
-
-            {/* Legal Help CTA */}
-            <div className="bg-neutral-900 rounded-2xl p-6 text-white mb-6">
-              <h3 className="text-lg font-medium mb-3">Were You in an Accident?</h3>
-              <p className="text-neutral-400 text-sm mb-4 leading-relaxed">
-                Get a free case evaluation from an experienced personal injury attorney near you.
-              </p>
-              <Link
-                href="/legal-help"
-                className="block w-full bg-[#2A7D6E] text-white px-4 py-3 rounded-xl hover:bg-[#236859] transition font-medium text-center text-sm"
-              >
-                Get Free Legal Help
-              </Link>
-            </div>
-
-            {/* Get Report CTA */}
-            <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5 mb-6">
-              <h3 className="font-medium text-neutral-900 mb-3">Need Your Police Report?</h3>
-              <p className="text-neutral-600 text-sm mb-4">
-                We can help you understand how to obtain the official accident report from your local agency.
-              </p>
-              <Link
-                href="/get-report/step-1"
-                className="block w-full bg-neutral-900 text-white px-4 py-3 rounded-xl hover:bg-neutral-800 transition font-medium text-center text-sm"
-              >
-                Get Your Report
               </Link>
             </div>
 

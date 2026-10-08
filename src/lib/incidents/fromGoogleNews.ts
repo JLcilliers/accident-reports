@@ -58,6 +58,11 @@ const EXCLUDE_PHRASES = [
 ];
 
 /**
+ * US phone numbers mark law-firm adverts rather than news reports.
+ */
+const PHONE_NUMBER = /\(?\b\d{3}\)?[-.\s]\d{3}[-.\s]\d{4}\b/;
+
+/**
  * US state abbreviations and their full names for location extraction.
  */
 const US_STATES: Record<string, string> = {
@@ -197,6 +202,9 @@ function isLikelyAccident(title: string, description?: string): boolean {
   const text = (title + " " + (description ?? "")).toLowerCase();
 
   // First check if it should be excluded
+  if (PHONE_NUMBER.test(text)) {
+    return false;
+  }
   for (const exclude of EXCLUDE_PHRASES) {
     if (text.includes(exclude)) {
       return false;

@@ -19,11 +19,11 @@ const BASE_URL =
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "Free Accident Reports Online | CarCrashReport.com",
+    default: "Latest Car Accident News by State | CarCrashReport.com",
     template: "%s | CarCrashReport.com",
   },
   description:
-    "Search recent traffic accidents, get your police report, and connect with legal help. Free, fast, and secure access to accident information.",
+    "Up-to-date traffic accident news from across the United States, organized by state, with plain-language summaries and links to the original reports.",
   verification: {
     google: "D9Biju710LGgiW2HPc7lJzEAUIWRDCplmahAuE7ohE0",
   },

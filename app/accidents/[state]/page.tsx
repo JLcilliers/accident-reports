@@ -389,20 +389,6 @@ export default async function StateAccidentsPage({
 
           {/* Sidebar */}
           <div className="lg:col-span-1 mt-8 lg:mt-0">
-            {/* Legal Help CTA */}
-            <div className="bg-neutral-900 rounded-2xl p-6 text-white mb-6">
-              <h3 className="text-lg font-medium mb-3">Injured in a {stateData.stateName} Accident?</h3>
-              <p className="text-neutral-400 text-sm mb-4 leading-relaxed">
-                Get a free case evaluation from an experienced personal injury attorney. No fees unless you win.
-              </p>
-              <Link
-                href="/legal-help"
-                className="block w-full bg-[#2A7D6E] text-white px-4 py-3 rounded-xl hover:bg-[#236859] transition font-medium text-center text-sm"
-              >
-                Get Free Legal Consultation
-              </Link>
-            </div>
-
             {/* Search Card */}
             <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5 mb-6">
               <h3 className="text-sm font-medium text-neutral-900 mb-3 uppercase tracking-wide">Search Accidents</h3>
@@ -414,20 +400,6 @@ export default async function StateAccidentsPage({
                 className="block w-full bg-neutral-900 text-white px-4 py-3 rounded-xl hover:bg-neutral-800 transition font-medium text-center text-sm"
               >
                 Search {stateData.stateName} Accidents
-              </Link>
-            </div>
-
-            {/* Get Report CTA */}
-            <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5 mb-6">
-              <h3 className="text-sm font-medium text-neutral-900 mb-3 uppercase tracking-wide">Need Your Report?</h3>
-              <p className="text-neutral-600 text-sm mb-4">
-                Learn how to obtain the official accident report from your local agency.
-              </p>
-              <Link
-                href="/get-report/step-1"
-                className="block w-full bg-[#2A7D6E] text-white px-4 py-3 rounded-xl hover:bg-[#236859] transition font-medium text-center text-sm"
-              >
-                Get Your Police Report
               </Link>
             </div>
 

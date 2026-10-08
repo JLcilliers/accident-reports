@@ -18,7 +18,7 @@ const organizationJsonLd = {
   name: "CarCrashReport.com",
   url: BASE_URL,
   description:
-    "Search recent traffic accidents, get your police report, and connect with legal help. Free, fast, and secure accident information.",
+    "Up-to-date traffic accident news from across the United States, organized by state, with plain-language summaries and links to the original reports.",
   sameAs: [],
 };
 
@@ -40,7 +40,7 @@ export default function Home() {
               What You Can Do
             </h2>
             <p className="text-neutral-500 max-w-xl mx-auto">
-              Find accident information and understand your options
+              Follow traffic accidents reported across the country
             </p>
           </div>
 
@@ -65,9 +65,9 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
                 </svg>
               </div>
-              <h3 className="text-lg font-medium text-neutral-900 mb-2">Get Your Police Report</h3>
+              <h3 className="text-lg font-medium text-neutral-900 mb-2">Read Clear Summaries</h3>
               <p className="text-neutral-500 text-sm leading-relaxed">
-                Learn how to obtain your official accident report from local authorities.
+                Plain-language summaries of what was reported, with the key facts up front.
               </p>
             </div>
 
@@ -75,12 +75,12 @@ export default function Home() {
             <div className="bg-[#FAFAFA] rounded-2xl p-8 border border-neutral-100 hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-all duration-300">
               <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center mb-5 shadow-sm">
                 <svg className="w-6 h-6 text-[#2A7D6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0012 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 01-2.031.352 5.988 5.988 0 01-2.031-.352c-.483-.174-.711-.703-.59-1.202L18.75 4.971zm-16.5.52c.99-.203 1.99-.377 3-.52m0 0l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.989 5.989 0 01-2.031.352 5.989 5.989 0 01-2.031-.352c-.483-.174-.711-.703-.59-1.202L5.25 4.971z"/>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/>
                 </svg>
               </div>
-              <h3 className="text-lg font-medium text-neutral-900 mb-2">Understand Legal Options</h3>
+              <h3 className="text-lg font-medium text-neutral-900 mb-2">Check the Sources</h3>
               <p className="text-neutral-500 text-sm leading-relaxed">
-                Connect with personal injury attorneys for a free case evaluation.
+                Every summary links to the original news coverage it is based on.
               </p>
             </div>
 
@@ -130,9 +130,8 @@ export default function Home() {
       {/* STAY IN THE KNOW SECTION */}
       <section className="py-20 lg:py-28 bg-[#F7F7F7]">
         <div className="container mx-auto px-6 lg:px-12 max-w-[1200px]">
-          <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
-            {/* Left Content */}
-            <div className="mb-12 lg:mb-0">
+          <div className="max-w-2xl">
+            <div>
               <h2 className="text-2xl md:text-3xl font-medium text-neutral-900 mb-5 tracking-tight">
                 Stay Informed About Local Accidents
               </h2>
@@ -174,46 +173,6 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
                 </svg>
               </Link>
-            </div>
-
-            {/* Right - Sample Accident Card */}
-            <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.04)] overflow-hidden">
-              <div className="p-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="bg-[#FEF3C7] text-[#B45309] text-xs font-medium px-3 py-1 rounded-full">Recent</span>
-                  <span className="text-neutral-400 text-sm">2 hours ago</span>
-                </div>
-                <h3 className="text-lg font-medium text-neutral-900 mb-3">
-                  Two-Vehicle Collision on I-25 near Downtown Denver
-                </h3>
-                <div className="flex flex-wrap gap-4 text-sm text-neutral-500 mb-4">
-                  <span className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
-                    </svg>
-                    Denver, CO
-                  </span>
-                  <span className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    Today, 3:45 PM
-                  </span>
-                </div>
-                <p className="text-neutral-500 text-sm leading-relaxed mb-5">
-                  A two-vehicle collision was reported on I-25 northbound near the downtown exits. Injuries have been reported. Traffic is backed up for approximately 2 miles.
-                </p>
-                <Link
-                  href="/accidents/colorado/denver/i-25-collision-example"
-                  className="text-[#2A7D6E] hover:text-[#236859] font-medium text-sm flex items-center gap-1.5 transition-colors"
-                >
-                  View Details
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/>
-                  </svg>
-                </Link>
-              </div>
             </div>
           </div>
         </div>
@@ -280,7 +239,7 @@ export default function Home() {
               </div>
               <h3 className="text-base font-medium text-neutral-900 mb-2">Next Steps</h3>
               <p className="text-neutral-500 text-sm leading-relaxed">
-                Guidance on what to do if you were involved, including legal options.
+                Guidance on what to do if you were involved in a crash.
               </p>
             </div>
 
@@ -308,91 +267,6 @@ export default function Home() {
               <p className="text-neutral-500 text-sm leading-relaxed">
                 Articles updated as investigations progress and new information arrives.
               </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* TESTIMONIALS SECTION */}
-      <section className="py-20 lg:py-28 bg-[#F7F7F7]">
-        <div className="container mx-auto px-6 lg:px-12 max-w-[1200px]">
-          <div className="text-center mb-16">
-            <h2 className="text-2xl md:text-3xl font-medium text-neutral-900 mb-3 tracking-tight">
-              How We Have Helped
-            </h2>
-            <p className="text-neutral-500 max-w-xl mx-auto">
-              Stories from people who found the information they needed
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Testimonial 1 */}
-            <div className="bg-white rounded-2xl p-8 border border-neutral-100">
-              <div className="flex items-center gap-1 mb-5">
-                {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-4 h-4 text-[#2A7D6E]" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                  </svg>
-                ))}
-              </div>
-              <p className="text-neutral-600 text-sm leading-relaxed mb-6">
-                &ldquo;My dad was in an accident and we couldn&apos;t get details from the hospital. This site helped us understand what happened and connected us with a great attorney.&rdquo;
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[#E8F5F2] rounded-full flex items-center justify-center">
-                  <span className="text-[#2A7D6E] font-medium text-sm">MR</span>
-                </div>
-                <div>
-                  <p className="text-neutral-900 font-medium text-sm">Maria R.</p>
-                  <p className="text-neutral-400 text-xs">Denver, CO</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Testimonial 2 */}
-            <div className="bg-white rounded-2xl p-8 border border-neutral-100">
-              <div className="flex items-center gap-1 mb-5">
-                {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-4 h-4 text-[#2A7D6E]" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                  </svg>
-                ))}
-              </div>
-              <p className="text-neutral-600 text-sm leading-relaxed mb-6">
-                &ldquo;I witnessed a crash and wanted to know if everyone was okay. Found the information here the next day. Very helpful and respectfully written.&rdquo;
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[#E8F5F2] rounded-full flex items-center justify-center">
-                  <span className="text-[#2A7D6E] font-medium text-sm">JT</span>
-                </div>
-                <div>
-                  <p className="text-neutral-900 font-medium text-sm">James T.</p>
-                  <p className="text-neutral-400 text-xs">Phoenix, AZ</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Testimonial 3 */}
-            <div className="bg-white rounded-2xl p-8 border border-neutral-100">
-              <div className="flex items-center gap-1 mb-5">
-                {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-4 h-4 text-[#2A7D6E]" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                  </svg>
-                ))}
-              </div>
-              <p className="text-neutral-600 text-sm leading-relaxed mb-6">
-                &ldquo;The guide on getting my police report saved me hours. I didn&apos;t know which department to contact until I read their step-by-step instructions.&rdquo;
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[#E8F5F2] rounded-full flex items-center justify-center">
-                  <span className="text-[#2A7D6E] font-medium text-sm">SK</span>
-                </div>
-                <div>
-                  <p className="text-neutral-900 font-medium text-sm">Sarah K.</p>
-                  <p className="text-neutral-400 text-xs">Austin, TX</p>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -441,12 +315,12 @@ export default function Home() {
             <div className="text-center">
               <div className="w-14 h-14 bg-[#E8F5F2] rounded-2xl flex items-center justify-center mx-auto mb-5">
                 <svg className="w-7 h-7 text-[#2A7D6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0012 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 01-2.031.352 5.988 5.988 0 01-2.031-.352c-.483-.174-.711-.703-.59-1.202L18.75 4.971zm-16.5.52c.99-.203 1.99-.377 3-.52m0 0l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.989 5.989 0 01-2.031.352 5.989 5.989 0 01-2.031-.352c-.483-.174-.711-.703-.59-1.202L5.25 4.971z"/>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/>
                 </svg>
               </div>
-              <h3 className="text-base font-medium text-neutral-900 mb-2">Vetted Attorneys</h3>
+              <h3 className="text-base font-medium text-neutral-900 mb-2">Always Current</h3>
               <p className="text-neutral-500 text-sm leading-relaxed">
-                Connections to experienced local personal injury lawyers.
+                New incidents are added automatically throughout the day.
               </p>
             </div>
 
@@ -472,24 +346,24 @@ export default function Home() {
           <div className="lg:flex lg:items-center lg:justify-between">
             <div className="mb-10 lg:mb-0 lg:max-w-xl">
               <h2 className="text-2xl md:text-3xl font-medium text-white mb-4 tracking-tight">
-                Need Legal Help After an Accident?
+                Looking for a Specific Accident?
               </h2>
               <p className="text-neutral-300 leading-relaxed">
-                Connect with personal injury attorneys who can review your case. Free consultation, no obligation.
+                Search by state and city, or browse the latest incidents as they are reported.
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
-                href="/legal-help"
+                href="/search"
                 className="inline-flex items-center justify-center bg-[#2A7D6E] text-white px-8 py-4 rounded-xl font-medium hover:bg-[#236859] transition-all"
               >
-                Get Free Case Review
+                Search Accidents
               </Link>
               <Link
-                href="/search"
+                href="/incidents"
                 className="inline-flex items-center justify-center bg-transparent text-white px-8 py-4 rounded-xl font-medium hover:bg-white/10 transition-all border border-neutral-700"
               >
-                Search Accidents
+                Latest Accidents
               </Link>
             </div>
           </div>
