@@ -530,12 +530,12 @@ export async function generateMetadata({
 
   if (!incident) {
     return {
-      title: "Accident Not Found | AccidentLookup",
+      title: "Accident Not Found",
     };
   }
 
   return {
-    title: `${incident.title} | AccidentLookup`,
+    title: `${incident.title}`,
     description: incident.summary,
   };
 }

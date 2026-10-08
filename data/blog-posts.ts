@@ -28,7 +28,7 @@ export const blogPosts: BlogPost[] = [
     publishedAt: "2025-12-11",
     updatedAt: "2025-12-11",
     author: {
-      name: "AccidentLookup Research Team",
+      name: "CarCrashReport Research Team",
       role: "Safety & Statistics Division"
     },
     category: "Statistics & Research",

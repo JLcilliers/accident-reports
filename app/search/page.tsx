@@ -477,7 +477,8 @@ export default async function SearchPage({
 }
 
 export const metadata = {
-  title: "Search Accidents | AccidentLookup",
+  title: "Search Accidents",
   description:
     "Search for traffic accidents by location, date, or keyword. Find accident reports and crash information compiled from public news sources.",
+  alternates: { canonical: "/search" },
 };

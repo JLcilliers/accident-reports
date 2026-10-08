@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
 import PageContainer from "@/components/PageContainer";
+
+export const metadata: Metadata = {
+  title: "Terms of Service",
+  description:
+    "Read the terms and conditions for using CarCrashReport.com, including our free accident report service and legal help referrals.",
+  alternates: { canonical: "/terms" },
+};
 
 export default function TermsPage() {
   return (
@@ -12,7 +20,7 @@ export default function TermsPage() {
         <section className="bg-white rounded-2xl p-6 border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
           <h2 className="text-xl font-medium text-neutral-900 mb-4">1. Acceptance of Terms</h2>
           <p className="text-neutral-600 leading-relaxed">
-            By accessing and using AccidentLookup (the "Service"), you accept and agree to be bound
+            By accessing and using CarCrashReport (the "Service"), you accept and agree to be bound
             by these Terms of Service. If you do not agree to these terms, please do not use the Service.
           </p>
         </section>
@@ -20,7 +28,7 @@ export default function TermsPage() {
         <section className="bg-white rounded-2xl p-6 border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
           <h2 className="text-xl font-medium text-neutral-900 mb-4">2. Description of Service</h2>
           <p className="text-neutral-600 leading-relaxed mb-3">
-            AccidentLookup provides a free service to help users locate and obtain accident and
+            CarCrashReport provides a free service to help users locate and obtain accident and
             police reports using modern technology. We search various databases and public records to find reports matching
             the information you provide.
           </p>
@@ -67,7 +75,7 @@ export default function TermsPage() {
         <section className="bg-white rounded-2xl p-6 border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
           <h2 className="text-xl font-medium text-neutral-900 mb-4">6. Limitation of Liability</h2>
           <p className="text-neutral-600 leading-relaxed">
-            To the maximum extent permitted by law, AccidentLookup shall not be liable for any
+            To the maximum extent permitted by law, CarCrashReport shall not be liable for any
             indirect, incidental, special, consequential, or punitive damages resulting from your use
             of or inability to use the Service.
           </p>

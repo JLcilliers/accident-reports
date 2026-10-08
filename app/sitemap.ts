@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 import prisma from "@/lib/prisma";
 
 const BASE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://accident-reports.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.carcrashreport.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
@@ -11,12 +11,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     "",
     "/accidents",
+    "/incidents",
     "/search",
     "/legal-help",
     "/how-it-works",
     "/for-lawyers",
     "/faq",
     "/about",
+    "/contact",
+    "/blog",
+    "/get-help",
     "/privacy",
     "/terms",
   ].map((path) => ({

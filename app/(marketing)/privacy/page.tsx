@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
 import PageContainer from "@/components/PageContainer";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description:
+    "Learn how CarCrashReport.com collects, uses, and protects your personal information. Your privacy and data security are important to us.",
+  alternates: { canonical: "/privacy" },
+};
 
 export default function PrivacyPage() {
   return (
@@ -12,7 +20,7 @@ export default function PrivacyPage() {
         <section className="bg-white rounded-2xl p-6 border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
           <h2 className="text-xl font-medium text-neutral-900 mb-4">1. Introduction</h2>
           <p className="text-neutral-600 leading-relaxed">
-            At AccidentLookup, we take your privacy seriously. This Privacy Policy explains how
+            At CarCrashReport, we take your privacy seriously. This Privacy Policy explains how
             we collect, use, disclose, and safeguard your information when you use our website and
             services.
           </p>

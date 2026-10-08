@@ -392,7 +392,7 @@ function SearchProgressContent() {
       <div className="bg-white/80 backdrop-blur-md border-b border-neutral-100">
         <div className="container mx-auto px-6 max-w-[1200px] py-4">
           <Link href="/" className="text-xl font-medium tracking-tight text-neutral-900">
-            AccidentLookup
+            CarCrashReport
           </Link>
         </div>
       </div>

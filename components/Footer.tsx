@@ -10,7 +10,7 @@ export default function Footer() {
           <div className="lg:col-span-4">
             <Link href="/" className="inline-block mb-6">
               <span className="text-xl font-medium tracking-tight text-neutral-900">
-                AccidentLookup
+                CarCrashReport
               </span>
             </Link>
             <p className="text-neutral-500 leading-relaxed text-sm max-w-sm">
@@ -108,7 +108,7 @@ export default function Footer() {
         <div className="border-t border-neutral-100 pt-8">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
             <p className="text-neutral-400 text-sm">
-              &copy; {new Date().getFullYear()} AccidentLookup. All rights reserved.
+              &copy; {new Date().getFullYear()} CarCrashReport.com. All rights reserved.
             </p>
             <p className="text-neutral-400 text-xs leading-relaxed max-w-2xl">
               This site provides informational resources only. Not a law firm. Information based on publicly available sources.

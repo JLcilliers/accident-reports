@@ -1,17 +1,24 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import VideoHero from "@/components/hero/VideoHero";
 
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "/",
+  },
+};
+
 const BASE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://accident-reports.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.carcrashreport.com";
 
 // JSON-LD Organization structured data
 const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "AccidentReports",
+  name: "CarCrashReport.com",
   url: BASE_URL,
   description:
-    "Search recent traffic accidents compiled from publicly available news sources. Find accident information by location, date, and road.",
+    "Search recent traffic accidents, get your police report, and connect with legal help. Free, fast, and secure accident information.",
   sameAs: [],
 };
 
@@ -396,7 +403,7 @@ export default function Home() {
         <div className="container mx-auto px-6 lg:px-12 max-w-[1200px]">
           <div className="text-center mb-16">
             <h2 className="text-2xl md:text-3xl font-medium text-neutral-900 mb-3 tracking-tight">
-              Why AccidentLookup?
+              Why CarCrashReport?
             </h2>
             <p className="text-neutral-500 max-w-xl mx-auto">
               We handle accident information with care and professionalism

@@ -4,19 +4,19 @@ import PageContainer from "@/components/PageContainer";
 import { BlogCard } from "@/components/blog";
 import { getAllBlogPosts, getFeaturedPosts } from "@/data/blog-posts";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://accident-reports.vercel.app";
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.carcrashreport.com";
 
 export const metadata: Metadata = {
-  title: "Blog | AccidentLookup - Traffic Safety Insights & Statistics",
+  title: "Blog - Traffic Safety Insights & Statistics",
   description: "Explore in-depth articles on traffic safety, accident statistics, prevention strategies, and what to do after a crash. Expert insights backed by federal data.",
   alternates: {
     canonical: `${BASE_URL}/blog`,
   },
   openGraph: {
-    title: "Blog | AccidentLookup - Traffic Safety Insights & Statistics",
+    title: "Blog | CarCrashReport - Traffic Safety Insights & Statistics",
     description: "Explore in-depth articles on traffic safety, accident statistics, prevention strategies, and what to do after a crash.",
     url: `${BASE_URL}/blog`,
-    siteName: "AccidentLookup",
+    siteName: "CarCrashReport",
     type: "website",
   },
 };
@@ -25,12 +25,12 @@ export const metadata: Metadata = {
 const blogListingJsonLd = {
   "@context": "https://schema.org",
   "@type": "Blog",
-  name: "AccidentLookup Blog",
+  name: "CarCrashReport Blog",
   description: "Traffic safety insights, accident statistics, and prevention strategies",
   url: `${BASE_URL}/blog`,
   publisher: {
     "@type": "Organization",
-    name: "AccidentLookup",
+    name: "CarCrashReport",
     url: BASE_URL,
   },
 };

@@ -42,6 +42,10 @@ next-env.d.ts
 
 /lib/generated/prisma
 
+# Database exports and dumps
+db-export/
+*.dump
+
 # Playwright MCP test artifacts
 .playwright-mcp/
 
