@@ -24,6 +24,18 @@ export default function PrivacyPage() {
             CarCrashReport.com. In short: we do not ask for, collect or store personal information
             about our visitors. The only data gathered is the website analytics described below.
           </p>
+          <p className="text-neutral-600 leading-relaxed mt-3">
+            CarCrashReport.com is operated by Clixsy. Questions about this policy can be sent through{" "}
+            <a
+              href="https://www.clixsy.com/"
+              className="text-[#2A7D6E] hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Clixsy&apos;s website
+            </a>
+            .
+          </p>
         </section>
 
         <section className="bg-white rounded-2xl p-6 border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
