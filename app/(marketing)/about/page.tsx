@@ -3,9 +3,9 @@ import Link from "next/link";
 import PageContainer from "@/components/PageContainer";
 
 export const metadata: Metadata = {
-  title: "About Us - Free Accident Reports & Legal Help",
+  title: "About Us",
   description:
-    "Learn about CarCrashReport.com and how we help accident victims access free accident reports, find legal help, and understand their options.",
+    "CarCrashReport.com follows local news coverage of traffic accidents across the United States and summarizes each incident, with links to the original reports.",
   alternates: { canonical: "/about" },
 };
 
@@ -15,78 +15,57 @@ export default function AboutPage() {
       <div className="mb-12">
         <h1 className="text-4xl md:text-5xl font-medium text-neutral-900 mb-4 tracking-tight">About CarCrashReport</h1>
         <p className="text-lg text-neutral-500 leading-relaxed">
-          We're dedicated to helping accident victims access the information they need - for free.
+          Up-to-date news on traffic accidents across the United States, in one place.
         </p>
       </div>
 
       <div className="space-y-6">
-        {/* Mission */}
+        {/* What We Do */}
         <div className="bg-white rounded-2xl p-8 border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
-          <h2 className="text-2xl font-medium text-neutral-900 mb-4">Our Mission</h2>
+          <h2 className="text-2xl font-medium text-neutral-900 mb-4">What We Do</h2>
           <p className="text-neutral-600 mb-4 leading-relaxed">
-            Getting an accident report shouldn't be complicated or expensive. That's why we created
-            CarCrashReport - to provide free, fast, and easy access to accident and police
-            reports using modern technology.
+            CarCrashReport follows local news coverage of traffic accidents across the United States.
+            Each incident gets its own page with a plain-language summary, the key facts, and links
+            to the news reports it is based on.
           </p>
           <p className="text-neutral-600 leading-relaxed">
-            Whether you need a report for insurance claims, legal proceedings, or personal records,
-            we're here to help you get it without the hassle of dealing with government offices
-            or paying expensive fees.
+            Incidents are organized by state, so you can quickly see what has been reported near
+            you. New incidents are added automatically throughout the day.
           </p>
         </div>
 
-        {/* How We Help */}
+        {/* How It Works */}
         <div className="bg-white rounded-2xl p-8 border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
-          <h2 className="text-2xl font-medium text-neutral-900 mb-4">How We Help</h2>
-          <p className="text-neutral-600 mb-6 leading-relaxed">
-            We've built a comprehensive system that searches multiple databases to locate accident
-            reports quickly. Instead of you having to contact various police departments, navigate
-            complex government websites, or wait in long lines, we do the work for you.
-          </p>
+          <h2 className="text-2xl font-medium text-neutral-900 mb-6">How It Works</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
               <div className="w-16 h-16 bg-[#E8F5F2] rounded-xl flex items-center justify-center mx-auto mb-3">
                 <span className="text-2xl font-medium text-[#2A7D6E]">1</span>
               </div>
-              <h3 className="font-medium text-neutral-900 mb-2">You Provide Details</h3>
+              <h3 className="font-medium text-neutral-900 mb-2">We Monitor the News</h3>
               <p className="text-sm text-neutral-500">
-                Simple form with basic accident information
+                New accident coverage from local outlets is picked up automatically
               </p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-[#E8F5F2] rounded-xl flex items-center justify-center mx-auto mb-3">
                 <span className="text-2xl font-medium text-[#2A7D6E]">2</span>
               </div>
-              <h3 className="font-medium text-neutral-900 mb-2">We Search</h3>
+              <h3 className="font-medium text-neutral-900 mb-2">We Summarize</h3>
               <p className="text-sm text-neutral-500">
-                Our system locates your report across multiple databases
+                Each incident is summarized in plain language with the key facts up front
               </p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-[#E8F5F2] rounded-xl flex items-center justify-center mx-auto mb-3">
                 <span className="text-2xl font-medium text-[#2A7D6E]">3</span>
               </div>
-              <h3 className="font-medium text-neutral-900 mb-2">You Receive</h3>
+              <h3 className="font-medium text-neutral-900 mb-2">You Browse</h3>
               <p className="text-sm text-neutral-500">
-                Free access to your report summary and instructions
+                Find incidents by state, or search by location
               </p>
             </div>
           </div>
-        </div>
-
-        {/* Why Free */}
-        <div className="bg-white rounded-2xl p-8 border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
-          <h2 className="text-2xl font-medium text-neutral-900 mb-4">Why Is It Free?</h2>
-          <p className="text-neutral-600 mb-4 leading-relaxed">
-            We believe everyone deserves access to their accident reports without financial barriers.
-            Our service is free because we're supported by partnerships with legal professionals who
-            help accident victims get the compensation they deserve.
-          </p>
-          <p className="text-neutral-600 leading-relaxed">
-            If you were injured in an accident, we can optionally connect you with experienced
-            personal injury attorneys for a free case review. There's no obligation - you're free
-            to just get your report and move on. But if you need legal help, we're here for that too.
-          </p>
         </div>
 
         {/* Values */}
@@ -102,7 +81,7 @@ export default function AboutPage() {
               <div>
                 <h3 className="font-medium text-neutral-900 mb-1">Transparency</h3>
                 <p className="text-neutral-600">
-                  No hidden fees, no surprises. What we say is what you get - free accident reports.
+                  Every summary links to the original coverage, so you can check the details yourself.
                 </p>
               </div>
             </div>
@@ -113,9 +92,9 @@ export default function AboutPage() {
                 </svg>
               </div>
               <div>
-                <h3 className="font-medium text-neutral-900 mb-1">Privacy & Security</h3>
+                <h3 className="font-medium text-neutral-900 mb-1">Privacy</h3>
                 <p className="text-neutral-600">
-                  Your information is protected with industry-standard encryption and never sold to third parties.
+                  There are no forms or accounts. We don&apos;t ask for or store personal information.
                 </p>
               </div>
             </div>
@@ -126,9 +105,9 @@ export default function AboutPage() {
                 </svg>
               </div>
               <div>
-                <h3 className="font-medium text-neutral-900 mb-1">Speed & Efficiency</h3>
+                <h3 className="font-medium text-neutral-900 mb-1">Timeliness</h3>
                 <p className="text-neutral-600">
-                  Modern automation means faster results. Get your report in minutes, not days.
+                  New incidents appear automatically as local news outlets report them.
                 </p>
               </div>
             </div>
@@ -139,9 +118,9 @@ export default function AboutPage() {
                 </svg>
               </div>
               <div>
-                <h3 className="font-medium text-neutral-900 mb-1">Compassion</h3>
+                <h3 className="font-medium text-neutral-900 mb-1">Respect</h3>
                 <p className="text-neutral-600">
-                  We understand that dealing with an accident is stressful. We're here to make at least one part easier.
+                  Real people are affected by every crash. We cover each one with care.
                 </p>
               </div>
             </div>
@@ -150,9 +129,9 @@ export default function AboutPage() {
 
         {/* CTA */}
         <div className="bg-neutral-900 rounded-2xl p-8 text-center">
-          <h2 className="text-3xl font-medium text-white mb-4">Ready to Get Started?</h2>
+          <h2 className="text-3xl font-medium text-white mb-4">Find Recent Accidents</h2>
           <p className="text-lg text-neutral-400 mb-6 leading-relaxed">
-            Join thousands of people who've already used our free service
+            Browse the latest incidents or search by location
           </p>
           <Link
             href="/search"

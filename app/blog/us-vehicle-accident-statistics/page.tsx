@@ -1027,25 +1027,24 @@ export default function USVehicleAccidentStatisticsPage() {
               {/* CTA Section */}
               <section className="bg-neutral-900 rounded-2xl p-8 lg:p-10">
                 <h2 className="text-2xl font-medium text-white mb-4 tracking-tight">
-                  Were You Involved in an Accident?
+                  Looking for a Recent Accident?
                 </h2>
                 <p className="text-neutral-300 mb-6 leading-relaxed">
-                  If you or a loved one has been injured in a vehicle crash, understanding your options is
-                  important. We can help connect you with experienced personal injury attorneys for a free,
-                  no-obligation case review.
+                  Search recent traffic accidents by state and city, with summaries of what was reported
+                  and links to the original news coverage.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Link
-                    href="/legal-help"
+                    href="/search"
                     className="inline-flex items-center justify-center bg-[#2A7D6E] text-white px-6 py-3 rounded-xl font-medium hover:bg-[#236859] transition-all"
                   >
-                    Get Free Case Review
+                    Search Accident Records
                   </Link>
                   <Link
-                    href="/search"
+                    href="/incidents"
                     className="inline-flex items-center justify-center bg-transparent text-white px-6 py-3 rounded-xl font-medium hover:bg-white/10 transition-all border border-neutral-700"
                   >
-                    Search Accident Records
+                    Latest Accidents
                   </Link>
                 </div>
               </section>

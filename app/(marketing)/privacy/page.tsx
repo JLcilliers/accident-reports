@@ -4,7 +4,7 @@ import PageContainer from "@/components/PageContainer";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "Learn how CarCrashReport.com collects, uses, and protects your personal information. Your privacy and data security are important to us.",
+    "CarCrashReport.com does not collect personal information. Learn about the analytics cookies the site uses and how to opt out.",
   alternates: { canonical: "/privacy" },
 };
 
@@ -13,137 +13,93 @@ export default function PrivacyPage() {
     <PageContainer>
       <div className="mb-12">
         <h1 className="text-4xl md:text-5xl font-medium text-neutral-900 mb-4 tracking-tight">Privacy Policy</h1>
-        <p className="text-neutral-500">Last Updated: January 2025</p>
+        <p className="text-neutral-500">Last Updated: October 2026</p>
       </div>
 
       <div className="space-y-6">
         <section className="bg-white rounded-2xl p-6 border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
           <h2 className="text-xl font-medium text-neutral-900 mb-4">1. Introduction</h2>
           <p className="text-neutral-600 leading-relaxed">
-            At CarCrashReport, we take your privacy seriously. This Privacy Policy explains how
-            we collect, use, disclose, and safeguard your information when you use our website and
-            services.
+            This Privacy Policy explains what information is collected when you visit
+            CarCrashReport.com. In short: we do not ask for, collect or store personal information
+            about our visitors. The only data gathered is the website analytics described below.
           </p>
         </section>
 
         <section className="bg-white rounded-2xl p-6 border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
           <h2 className="text-xl font-medium text-neutral-900 mb-4">2. Information We Collect</h2>
-          <h3 className="text-lg font-medium text-neutral-900 mt-4 mb-2">Personal Information</h3>
-          <p className="text-neutral-600 leading-relaxed mb-3">We collect information that you provide directly to us, including:</p>
-          <ul className="list-disc pl-6 space-y-2 text-neutral-600">
-            <li>Name and contact information (email, phone number)</li>
-            <li>Accident details (date, location, type of incident)</li>
-            <li>Information about injuries or damages</li>
-            <li>Any other information you choose to provide</li>
-          </ul>
-
-          <h3 className="text-lg font-medium text-neutral-900 mt-6 mb-2">Automatically Collected Information</h3>
-          <p className="text-neutral-600 leading-relaxed mb-3">When you visit our website, we automatically collect:</p>
-          <ul className="list-disc pl-6 space-y-2 text-neutral-600">
-            <li>IP address and device information</li>
-            <li>Browser type and version</li>
-            <li>Pages visited and time spent on pages</li>
-            <li>Referring website addresses</li>
-          </ul>
-        </section>
-
-        <section className="bg-white rounded-2xl p-6 border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
-          <h2 className="text-xl font-medium text-neutral-900 mb-4">3. How We Use Your Information</h2>
-          <p className="text-neutral-600 leading-relaxed mb-3">We use the information we collect to:</p>
-          <ul className="list-disc pl-6 space-y-2 text-neutral-600">
-            <li>Locate and provide you with accident reports</li>
-            <li>Connect you with legal professionals if requested</li>
-            <li>Communicate with you about your requests</li>
-            <li>Improve our services and user experience</li>
-            <li>Comply with legal obligations</li>
-            <li>Prevent fraud and ensure security</li>
-          </ul>
-        </section>
-
-        <section className="bg-white rounded-2xl p-6 border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
-          <h2 className="text-xl font-medium text-neutral-900 mb-4">4. Information Sharing and Disclosure</h2>
-
-          <h3 className="text-lg font-medium text-neutral-900 mt-4 mb-2">With Your Consent</h3>
           <p className="text-neutral-600 leading-relaxed">
-            If you request legal assistance, we will share your information with partner law firms
-            who can provide free case reviews. You explicitly consent to this sharing when you check
-            the consent box on our forms.
-          </p>
-
-          <h3 className="text-lg font-medium text-neutral-900 mt-6 mb-2">Service Providers</h3>
-          <p className="text-neutral-600 leading-relaxed mb-3">
-            We may share information with third-party service providers who help us operate our
-            website and services, such as:
-          </p>
-          <ul className="list-disc pl-6 space-y-2 text-neutral-600">
-            <li>Database and record search services</li>
-            <li>Email and communication platforms</li>
-            <li>Analytics and performance monitoring tools</li>
-            <li>Cloud hosting and storage providers</li>
-          </ul>
-
-          <h3 className="text-lg font-medium text-neutral-900 mt-6 mb-2">What We Don't Do</h3>
-          <p className="text-[#2A7D6E] font-medium">
-            We do not sell your personal information to third parties for marketing purposes.
+            We do not collect names, email addresses, phone numbers or any other personal
+            information. The site has no forms, no accounts, no newsletter and no sign-ups.
           </p>
         </section>
 
         <section className="bg-white rounded-2xl p-6 border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
-          <h2 className="text-xl font-medium text-neutral-900 mb-4">5. Data Security</h2>
+          <h2 className="text-xl font-medium text-neutral-900 mb-4">3. Analytics and Cookies</h2>
           <p className="text-neutral-600 leading-relaxed mb-3">
-            We implement appropriate technical and organizational measures to protect your personal
-            information, including:
+            We use Google Analytics and Google Tag Manager to understand how the site is used, such
+            as which pages are read and how visitors find us. Google Analytics uses cookies and
+            collects information such as:
           </p>
           <ul className="list-disc pl-6 space-y-2 text-neutral-600">
-            <li>Encryption of data in transit and at rest</li>
-            <li>Secure servers and databases</li>
-            <li>Limited access to personal information</li>
-            <li>Regular security assessments</li>
-          </ul>
-        </section>
-
-        <section className="bg-white rounded-2xl p-6 border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
-          <h2 className="text-xl font-medium text-neutral-900 mb-4">6. Your Privacy Rights</h2>
-          <p className="text-neutral-600 leading-relaxed mb-3">Depending on your location, you may have the following rights:</p>
-          <ul className="list-disc pl-6 space-y-2 text-neutral-600">
-            <li>Access to your personal information</li>
-            <li>Correction of inaccurate information</li>
-            <li>Deletion of your information</li>
-            <li>Opt-out of marketing communications</li>
-            <li>Data portability</li>
+            <li>Pages viewed and time spent on them</li>
+            <li>Approximate location (city or country)</li>
+            <li>Device, operating system and browser type</li>
+            <li>The website or search that referred you</li>
           </ul>
           <p className="text-neutral-600 leading-relaxed mt-4">
-            To exercise these rights, please contact us at <span className="text-[#2A7D6E]">privacy@accidentlookup.com</span>
+            This information is processed by Google under{" "}
+            <a
+              href="https://policies.google.com/privacy"
+              className="text-[#2A7D6E] hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Google&apos;s Privacy Policy
+            </a>
+            . You can block these cookies in your browser settings or install the{" "}
+            <a
+              href="https://tools.google.com/dlpage/gaoptout"
+              className="text-[#2A7D6E] hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Google Analytics opt-out add-on
+            </a>
+            .
           </p>
         </section>
 
         <section className="bg-white rounded-2xl p-6 border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
-          <h2 className="text-xl font-medium text-neutral-900 mb-4">7. California Privacy Rights</h2>
+          <h2 className="text-xl font-medium text-neutral-900 mb-4">4. Hosting and Security</h2>
           <p className="text-neutral-600 leading-relaxed">
-            California residents have specific rights under the California Consumer Privacy Act (CCPA),
-            including the right to know what personal information is collected, the right to delete
-            personal information, and the right to opt-out of the sale of personal information.
-          </p>
-          <p className="text-[#2A7D6E] font-medium mt-3">
-            We do not sell personal information as defined by the CCPA.
+            Our hosting and network providers, Vercel and Cloudflare, process technical information
+            such as IP addresses and browser details in order to deliver pages and protect the site
+            from abuse.
           </p>
         </section>
 
         <section className="bg-white rounded-2xl p-6 border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
-          <h2 className="text-xl font-medium text-neutral-900 mb-4">8. Changes to This Privacy Policy</h2>
+          <h2 className="text-xl font-medium text-neutral-900 mb-4">5. People Named in News Reports</h2>
           <p className="text-neutral-600 leading-relaxed">
-            We may update this Privacy Policy from time to time. We will notify you of any changes by
-            posting the new Privacy Policy on this page and updating the "Last Updated" date.
+            Incident pages summarize information that news organizations have already published,
+            which can include names, ages and locations reported in their coverage. Each summary
+            links to the original reports.
           </p>
         </section>
 
         <section className="bg-white rounded-2xl p-6 border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
-          <h2 className="text-xl font-medium text-neutral-900 mb-4">9. Contact Us</h2>
-          <p className="text-neutral-600 leading-relaxed">
-            If you have questions or concerns about this Privacy Policy, please contact us:
+          <h2 className="text-xl font-medium text-neutral-900 mb-4">6. Selling and Sharing</h2>
+          <p className="text-[#2A7D6E] font-medium">
+            We do not sell or share personal information, because we do not collect any.
           </p>
-          <p className="text-[#2A7D6E] mt-3">
-            Email: privacy@accidentlookup.com
+        </section>
+
+        <section className="bg-white rounded-2xl p-6 border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
+          <h2 className="text-xl font-medium text-neutral-900 mb-4">7. Changes to This Privacy Policy</h2>
+          <p className="text-neutral-600 leading-relaxed">
+            We may update this Privacy Policy from time to time. Changes are posted on this page with
+            an updated &quot;Last Updated&quot; date.
           </p>
         </section>
       </div>

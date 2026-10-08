@@ -368,9 +368,6 @@ export default async function SearchPage({
                             <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                           </svg>
                         </Link>
-                        <Link href="/legal-help" className="text-neutral-500 hover:text-neutral-700 text-sm">
-                          Get Legal Help
-                        </Link>
                       </div>
                     </div>
                   );

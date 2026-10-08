@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { HomeAccidentWizard } from "@/components/HomeAccidentWizard";
+import Link from "next/link";
 
 export default function VideoHero() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -55,7 +55,7 @@ export default function VideoHero() {
             </p>
           </div>
 
-          {/* Wizard Card */}
+          {/* Actions */}
           <div
             className={`w-full transition-all duration-700 ease-out delay-150 ${
               isLoaded
@@ -63,7 +63,20 @@ export default function VideoHero() {
                 : "opacity-0 translate-y-8"
             }`}
           >
-            <HomeAccidentWizard />
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <Link
+                href="/incidents"
+                className="inline-flex items-center justify-center bg-[#2A7D6E] text-white px-8 py-4 rounded-xl font-medium hover:bg-[#236859] transition-all"
+              >
+                Latest Accidents
+              </Link>
+              <Link
+                href="/search"
+                className="inline-flex items-center justify-center bg-white text-neutral-900 px-8 py-4 rounded-xl font-medium hover:bg-neutral-50 transition-all border border-neutral-300"
+              >
+                Search by Location
+              </Link>
+            </div>
           </div>
         </div>
       </div>

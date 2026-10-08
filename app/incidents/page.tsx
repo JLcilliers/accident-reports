@@ -242,23 +242,6 @@ export default async function IncidentsPage() {
             })}
           </div>
         )}
-
-        {/* CTA Section */}
-        <div className="mt-12 bg-gradient-to-br from-blue-800 to-blue-900 rounded-xl p-8 text-white text-center">
-          <h2 className="text-2xl font-bold mb-3">
-            Were You Involved in an Accident?
-          </h2>
-          <p className="text-blue-100 mb-6 max-w-xl mx-auto">
-            Get a free case evaluation from an experienced personal injury
-            attorney in your area. No fees unless you win.
-          </p>
-          <Link
-            href="/legal-help"
-            className="inline-flex items-center gap-2 bg-white text-blue-800 px-6 py-3 rounded-lg hover:bg-blue-50 transition font-semibold"
-          >
-            Talk to a Local Injury Lawyer
-          </Link>
-        </div>
       </div>
     </div>
   );

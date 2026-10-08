@@ -14,7 +14,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="text-neutral-500 leading-relaxed text-sm max-w-sm">
-              Your trusted source for traffic accident information. Search recent incidents and understand your options.
+              Up-to-date traffic accident news from across the United States, organized by state.
             </p>
           </div>
 
@@ -39,11 +39,6 @@ export default function Footer() {
                   How It Works
                 </Link>
               </li>
-              <li>
-                <Link href="/legal-help" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">
-                  Legal Help
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -66,16 +61,6 @@ export default function Footer() {
               <li>
                 <Link href="/faq" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">
                   FAQ
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">
-                  Contact
-                </Link>
-              </li>
-              <li>
-                <Link href="/for-lawyers" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">
-                  For Lawyers
                 </Link>
               </li>
             </ul>
