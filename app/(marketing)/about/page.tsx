@@ -1,11 +1,19 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import PageContainer from "@/components/PageContainer";
+
+export const metadata: Metadata = {
+  title: "About Us - Free Accident Reports & Legal Help",
+  description:
+    "Learn about CarCrashReport.com and how we help accident victims access free accident reports, find legal help, and understand their options.",
+  alternates: { canonical: "/about" },
+};
 
 export default function AboutPage() {
   return (
     <PageContainer>
       <div className="mb-12">
-        <h1 className="text-4xl md:text-5xl font-medium text-neutral-900 mb-4 tracking-tight">About AccidentLookup</h1>
+        <h1 className="text-4xl md:text-5xl font-medium text-neutral-900 mb-4 tracking-tight">About CarCrashReport</h1>
         <p className="text-lg text-neutral-500 leading-relaxed">
           We're dedicated to helping accident victims access the information they need - for free.
         </p>
@@ -17,7 +25,7 @@ export default function AboutPage() {
           <h2 className="text-2xl font-medium text-neutral-900 mb-4">Our Mission</h2>
           <p className="text-neutral-600 mb-4 leading-relaxed">
             Getting an accident report shouldn't be complicated or expensive. That's why we created
-            AccidentLookup - to provide free, fast, and easy access to accident and police
+            CarCrashReport - to provide free, fast, and easy access to accident and police
             reports using modern technology.
           </p>
           <p className="text-neutral-600 leading-relaxed">

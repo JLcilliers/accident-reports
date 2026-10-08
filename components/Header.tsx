@@ -44,7 +44,7 @@ export default function Header() {
           >
             <Image
               src="https://res.cloudinary.com/dovgh19xr/image/upload/v1764100024/Untitled_design_49_d4kmjg.png"
-              alt="AccidentLookup"
+              alt="CarCrashReport.com"
               width={180}
               height={40}
               className="h-8 lg:h-10 w-auto"

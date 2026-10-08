@@ -1,5 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import PageContainer from "@/components/PageContainer";
+
+export const metadata: Metadata = {
+  title: "How It Works - Get Your Free Accident Report in 3 Steps",
+  description:
+    "Learn how CarCrashReport.com helps you find accident information in 3 simple steps. Enter details, we search public records, and you get a free summary.",
+  alternates: { canonical: "/how-it-works" },
+};
 
 export default function HowItWorksPage() {
   return (
@@ -10,7 +18,7 @@ export default function HowItWorksPage() {
           How It Works
         </h1>
         <p className="text-lg text-neutral-500 leading-relaxed max-w-3xl mx-auto mb-8">
-          Getting your accident report shouldn&apos;t be confusing or expensive. Here&apos;s exactly what happens when you use AccidentLookup — from the moment you search to the moment your summary arrives.
+          Getting your accident report shouldn&apos;t be confusing or expensive. Here&apos;s exactly what happens when you use CarCrashReport — from the moment you search to the moment your summary arrives.
         </p>
         <Link
           href="/search"

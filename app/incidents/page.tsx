@@ -5,9 +5,10 @@ import { stripHtmlAndPublisher, cleanRssSnippet } from "@/lib/text";
 export const revalidate = 300; // Re-generate every 5 minutes
 
 export const metadata = {
-  title: "Recent Traffic Incidents | AccidentReports",
+  title: "Recent Traffic Incidents",
   description:
     "Browse the latest traffic accidents and incidents across the United States. Updated automatically from news sources.",
+  alternates: { canonical: "/incidents" },
 };
 
 type IncidentWithSources = {

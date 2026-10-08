@@ -50,7 +50,7 @@ export async function generateMetadata({
   const incident = await getIncident(slug);
 
   if (!incident) {
-    return { title: "Incident Not Found | AccidentReports" };
+    return { title: "Incident Not Found" };
   }
 
   const extractedFacts = incident.extractedFacts as AccidentFacts | null;
@@ -65,7 +65,7 @@ export async function generateMetadata({
   let title =
     parsedMeta.seoTitle ||
     incident.seoTitle ||
-    `${incident.headline} | AccidentReports`;
+    incident.headline;
 
   if (
     !parsedMeta.seoTitle &&
@@ -98,6 +98,9 @@ export async function generateMetadata({
     title,
     description,
     ...(keywords && { keywords }),
+    alternates: {
+      canonical: `/incidents/${slug}`,
+    },
     openGraph: {
       title,
       description,
@@ -109,7 +112,7 @@ export async function generateMetadata({
 }
 
 const BASE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://accident-reports.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.carcrashreport.com";
 
 export default async function IncidentPage({
   params,
@@ -177,12 +180,12 @@ export default async function IncidentPage({
     dateModified: (incident.updatedAt ?? incident.occurredAt).toISOString(),
     author: {
       "@type": "Organization",
-      name: "AccidentReports",
+      name: "CarCrashReport.com",
       url: BASE_URL,
     },
     publisher: {
       "@type": "Organization",
-      name: "AccidentReports",
+      name: "CarCrashReport.com",
       url: BASE_URL,
     },
     mainEntityOfPage: {

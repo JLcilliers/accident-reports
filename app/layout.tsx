@@ -13,11 +13,31 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+const BASE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.carcrashreport.com";
+
 export const metadata: Metadata = {
-  title: "Free Accident Reports Online | CarCrashReport.com",
-  description: "Get your accident and police reports online for free. Fast, easy, and secure access to your accident documentation.",
+  metadataBase: new URL(BASE_URL),
+  title: {
+    default: "Free Accident Reports Online | CarCrashReport.com",
+    template: "%s | CarCrashReport.com",
+  },
+  description:
+    "Search recent traffic accidents, get your police report, and connect with legal help. Free, fast, and secure access to accident information.",
   verification: {
     google: "D9Biju710LGgiW2HPc7lJzEAUIWRDCplmahAuE7ohE0",
+  },
+  openGraph: {
+    siteName: "CarCrashReport.com",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 

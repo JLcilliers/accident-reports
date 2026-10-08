@@ -242,7 +242,7 @@ export default async function AccidentsIndexPage() {
                 <h2 className="text-xl font-medium text-neutral-900 mb-4">Where Our Accident Information Comes From</h2>
                 <div className="prose prose-neutral max-w-none text-neutral-600">
                   <p className="mb-4 leading-relaxed">
-                    AccidentLookup monitors publicly available sources such as local news outlets,
+                    CarCrashReport monitors publicly available sources such as local news outlets,
                     public announcements, and law-enforcement press releases to identify traffic
                     accidents that may be relevant to you. We then organize that information by
                     state, city, and road so you can quickly see what happened and where.
@@ -347,6 +347,7 @@ export default async function AccidentsIndexPage() {
 }
 
 export const metadata = {
-  title: "Traffic Accidents Today | AccidentLookup",
+  title: "Traffic Accidents Today",
   description: "Browse recent traffic accidents across the US. Search by state, city, or date to find accident reports and crash information compiled from public news sources.",
+  alternates: { canonical: "/accidents" },
 };

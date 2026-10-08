@@ -5,7 +5,7 @@ import prisma from "@/lib/prisma";
 export const revalidate = 600; // Re-generate every 10 minutes
 
 const BASE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://accident-reports.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.carcrashreport.com";
 
 // State abbreviation to full name mapping
 const STATE_NAMES: Record<string, string> = {
@@ -457,7 +457,7 @@ export async function generateMetadata({
   const stateName = STATE_NAMES[state.toLowerCase()] || state.toUpperCase();
 
   return {
-    title: `${stateName} Traffic Accidents Today | AccidentLookup`,
+    title: `${stateName} Traffic Accidents Today`,
     description: `View recent traffic accidents in ${stateName}. Search accident reports by city, find crash locations, and learn how to get your official police report.`,
   };
 }

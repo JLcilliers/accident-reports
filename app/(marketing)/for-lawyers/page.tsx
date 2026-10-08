@@ -1,5 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import PageContainer from "@/components/PageContainer";
+
+export const metadata: Metadata = {
+  title: "For Lawyers - Personal Injury Lead Generation Partnership",
+  description:
+    "Partner with CarCrashReport.com to receive high-quality personal injury leads from accident victims actively seeking legal representation.",
+  alternates: { canonical: "/for-lawyers" },
+};
 
 export default function ForLawyersPage() {
   return (
@@ -14,7 +22,7 @@ export default function ForLawyersPage() {
       <div className="space-y-6">
         {/* Overview */}
         <div className="bg-white rounded-2xl p-8 border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
-          <h2 className="text-2xl font-medium text-neutral-900 mb-4">Why Partner With AccidentLookup?</h2>
+          <h2 className="text-2xl font-medium text-neutral-900 mb-4">Why Partner With CarCrashReport?</h2>
           <p className="text-neutral-600 mb-4 leading-relaxed">
             We connect personal injury law firms with accident victims at the exact moment they
             need legal assistance - right after they've obtained their accident report and

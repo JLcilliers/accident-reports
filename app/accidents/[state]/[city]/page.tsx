@@ -450,12 +450,12 @@ export async function generateMetadata({
 
   if (!cityData) {
     return {
-      title: "City Not Found | AccidentLookup",
+      title: "City Not Found",
     };
   }
 
   return {
-    title: `${cityData.city}, ${cityData.stateAbbr} Accidents Today | AccidentLookup`,
+    title: `${cityData.city}, ${cityData.stateAbbr} Accidents Today`,
     description: `View recent traffic accidents in ${cityData.city}, ${cityData.state}. Find accident reports, crash locations, and injury information.`,
   };
 }

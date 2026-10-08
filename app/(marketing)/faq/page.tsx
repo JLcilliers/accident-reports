@@ -1,5 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import PageContainer from "@/components/PageContainer";
+
+export const metadata: Metadata = {
+  title: "Frequently Asked Questions - Accident Reports & Legal Help",
+  description:
+    "Get answers to common questions about finding accident reports, how the service works, costs, legal options, and state coverage.",
+  alternates: { canonical: "/faq" },
+};
 
 export default function FAQPage() {
   const faqs = [
@@ -45,8 +53,26 @@ export default function FAQPage() {
     },
   ];
 
+  // FAQPage JSON-LD for rich snippets in Google Search
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  };
+
   return (
     <PageContainer>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <div className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-medium text-neutral-900 mb-4 tracking-tight">Frequently Asked Questions</h1>
         <p className="text-lg text-neutral-500 leading-relaxed">

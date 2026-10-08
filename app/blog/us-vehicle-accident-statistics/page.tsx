@@ -3,12 +3,12 @@ import Link from "next/link";
 import { TableOfContents, StatCard } from "@/components/blog";
 import { getBlogPost } from "@/data/blog-posts";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://accident-reports.vercel.app";
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.carcrashreport.com";
 const post = getBlogPost("us-vehicle-accident-statistics");
 const LAST_UPDATED = "December 2025";
 
 export const metadata: Metadata = {
-  title: "United States Car Accident Statistics, Causes, and Prevention (2025) | AccidentLookup",
+  title: "United States Car Accident Statistics, Causes, and Prevention (2025)",
   description: "Fresh United States car accident statistics, causes, and safety tips. Explore 2023 crash data, high-risk groups, and evidence-based prevention strategies.",
   alternates: {
     canonical: `${BASE_URL}/blog/us-vehicle-accident-statistics`,
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     title: "United States Car Accident Statistics, Causes, and Prevention (2025)",
     description: "Fresh United States car accident statistics, causes, and safety tips. Explore 2023 crash data, high-risk groups, and evidence-based prevention strategies.",
     url: `${BASE_URL}/blog/us-vehicle-accident-statistics`,
-    siteName: "AccidentLookup",
+    siteName: "CarCrashReport",
     type: "article",
     publishedTime: post?.publishedAt,
     modifiedTime: post?.updatedAt,
@@ -49,11 +49,11 @@ const articleJsonLd = {
   dateModified: post?.updatedAt,
   author: {
     "@type": "Organization",
-    name: "AccidentLookup Research Team",
+    name: "CarCrashReport Research Team",
   },
   publisher: {
     "@type": "Organization",
-    name: "AccidentLookup",
+    name: "CarCrashReport",
     url: BASE_URL,
   },
   mainEntityOfPage: {
@@ -151,7 +151,7 @@ export default function USVehicleAccidentStatisticsPage() {
                   <div className="w-8 h-8 bg-[#E8F5F2] rounded-full flex items-center justify-center">
                     <span className="text-[#2A7D6E] font-medium text-xs">AR</span>
                   </div>
-                  <span>AccidentLookup Research Team</span>
+                  <span>CarCrashReport Research Team</span>
                 </div>
                 <span className="text-neutral-300">•</span>
                 <span>25 min read</span>
