@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { DEFAULT_ILLUSTRATION, ILLUSTRATION_HEIGHT, ILLUSTRATION_WIDTH } from "@/lib/images/display";
 import { Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
@@ -31,9 +32,11 @@ export const metadata: Metadata = {
     siteName: "CarCrashReport.com",
     type: "website",
     locale: "en_US",
+    images: [{ url: DEFAULT_ILLUSTRATION.src, width: ILLUSTRATION_WIDTH, height: ILLUSTRATION_HEIGHT, alt: DEFAULT_ILLUSTRATION.alt }],
   },
   twitter: {
     card: "summary_large_image",
+    images: [{ url: DEFAULT_ILLUSTRATION.src, alt: DEFAULT_ILLUSTRATION.alt }],
   },
   robots: {
     index: true,

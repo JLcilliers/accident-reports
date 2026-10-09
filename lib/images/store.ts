@@ -6,6 +6,7 @@ export interface ClaimedIncident {
   headline: string;
   articleBody: string | null;
   extractedFacts: Prisma.JsonValue;
+  occurredAt: Date;
 }
 
 export interface SavedIllustration {
@@ -15,6 +16,8 @@ export interface SavedIllustration {
   model: string;
   costUsd: number;
   attempts: number;
+  composition: string | null;
+  hash: string | null;
 }
 
 // Any fixed number works, as long as every run uses the same one.
@@ -55,7 +58,7 @@ export async function claimIncidents(
           LIMIT ${take}
           FOR UPDATE SKIP LOCKED
        )
-      RETURNING id, slug, headline, "articleBody", "extractedFacts"`) as ClaimedIncident[];
+      RETURNING id, slug, headline, "articleBody", "extractedFacts", "occurredAt"`) as ClaimedIncident[];
     return { usedToday, claimed };
   });
 }
@@ -70,6 +73,18 @@ export async function saveIllustration(db: PrismaClient, id: string, result: Sav
            "imageModel" = ${result.model},
            "imageCostUsd" = ${result.costUsd},
            "imageAttempts" = ${result.attempts},
+           "imageComposition" = ${result.composition},
+           "imageHash" = ${result.hash},
            "imageGeneratedAt" = (NOW() AT TIME ZONE 'UTC')
      WHERE id = ${id}`;
+}
+
+/** The most recent stored illustrations, newest first: their compositions and hashes keep new pictures different. */
+export async function recentImages(db: PrismaClient, take = 50) {
+  return db.incident.findMany({
+    where: { imageStatus: "OK" },
+    orderBy: { imageGeneratedAt: "desc" },
+    take,
+    select: { imageComposition: true, imageHash: true, imageUrl: true },
+  });
 }
