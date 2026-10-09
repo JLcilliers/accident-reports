@@ -64,7 +64,7 @@ export async function GET(req: NextRequest) {
     },
     orderBy: { createdAt: "asc" },
     take,
-    select: { id: true, slug: true, headline: true, articleBody: true, extractedFacts: true },
+    select: { id: true, slug: true, headline: true, articleBody: true, extractedFacts: true, updatedAt: true },
   });
 
   const results: Record<string, unknown>[] = [];
@@ -74,9 +74,10 @@ export async function GET(req: NextRequest) {
     const done = await Promise.all(
       batch.map(async (incident) => {
         // Reserve both attempts first so a crash mid-run can never cause an automatic retry.
+        // updatedAt is passed back unchanged: adding an illustration is not an edit to the article.
         await prisma.incident.update({
           where: { id: incident.id },
-          data: { imageAttempts: MAX_ATTEMPTS, imageGeneratedAt: new Date() },
+          data: { imageAttempts: MAX_ATTEMPTS, imageGeneratedAt: new Date(), updatedAt: incident.updatedAt },
         });
 
         const scene = buildScene({
@@ -96,6 +97,7 @@ export async function GET(req: NextRequest) {
             imageCostUsd: result.costUsd,
             imageAttempts: result.attempts.length,
             imageGeneratedAt: new Date(),
+            updatedAt: incident.updatedAt,
           },
         });
 
