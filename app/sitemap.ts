@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import prisma from "@/lib/prisma";
+import { CRASH_REPORT_GUIDES } from "@/lib/crashReportGuides";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.carcrashreport.com";
@@ -13,6 +14,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/accidents",
     "/incidents",
     "/search",
+    "/crash-reports",
     "/how-it-works",
     "/faq",
     "/about",
@@ -24,6 +26,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: now,
     changeFrequency: "daily" as const,
     priority: path === "" ? 1.0 : 0.8,
+  }));
+
+  const guideRoutes: MetadataRoute.Sitemap = CRASH_REPORT_GUIDES.map((guide) => ({
+    url: `${BASE_URL}/crash-reports/${guide.slug}`,
+    lastModified: new Date(`${guide.checkedOn}T00:00:00Z`),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
   }));
 
   // 2) Dynamic routes from database (wrapped in try/catch for build resilience)
@@ -63,5 +72,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.log("[sitemap] Database not available during build, using static routes only");
   }
 
-  return [...staticRoutes, ...dynamicRoutes];
+  return [...staticRoutes, ...guideRoutes, ...dynamicRoutes];
 }

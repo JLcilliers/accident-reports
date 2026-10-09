@@ -1,0 +1,2308 @@
+[
+  {
+    "code": "CA",
+    "checkedOn": "2026-10-09",
+    "facts": [
+      {
+        "id": "F1",
+        "category": "who-holds",
+        "claim": "The CHP can obtain copies only of collision reports that the CHP itself investigates.",
+        "sourceUrl": "https://www.chp.ca.gov/notify-chp/collision-report-chp-190/",
+        "quote": "No. The CHP can only obtain copies of collision reports we investigate."
+      },
+      {
+        "id": "F2",
+        "category": "who-holds",
+        "claim": "Vehicle Code 20012 says required accident reports and supplemental reports are for the confidential use of the DMV and the CHP.",
+        "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=20012",
+        "quote": "shall be for the confidential use of the Department of Motor Vehicles and the Department of the California Highway Patrol"
+      },
+      {
+        "id": "F3",
+        "category": "who-holds",
+        "claim": "Vehicle Code 20008 requires every police department to forward to the CHP's main office in Sacramento the reports (or copies) it received during the previous calendar month of accidents it is responsible for investigating.",
+        "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=20008",
+        "quote": "every police department which received a report during the previous calendar month of an accident which it is responsible for investigating shall forward the report or a copy thereof to the main office of the Department of the California Highway Patrol at Sacramento"
+      },
+      {
+        "id": "F4",
+        "category": "who-holds",
+        "claim": "The CHP's Crash Investigation Manual (revised August 2025) says all crash investigation reports are to be sent to the CHP to collect traffic safety data used by local, state and federal entities.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/hpm/hpm-110.5/hpm-110.5-ch-10.pdf",
+        "quote": "All crash investigation reports shall be transmitted in a timely manner to the CHP for the collection of traffic safety data used by local, state, and federal entities."
+      },
+      {
+        "id": "F5",
+        "category": "request-online",
+        "claim": "A proper Party of Interest can request a copy of a CHP crash report online through the Crash Portal, without going to the CHP Area office where the report was filed.",
+        "sourceUrl": "https://www.chp.ca.gov/traffic/request-a-crash-report/",
+        "quote": "may request a copy of a CHP crash report/investigation, without having to go to the CHP Area office where the crash report was filed online through the Crash Portal."
+      },
+      {
+        "id": "F6",
+        "category": "request-online",
+        "claim": "A CHP Area office page (Dublin) tells people they can visit the CHP Crash report portal to get a copy of a CHP-investigated crash report.",
+        "sourceUrl": "https://www.chp.ca.gov/find-an-office/golden-gate-division/390-dublin",
+        "quote": "Visit the CHP Crash report portal"
+      },
+      {
+        "id": "F7",
+        "category": "request-mail",
+        "claim": "A proper Party of Interest can also request a CHP crash report in person or by mail at the nearest CHP Area office by completing form CHP 190.",
+        "sourceUrl": "https://www.chp.ca.gov/traffic/request-a-crash-report/",
+        "quote": "A proper Party of Interest may also submit a request for a copy of a CHP crash report/investigation in person or via mail to the nearest CHP Area office by completing a CHP 190"
+      },
+      {
+        "id": "F8",
+        "category": "request-mail",
+        "claim": "The CHP 190 form posted on the CHP website is marked CHP 190 (Rev. 11-03) OPI 008.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/files/chp190.pdf",
+        "quote": "CHP 190 (Rev. 11-03) OPI 008"
+      },
+      {
+        "id": "F9",
+        "category": "request-mail",
+        "claim": "To get a report by mail, you can complete form CHP 190 (Application for Release of Information) or simply write a personal letter.",
+        "sourceUrl": "https://www.chp.ca.gov/notify-chp/collision-report-chp-190/",
+        "quote": "Follow the procedures below to obtain a copy of the collision report through the mail by completing a form CHP 190 (Application for Release of Information) available on this web site, or you may simply write a personal letter."
+      },
+      {
+        "id": "F10",
+        "category": "request-mail",
+        "claim": "Send the completed form or letter to the CHP office that reported the collision, with verification that you are a proper Party of Interest.",
+        "sourceUrl": "https://www.chp.ca.gov/notify-chp/collision-report-chp-190/",
+        "quote": "Send the completed form or personal letter to the CHP office that reported the collision, along with verification that you are a proper Party of Interest."
+      },
+      {
+        "id": "F11",
+        "category": "request-mail",
+        "claim": "After the CHP verifies that you are a proper party of interest, it mails a copy of the report to your address once it receives payment.",
+        "sourceUrl": "https://www.chp.ca.gov/notify-chp/collision-report-chp-190/",
+        "quote": "Once the CHP has your request and verified you are a proper party of interest, a copy of the report will be mailed to your address upon receipt of payment."
+      },
+      {
+        "id": "F12",
+        "category": "request-in-person",
+        "claim": "A Party of Interest can go to any CHP office and pay a nominal fee for a copy of a CHP-investigated report.",
+        "sourceUrl": "https://www.chp.ca.gov/notify-chp/collision-report-chp-190/",
+        "quote": "If you are a Party of Interest, you can go to any CHP office and pay a nominal fee for a copy of the report."
+      },
+      {
+        "id": "F13",
+        "category": "request-in-person",
+        "claim": "Any CHP office can get a copy of a CHP collision report or arrange for one to be mailed to your address.",
+        "sourceUrl": "https://www.chp.ca.gov/notify-chp/collision-report-chp-190/",
+        "quote": "Any CHP office will be able to get a copy of a CHP collision report or arrange for one to be mailed to your address."
+      },
+      {
+        "id": "F14",
+        "category": "request-in-person",
+        "claim": "CHP General Order 110.2 says a person with proper interest can get a copy of a CHP-generated collision report from any CHP Area in the state, regardless of the CHP jurisdiction where the collision happened.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/go/go-110.2-release-of-collission-information.pdf",
+        "quote": "A person who has proper interest can obtain a copy of a California Highway Patrol (CHP) generated collision report from any CHP Area in the state, regardless of the CHP jurisdiction in which the collision occurred."
+      },
+      {
+        "id": "F15",
+        "category": "request-in-person",
+        "claim": "Traffic collision reports can be picked up at any CHP office during normal business hours.",
+        "sourceUrl": "https://www.chp.ca.gov/faq/",
+        "quote": "Traffic Collision Reports are available to be picked up at any CHP office during normal business hours."
+      },
+      {
+        "id": "F16",
+        "category": "request-other",
+        "claim": "The CHP says you can have your insurance provider obtain a copy of the collision report and give you a copy, which may save you the report fee.",
+        "sourceUrl": "https://www.chp.ca.gov/notify-chp/collision-report-chp-190/",
+        "quote": "Have your insurance provider obtain a copy of the collision report and give you a copy (this may save you the report fee)."
+      },
+      {
+        "id": "F17",
+        "category": "request-other",
+        "claim": "CHP General Order 110.2 lists sending a copy by e-mail from a CHP Area to an e-mail address requested by the person with proper interest as one way to provide a report.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/go/go-110.2-release-of-collission-information.pdf",
+        "quote": "or sending a copy via e-mail from one CHP Area to an e-mail address requested by the person who has proper interest."
+      },
+      {
+        "id": "F18",
+        "category": "what-you-need",
+        "claim": "On the CHP 190, give the crash date, or an approximate date if you do not know the exact date.",
+        "sourceUrl": "https://www.chp.ca.gov/traffic/request-a-crash-report/",
+        "quote": "If you do not know the exact date, provide an approximate date."
+      },
+      {
+        "id": "F19",
+        "category": "what-you-need",
+        "claim": "On the CHP 190, give the crash location, listing as much information as possible if you do not know the exact location.",
+        "sourceUrl": "https://www.chp.ca.gov/traffic/request-a-crash-report/",
+        "quote": "If you do not know the exact location, list as much information as possible."
+      },
+      {
+        "id": "F20",
+        "category": "what-you-need",
+        "claim": "On the CHP 190, list the driver or owner of the vehicle, or your own name and address if only your property was damaged.",
+        "sourceUrl": "https://www.chp.ca.gov/traffic/request-a-crash-report/",
+        "quote": "List the driver or owner of the vehicle. If only your property was damaged, please list your name and address."
+      },
+      {
+        "id": "F21",
+        "category": "what-you-need",
+        "claim": "Attach a photocopy of your driver license or picture ID card to the request; if you have neither, the CHP 190 must be certified by a notary.",
+        "sourceUrl": "https://www.chp.ca.gov/notify-chp/collision-report-chp-190/",
+        "quote": "Photocopy your driver license or picture identification card and attach it to your request for a collision report. If you do not have either of these forms of identification, then, the CHP 190 form must be certified by a notary."
+      },
+      {
+        "id": "F22",
+        "category": "what-you-need",
+        "claim": "The applicant signs the CHP 190 declaring under penalty of perjury that they are the party of interest checked on the form.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/files/chp190.pdf",
+        "quote": "I DECLARE UNDER PENALTY OF PERJURY THAT I AM THE PARTY OF INTEREST"
+      },
+      {
+        "id": "F23",
+        "category": "what-you-need",
+        "claim": "On the CHP 190, an insurance company or adjusting agency representative must have been a carrier for an involved party at the time of the accident and must present a policy or claim number.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/files/chp190.pdf",
+        "quote": "Must have been a carrier for involved party at time of accident. Policy or claim number must be presented."
+      },
+      {
+        "id": "F24",
+        "category": "what-you-need",
+        "claim": "If you know the report number, the CHP asks you to put it on your check.",
+        "sourceUrl": "https://www.chp.ca.gov/notify-chp/collision-report-chp-190/",
+        "quote": "Please place the report number on your check, if you know it."
+      },
+      {
+        "id": "F25",
+        "category": "fee",
+        "claim": "The CHP's posted charge for a collision report of 01-25 pages is $10.00.",
+        "sourceUrl": "https://www.chp.ca.gov/notify-chp/collision-report-chp-190/",
+        "quote": "$10.00 — 01 - 25 pages"
+      },
+      {
+        "id": "F26",
+        "category": "fee",
+        "claim": "The CHP's posted charge for a collision report of 26-50 pages is $20.00.",
+        "sourceUrl": "https://www.chp.ca.gov/notify-chp/collision-report-chp-190/",
+        "quote": "$20.00 — 26 - 50 pages"
+      },
+      {
+        "id": "F27",
+        "category": "fee",
+        "claim": "The CHP's posted charge for a collision report of 51-75 pages is $30.00.",
+        "sourceUrl": "https://www.chp.ca.gov/notify-chp/collision-report-chp-190/",
+        "quote": "$30.00 — 51 - 75 pages"
+      },
+      {
+        "id": "F28",
+        "category": "fee",
+        "claim": "The CHP's posted charge for a collision report of 76-100 pages is $40.00.",
+        "sourceUrl": "https://www.chp.ca.gov/notify-chp/collision-report-chp-190/",
+        "quote": "$40.00 — 76 - 100 pages"
+      },
+      {
+        "id": "F29",
+        "category": "fee",
+        "claim": "For reports over 100 pages, the CHP charges $10.00 for each additional 25 pages or portion thereof.",
+        "sourceUrl": "https://www.chp.ca.gov/notify-chp/collision-report-chp-190/",
+        "quote": "$10.00 — Over 100 - for each additional 25 pages or portion thereof"
+      },
+      {
+        "id": "F30",
+        "category": "fee",
+        "claim": "The CHP adds no extra charge for handling or mailing.",
+        "sourceUrl": "https://www.chp.ca.gov/notify-chp/collision-report-chp-190/",
+        "quote": "There is no extra charge for handling or mailing."
+      },
+      {
+        "id": "F31",
+        "category": "fee",
+        "claim": "A personal check or money order made out to the California Highway Patrol must be sent with your request.",
+        "sourceUrl": "https://www.chp.ca.gov/notify-chp/collision-report-chp-190/",
+        "quote": "Your personal check or money order must be sent with your request and made out to the California Highway Patrol."
+      },
+      {
+        "id": "F32",
+        "category": "fee",
+        "claim": "The CHP does not accept cash for mailed requests and says it does not accept credit or debit cards at this time.",
+        "sourceUrl": "https://www.chp.ca.gov/notify-chp/collision-report-chp-190/",
+        "quote": "NO CASH PLEASE if you are requesting the report by mail. We do not accept Credit or Debit cards at this time."
+      },
+      {
+        "id": "F33",
+        "category": "fee",
+        "claim": "The CHP FAQ says the collision report fee is paid by cash or check and tells you to contact your local Area office about it.",
+        "sourceUrl": "https://www.chp.ca.gov/faq/",
+        "quote": "There is a fee for the collision report (cash or check); contact your local area office."
+      },
+      {
+        "id": "F34",
+        "category": "fee",
+        "claim": "The CHP says it charges a nominal fee to cover reproduction costs and tells you to contact the CHP office where the report was filed to find the cost of your report.",
+        "sourceUrl": "https://www.chp.ca.gov/notify-chp/collision-report-chp-190/",
+        "quote": "The CHP charges only a nominal fee to cover reproduction costs (To determine the cost of your report, please contact the CHP office where the report was filed)."
+      },
+      {
+        "id": "F35",
+        "category": "fee",
+        "claim": "The CHP tells CHP 190 filers to contact the Area office they are submitting the form to for the exact fee.",
+        "sourceUrl": "https://www.chp.ca.gov/traffic/request-a-crash-report/",
+        "quote": "Submit applicable fees (contact the Area office you will be submitting the form to for the exact amount)."
+      },
+      {
+        "id": "F36",
+        "category": "fee",
+        "claim": "CHP General Order 110.2 (revised December 2014) sets a charge of $10.00 per 25 pages for report copies in any format.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/go/go-110.2-release-of-collission-information.pdf",
+        "quote": "Report copies provided in any format, require a charge of $10.00 per 25 pages."
+      },
+      {
+        "id": "F37",
+        "category": "fee",
+        "claim": "CHP General Order 110.2 says a person with proper interest may review a report in its entirety without charge.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/go/go-110.2-release-of-collission-information.pdf",
+        "quote": "A person who has proper interest may review a report in its entirety without charge."
+      },
+      {
+        "id": "F38",
+        "category": "fee",
+        "claim": "Under Vehicle Code 20012, a request for a copy of an accident report must be accompanied by a fee that may not exceed the actual cost of providing the copy.",
+        "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=20012",
+        "quote": "A request for a copy of an accident report shall be accompanied by payment of a fee, provided such fee shall not exceed the actual cost of providing the copy."
+      },
+      {
+        "id": "F39",
+        "category": "timing",
+        "claim": "The CHP advises calling the CHP office handling the incident ahead of time to see whether your report is available for pick up.",
+        "sourceUrl": "https://www.chp.ca.gov/faq/",
+        "quote": "Call the CHP office overseeing the incident ahead of time to see if your traffic collision report is available for pick up."
+      },
+      {
+        "id": "F40",
+        "category": "who-can-request",
+        "claim": "The CHP lists proper Parties of Interest as drivers, bicyclists, pedestrians, passengers, parents of minors, legal guardians, vehicle or property owners, legal representatives, manufacturer representatives, and insurance companies with a valid claim or policy number.",
+        "sourceUrl": "https://www.chp.ca.gov/traffic/request-a-crash-report/",
+        "quote": "A proper Party of Interest (i.e., Drivers, Bicyclists, Pedestrians, Passengers, Parents of Minors, Legal Guardians, Vehicle or Property Owners, Legal representatives, Manufacturer Representatives, or Insurance Companies with a valid claim or policy number)"
+      },
+      {
+        "id": "F41",
+        "category": "who-can-request",
+        "claim": "The CHP says any involved or interested party can get a copy of a collision report.",
+        "sourceUrl": "https://www.chp.ca.gov/notify-chp/collision-report-chp-190/",
+        "quote": "Any involved or interested party can get a copy of a collision report."
+      },
+      {
+        "id": "F42",
+        "category": "who-can-request",
+        "claim": "The CHP FAQ says that to receive a copy you must be an involved party, passenger, property owner, or licensed insurance agent with a signed release from an involved party.",
+        "sourceUrl": "https://www.chp.ca.gov/faq/",
+        "quote": "To receive a copy of a report you must be an involved party, passenger, property owner, or licensed insurance agent (with a signed release from your insured, an involved party)."
+      },
+      {
+        "id": "F43",
+        "category": "who-can-request",
+        "claim": "If you are not sure you are entitled to a copy, the CHP asks you to contact any CHP Area office to verify whether you are a proper Party of Interest.",
+        "sourceUrl": "https://www.chp.ca.gov/traffic/request-a-crash-report/",
+        "quote": "If you are not sure you are entitled to a copy of the report/investigation, please contact any CHP Area office to verify whether you are a proper Party of Interest."
+      },
+      {
+        "id": "F44",
+        "category": "who-can-request",
+        "claim": "Under Vehicle Code 20012, reports are disclosed to any person with a proper interest, including the drivers involved, their guardians or conservators, the parent of a minor driver, a driver's authorized representative, and any named injured person.",
+        "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=20012",
+        "quote": "to any person who may have a proper interest therein, including, but not limited to, the driver or drivers involved, or the guardian or conservator thereof, the parent of a minor driver, the authorized representative of a driver, or to any named person injured therein"
+      },
+      {
+        "id": "F45",
+        "category": "who-can-request",
+        "claim": "Vehicle Code 20012 also covers owners of damaged vehicles or property, persons who may incur civil liability, and attorneys who declare under penalty of perjury that they represent any of those persons.",
+        "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=20012",
+        "quote": "the owners of vehicles or property damaged thereby, persons who may incur civil liability, including liability based upon a breach of warranty arising out of the accident, and any attorney who declares under penalty of perjury that he or she represents any of the above persons"
+      },
+      {
+        "id": "F46",
+        "category": "who-can-request",
+        "claim": "Under CHP General Order 110.2, parents of adult children are not persons of proper interest unless they have a signed authorization from the involved adult child.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/go/go-110.2-release-of-collission-information.pdf",
+        "quote": "Parents of adult children are not considered a person of proper interest, unless they have a signed authorization from the involved adult child."
+      },
+      {
+        "id": "F47",
+        "category": "who-can-request",
+        "claim": "For fatal collisions, CHP General Order 110.2 places proper interest with the surviving spouse, minor children through their guardians, or a court-appointed family member under Probate Code 6401.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/go/go-110.2-release-of-collission-information.pdf",
+        "quote": "In cases involving fatal collisions; proper interest lies with the surviving spouse, minor children when released through their guardians, or court appointed family member per California Probate Code 6401."
+      },
+      {
+        "id": "F48",
+        "category": "who-can-request",
+        "claim": "CHP General Order 110.2 authorizes insurance company representatives who supply the policy or claim number in effect at the time of the collision and hold the name of the insured.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/go/go-110.2-release-of-collission-information.pdf",
+        "quote": "Representatives of insurance companies that supply the policy or claim number that was in effect at the time of the collision and hold the name of the insured."
+      },
+      {
+        "id": "F49",
+        "category": "who-can-request",
+        "claim": "Under CHP General Order 110.2, a declaration under penalty of perjury that someone represents a person with proper interest permits release of the report to the attorney or their identified agent.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/go/go-110.2-release-of-collission-information.pdf",
+        "quote": "Such declarations permit release of the report to the attorney or their identified agent."
+      },
+      {
+        "id": "F50",
+        "category": "who-can-request",
+        "claim": "Vehicle or component manufacturer representatives must present a letter from the manufacturer, dated within the last 12 months, certifying their authority.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/go/go-110.2-release-of-collission-information.pdf",
+        "quote": "Such representatives must present a letter from the manufacturer, dated within the last 12 months, certifying their authority."
+      },
+      {
+        "id": "F51",
+        "category": "who-can-request",
+        "claim": "Under CHP General Order 110.2, until a collision report is complete the CHP can give the public only the time, date and location of the collision, the make of the vehicles, and occupant names (except in fatal collisions).",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/go/go-110.2-release-of-collission-information.pdf",
+        "quote": "Until a collision report is complete, the following information can be provided to the public: (1) Time of collision. (2) Date of collision. (3) Location of collision. (4) Make of vehicle(s) involved. (5) Names of vehicle occupants (other than fatal collisions)."
+      },
+      {
+        "id": "F52",
+        "category": "local-agencies",
+        "claim": "If you do not know which police department investigated the collision, the CHP says to contact your local police department or a CHP office for help identifying the right law enforcement agency.",
+        "sourceUrl": "https://www.chp.ca.gov/notify-chp/collision-report-chp-190/",
+        "quote": "If you do not know the police department who investigated the collision, you can either contact your local police department or CHP Office to assist you in identifying the proper law enforcement agency."
+      },
+      {
+        "id": "F53",
+        "category": "local-agencies",
+        "claim": "Vehicle Code 20012 makes the law enforcement agency to which an accident was reported, as well as the CHP, responsible for disclosing the entire contents of its accident reports.",
+        "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=20012",
+        "quote": "the Department of the California Highway Patrol or the law enforcement agency to whom the accident was reported shall disclose the entire contents of the reports"
+      },
+      {
+        "id": "F54",
+        "category": "local-agencies",
+        "claim": "The CHP's Crash Investigation Manual says allied agencies should establish crash report retention schedules suited to their needs.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/hpm/hpm-110.5/hpm-110.5-ch-10.pdf",
+        "quote": "Allied agencies should establish a retention schedule suited to their needs."
+      },
+      {
+        "id": "F55",
+        "category": "self-report",
+        "claim": "You or your insurance agent, broker or legal representative must send an SR-1 report to the DMV within 10 days if anyone is injured (however minor) or killed, or property damage is over $1000.",
+        "sourceUrl": "https://www.dmv.ca.gov/portal/dmv-virtual-office/accident-reporting/",
+        "quote": "You or your insurance agent, broker, or legal representative must complete an SR-1 report and send it to DMV within 10 days if someone is injured (no matter how minor the injury) or killed, or property damage is over $1000."
+      },
+      {
+        "id": "F56",
+        "category": "self-report",
+        "claim": "The DMV says an SR-1 is required in addition to any report made to the police, the CHP or your insurance company.",
+        "sourceUrl": "https://www.dmv.ca.gov/portal/dmv-virtual-office/accident-reporting/",
+        "quote": "An SR-1 report is required in addition to any other report made to the police, CHP, or your insurance company."
+      },
+      {
+        "id": "F57",
+        "category": "self-report",
+        "claim": "The DMV says paper SR-1 submissions are likely to take longer to process.",
+        "sourceUrl": "https://www.dmv.ca.gov/portal/dmv-virtual-office/accident-reporting/",
+        "quote": "Please note that paper submissions are likely to take longer to process."
+      },
+      {
+        "id": "F58",
+        "category": "self-report",
+        "claim": "Vehicle Code 16000 requires an accident that caused more than $1,000 in damage to any one person's property, or bodily injury, or death, to be reported within 10 days after the accident.",
+        "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=16000",
+        "quote": "that has resulted in damage to the property of any one person in excess of one thousand dollars ($1,000), or in bodily injury, or in the death of any person shall report the accident, within 10 days after the accident"
+      },
+      {
+        "id": "F59",
+        "category": "self-report",
+        "claim": "Under Vehicle Code 16000, no SR-1 report is required if the vehicle was owned or leased by, or under the direction of, the United States, California, another state, or a local agency.",
+        "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=16000",
+        "quote": "A report is not required under subdivision (a) if the motor vehicle involved in the accident was owned or leased by, or under the direction of, the United States, this state, another state, or a local agency."
+      },
+      {
+        "id": "F60",
+        "category": "self-report",
+        "claim": "The SR-1 form (Rev. 6/2025) says California law requires accidents on a California street/highway or private property to be reported to the DMV within 10 days if there was an injury, death or property damage over $1,000.",
+        "sourceUrl": "https://www.dmv.ca.gov/portal/file/report-of-traffic-accident-occurring-in-california-sr-1-pdf/",
+        "quote": "California law requires traffic accidents on a California street/highway or private property to be reported to the Department of Motor Vehicles (DMV) within 10 days if there was an injury, death or property damage in excess of $1,000."
+      },
+      {
+        "id": "F61",
+        "category": "self-report",
+        "claim": "The SR-1 form says the driver must file it with the DMV regardless of fault.",
+        "sourceUrl": "https://www.dmv.ca.gov/portal/file/report-of-traffic-accident-occurring-in-california-sr-1-pdf/",
+        "quote": "The law requires the driver to file this SR 1 form with DMV regardless of fault."
+      },
+      {
+        "id": "F62",
+        "category": "self-report",
+        "claim": "The SR-1 form says reports filed with a law enforcement agency, insurance company or the CHP do not satisfy the SR-1 filing requirement.",
+        "sourceUrl": "https://www.dmv.ca.gov/portal/file/report-of-traffic-accident-occurring-in-california-sr-1-pdf/",
+        "quote": "This report must be made in addition to any other report filed with a law enforcement agency, insurance company, or the California Highway Patrol (CHP) as their reports do not satisfy the filing requirement."
+      },
+      {
+        "id": "F63",
+        "category": "self-report",
+        "claim": "The SR-1 form warns that late reporting could lead the DMV to suspend a driver license.",
+        "sourceUrl": "https://www.dmv.ca.gov/portal/file/report-of-traffic-accident-occurring-in-california-sr-1-pdf/",
+        "quote": "Untimely reporting could result in DMV suspending a driver license."
+      },
+      {
+        "id": "F64",
+        "category": "self-report",
+        "claim": "An insurance agent, attorney or other designated representative may file the SR-1 for the driver.",
+        "sourceUrl": "https://www.dmv.ca.gov/portal/file/report-of-traffic-accident-occurring-in-california-sr-1-pdf/",
+        "quote": "An insurance agent, attorney, or other designated representative may file the report for the driver."
+      },
+      {
+        "id": "F65",
+        "category": "self-report",
+        "claim": "A paper SR-1 is mailed to the DMV Insurance Unit, Mail Station J237, P.O. Box 942884, Sacramento, CA 94284-0884.",
+        "sourceUrl": "https://www.dmv.ca.gov/portal/file/report-of-traffic-accident-occurring-in-california-sr-1-pdf/",
+        "quote": "Department of Motor Vehicles Insurance Unit Mail Station J237 P.O. Box 942884 Sacramento, CA 94284-0884"
+      },
+      {
+        "id": "F66",
+        "category": "self-report",
+        "claim": "Under Vehicle Code 20008, if the accident occurred within a city, that written report may go to either the CHP or the city's police department.",
+        "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=20008",
+        "quote": "if the accident occurred within a city, to either the Department of the California Highway Patrol or the police department of the city in which the accident occurred"
+      },
+      {
+        "id": "F67",
+        "category": "self-report",
+        "claim": "The CHP says it cannot accept traffic collision reports online at this time.",
+        "sourceUrl": "https://www.chp.ca.gov/faq/",
+        "quote": "At this time, we are unable to accept reports online."
+      },
+      {
+        "id": "F68",
+        "category": "self-report",
+        "claim": "You can file a traffic collision report at any CHP office in California, wherever the collision occurred.",
+        "sourceUrl": "https://www.chp.ca.gov/faq/",
+        "quote": "You may visit any CHP office anywhere in California to file a traffic collision report, regardless of where the collision occurred."
+      },
+      {
+        "id": "F69",
+        "category": "other",
+        "claim": "CHP General Order 110.2 says the authority for releasing collision reports is California Vehicle Code Section 20012.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/go/go-110.2-release-of-collission-information.pdf",
+        "quote": "The authority for release of collision reports is contained in California Vehicle Code (VC) Section 20012."
+      },
+      {
+        "id": "F70",
+        "category": "other",
+        "claim": "CHP officers normally give parties of interest at a crash scene a CHP 418, Crash Report Information, form that tells them the Traffic Crash Report will be available.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/hpm/hpm-110.5/hpm-110.5-ch-10.pdf",
+        "quote": "The CHP 418 shall normally be used by the CHP to notify parties of interest at a crash scene of the availability of the Traffic Crash Report."
+      },
+      {
+        "id": "F71",
+        "category": "other",
+        "claim": "The CHP's Crash Investigation Manual says all crash reports shall be retained for a minimum of four years from the date of the crash.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/hpm/hpm-110.5/hpm-110.5-ch-10.pdf",
+        "quote": "All crash reports shall be retained for a minimum of four years from the date of the crash."
+      },
+      {
+        "id": "F72",
+        "category": "other",
+        "claim": "The California Crash Reporting System (CCRS) dataset on data.ca.gov is described as statistic crash records within the State of California.",
+        "sourceUrl": "https://data.ca.gov/@california-highway-patrol/ccrs",
+        "quote": "Statistic crash records within State of California"
+      },
+      {
+        "id": "F73",
+        "category": "what-you-need",
+        "claim": "For a mailed request, the CHP FAQ says to include a copy of your CHP 418 (Crash Report Information) card and a copy of your valid driver license.",
+        "sourceUrl": "https://www.chp.ca.gov/faq/",
+        "quote": "Remember to include a copy of your CHP 418 (Crash Report Information) card and a copy of your valid driver license."
+      },
+      {
+        "id": "F74",
+        "category": "request-mail",
+        "claim": "The CHP says the CHP 190 form is available in both English and Spanish.",
+        "sourceUrl": "https://www.chp.ca.gov/faq/",
+        "quote": "The form contains areas to fill out information and is available in both English and Spanish."
+      },
+      {
+        "id": "F75",
+        "category": "request-mail",
+        "claim": "To request by mail, mail the CHP 190 and a photocopy of your driver license to the CHP office (jurisdiction) that filed the report.",
+        "sourceUrl": "https://www.chp.ca.gov/notify-chp/collision-report-chp-190/",
+        "quote": "If you prefer to handle this through the mail, you can complete the form CHP 190 (Application for Release of Information), which can be downloaded from this website. Mail the form and a photocopy of your driver license to the CHP jurisdiction that filed the report"
+      },
+      {
+        "id": "F76",
+        "category": "request-mail",
+        "claim": "People who live outside California can get a CHP collision report by mail.",
+        "sourceUrl": "https://www.chp.ca.gov/notify-chp/collision-report-chp-190/",
+        "quote": "How can I get a copy of a CHP collision report if I live out-of-state? You can obtain a copy of a collision report by mail."
+      },
+      {
+        "id": "F77",
+        "category": "request-online",
+        "claim": "The statewide CHP FAQ also points people to the CHP Crash Report Search website to get their crash report.",
+        "sourceUrl": "https://www.chp.ca.gov/faq/",
+        "quote": "You can also visit the following website to obtain your crash report: CHP | Crash Report Search"
+      },
+      {
+        "id": "F78",
+        "category": "request-other",
+        "claim": "Under CHP General Order 110.2, a CHP Area can fax a copy of the report to another CHP Area or to any other location the person with proper interest asks for.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/go/go-110.2-release-of-collission-information.pdf",
+        "quote": "Sending a fax copy of the report from one CHP Area to another CHP Area, or any other location requested by person who has proper interest."
+      },
+      {
+        "id": "F79",
+        "category": "who-can-request",
+        "claim": "The CHP lists insurance companies, attorneys, the coroner, Caltrans and parents of minors as examples of interested parties who can get a collision report.",
+        "sourceUrl": "https://www.chp.ca.gov/notify-chp/collision-report-chp-190/",
+        "quote": "Interested parties include but are not limited to: Insurance companies Attorneys Coroner Caltrans Parents of minors"
+      },
+      {
+        "id": "F80",
+        "category": "who-can-request",
+        "claim": "Under CHP General Order 110.2, when one collision is a primary or associated cause of later collisions, all drivers and passengers in all of those reports have proper interest.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/go/go-110.2-release-of-collission-information.pdf",
+        "quote": "When a collision is either a primary or associated collision factor of a subsequent collision or collisions, all drivers and passengers in all reports are considered to be persons who have proper interest."
+      },
+      {
+        "id": "F81",
+        "category": "who-can-request",
+        "claim": "CHP General Order 110.2 also authorizes any person, company or corporation named in a legal action, or who may incur civil liability from a collision, to buy a copy of the report.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/go/go-110.2-release-of-collission-information.pdf",
+        "quote": "Any person, company, or corporation named in a legal action or who may incur civil liability resulting from a collision."
+      },
+      {
+        "id": "F82",
+        "category": "who-can-request",
+        "claim": "Under CHP General Order 110.2, a written statement saying you represent a person with proper interest counts as a declaration under penalty of perjury.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/go/go-110.2-release-of-collission-information.pdf",
+        "quote": "A written statement from an individual stating they represent a person who has proper interest is deemed to be a declaration under penalty of perjury."
+      },
+      {
+        "id": "F83",
+        "category": "who-can-request",
+        "claim": "A person requesting a report as someone's representative must complete a CHP 190 before buying the report.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/go/go-110.2-release-of-collission-information.pdf",
+        "quote": "The individual shall complete a CHP 190, Application for Release of Information, (Annex A) prior to purchasing the report."
+      },
+      {
+        "id": "F84",
+        "category": "who-can-request",
+        "claim": "Manufacturer representatives are parties of interest only for collisions involving the manufacturer's make of vehicle, or vehicles with its component installed.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/go/go-110.2-release-of-collission-information.pdf",
+        "quote": "Such representatives are parties of interest for only those collisions which involved the manufacturer's make of vehicle or vehicle(s) in which a component has been installed."
+      },
+      {
+        "id": "F85",
+        "category": "other",
+        "claim": "On request, the CHP Area commander schedules a discussion of the collision investigation between a person with proper interest (or their agent) and the officer who wrote the report.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/go/go-110.2-release-of-collission-information.pdf",
+        "quote": "Upon request, the CHP Area commander shall schedule discussions of collision investigations between a person who has proper interest, or agents thereof, and officer who wrote the report."
+      },
+      {
+        "id": "F86",
+        "category": "other",
+        "claim": "A person with proper interest may not record a case discussion with the CHP officer.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/go/go-110.2-release-of-collission-information.pdf",
+        "quote": "A person who has proper interest shall not be allowed to record these discussions."
+      },
+      {
+        "id": "F87",
+        "category": "other",
+        "claim": "An involved party who disagrees with part of a CHP collision report can write a supplemental statement that includes the report number, their name and the items they dispute.",
+        "sourceUrl": "https://www.chp.ca.gov/faq/",
+        "quote": "If you are the involved party in a traffic collision, and disagree with any portion of the report, you may write a \"supplemental\" statement. In your written statement, please include: The report number Your name The specific item or items with which you disagree"
+      },
+      {
+        "id": "F88",
+        "category": "other",
+        "claim": "The supplemental statement can be taken to any CHP office or sent by US Mail, and the CHP replies by US Mail.",
+        "sourceUrl": "https://www.chp.ca.gov/faq/",
+        "quote": "You may bring this statement into any CHP office, or send it via US Mail. You will receive a response by US Mail."
+      },
+      {
+        "id": "F89",
+        "category": "who-holds",
+        "claim": "Caltrans keeps copies of all state highway-related crash reports for ten years from the month of the crash, and requests go to the Caltrans Legal Division (for duplicates missing from local files or purged).",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/hpm/hpm-110.5/hpm-110.5-ch-10.pdf",
+        "quote": "The California Department of Transportation retains copies of all state highway-related reports for ten years from the month of the crash. Requests should be directed to the Caltrans Legal Division."
+      },
+      {
+        "id": "F90",
+        "category": "who-holds",
+        "claim": "CHP Headquarters keeps copies of fatal crash reports for the current year plus three.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/hpm/hpm-110.5/hpm-110.5-ch-10.pdf",
+        "quote": "California Highway Patrol Headquarters retains copies of fatal crashes for the current year plus three."
+      },
+      {
+        "id": "F91",
+        "category": "other",
+        "claim": "The CHP keeps reports of crashes involving felony charges for serious bodily injury or death for seven years from the crash date.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/hpm/hpm-110.5/hpm-110.5-ch-10.pdf",
+        "quote": "Reports for crashes involving felony charges for serious bodily injury or death shall be retained for seven years from the date of the crash."
+      },
+      {
+        "id": "F92",
+        "category": "other",
+        "claim": "The CHP keeps unsolved fatal hit-and-run crash investigations indefinitely.",
+        "sourceUrl": "https://www.chp.ca.gov/siteassets/policy/hpm/hpm-110.5/hpm-110.5-ch-10.pdf",
+        "quote": "All unsolved fatal hit-and-run crash investigations shall be retained indefinitely."
+      },
+      {
+        "id": "F93",
+        "category": "local-agencies",
+        "claim": "Under Vehicle Code 20008, if the agency that receives a driver's injury or fatal accident report is not responsible for investigating it, that agency must immediately forward the report to the responsible law enforcement agency.",
+        "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=20008",
+        "quote": "If the agency which receives the report is not responsible for investigating the accident, it shall immediately forward the report to the law enforcement agency which is responsible for investigating the accident."
+      },
+      {
+        "id": "F94",
+        "category": "self-report",
+        "claim": "Under Vehicle Code 20008(b), the owner or driver of a common carrier vehicle in an injury or fatal accident reports to the CHP by the 10th day of the month after the accident.",
+        "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=20008",
+        "quote": "The owner or driver of a common carrier vehicle involved in any such accident shall make a like report to the Department of California Highway Patrol on or before the 10th day of the month following the accident."
+      },
+      {
+        "id": "F95",
+        "category": "self-report",
+        "claim": "The DMV does not accept an SR-1, or act against non-reporting or uninsured motorists, unless someone involved (or their designee) sends the SR-1 and the DMV receives it within one calendar year of the accident.",
+        "sourceUrl": "https://www.dmv.ca.gov/portal/file/report-of-traffic-accident-occurring-in-california-sr-1-pdf/",
+        "quote": "DMV does not accept reports or take actions against non-reporting or uninsured motorists unless this SR 1 form is sent to DMV by someone involved in the accident or their designee and the report is received by DMV within one calendar year of the accident date."
+      },
+      {
+        "id": "F96",
+        "category": "self-report",
+        "claim": "The SR-1 form says accidents on a military base, or on the driver's own property involving only the driver's personal property with no injury or death, are not reportable.",
+        "sourceUrl": "https://www.dmv.ca.gov/portal/file/report-of-traffic-accident-occurring-in-california-sr-1-pdf/",
+        "quote": "occurring on a military base or occurring on the driver's own property involving only the personal property of the driver and there was no injury or death are not reportable."
+      },
+      {
+        "id": "F97",
+        "category": "self-report",
+        "claim": "The DMV lets drivers file an SR-1 online with its 'Start an SR-1' button.",
+        "sourceUrl": "https://www.dmv.ca.gov/portal/dmv-virtual-office/accident-reporting/",
+        "quote": "Report a traffic accident by filing an SR-1. Start an SR-1"
+      },
+      {
+        "id": "F98",
+        "category": "self-report",
+        "claim": "Before filing an SR-1, the DMV says to gather your DL/ID card, your license plate number or VIN, your insurance information, and the other party's vehicle and insurance information if applicable.",
+        "sourceUrl": "https://www.dmv.ca.gov/portal/dmv-virtual-office/accident-reporting/",
+        "quote": "Your driver’s license or identification (DL/ID) card Your vehicle’s license plate number or vehicle identification number (VIN) Your vehicle’s insurance information Other party’s vehicle and insurance information, if applicable"
+      },
+      {
+        "id": "F99",
+        "category": "self-report",
+        "claim": "The DMV offers a Spanish version of the SR-1 form as a PDF.",
+        "sourceUrl": "https://www.dmv.ca.gov/portal/dmv-virtual-office/accident-reporting/",
+        "quote": "A printable copy of the form (PDF) is available if needed. Please note that paper submissions are likely to take longer to process. Spanish version (PDF)."
+      }
+    ],
+    "links": [
+      {
+        "label": "CHP: Request a Crash Report",
+        "url": "https://www.chp.ca.gov/traffic/request-a-crash-report/",
+        "officialEvidence": "Hosted on chp.ca.gov, the California Highway Patrol's state government website."
+      },
+      {
+        "label": "Form CHP 190, Application for Release of Information (PDF)",
+        "url": "https://www.chp.ca.gov/siteassets/files/chp190.pdf",
+        "officialEvidence": "Linked as 'CHP 190 - Crash Request Form (PDF)' from the chp.ca.gov Request a Crash Report page and hosted on chp.ca.gov."
+      },
+      {
+        "label": "CHP: Collision Report - CHP 190",
+        "url": "https://www.chp.ca.gov/notify-chp/collision-report-chp-190/",
+        "officialEvidence": "Hosted on chp.ca.gov, the California Highway Patrol's state government website."
+      },
+      {
+        "label": "CHP: Find an Office",
+        "url": "https://www.chp.ca.gov/find-an-office/",
+        "officialEvidence": "Hosted on chp.ca.gov; linked from the Request a Crash Report page as 'Area office'."
+      },
+      {
+        "label": "CHP FAQ (Collision section)",
+        "url": "https://www.chp.ca.gov/faq/",
+        "officialEvidence": "Hosted on chp.ca.gov, the California Highway Patrol's state government website."
+      },
+      {
+        "label": "CHP General Order 110.2, Release of Collision Information (PDF)",
+        "url": "https://www.chp.ca.gov/siteassets/policy/go/go-110.2-release-of-collission-information.pdf",
+        "officialEvidence": "CHP policy document hosted on chp.ca.gov."
+      },
+      {
+        "label": "California Vehicle Code 20012",
+        "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=20012",
+        "officialEvidence": "California Legislative Information (leginfo.legislature.ca.gov), the State of California's official statute site."
+      },
+      {
+        "label": "DMV: Report of Traffic Accident Occurring in California (SR-1)",
+        "url": "https://www.dmv.ca.gov/portal/dmv-virtual-office/accident-reporting/",
+        "officialEvidence": "Hosted on dmv.ca.gov, the California Department of Motor Vehicles website."
+      },
+      {
+        "label": "DMV: Start an SR-1 online",
+        "url": "https://www.dmv.ca.gov/portal/dmv-virtual-office/accident-reporting/accident-reporting-form/",
+        "officialEvidence": "Linked as 'Start an SR-1' from the DMV SR-1 page and hosted on dmv.ca.gov. The form page itself was not opened."
+      },
+      {
+        "label": "SR-1 printable form (PDF)",
+        "url": "https://www.dmv.ca.gov/portal/file/report-of-traffic-accident-occurring-in-california-sr-1-pdf/",
+        "officialEvidence": "Linked as 'printable copy of the form (PDF)' from the DMV SR-1 page and hosted on dmv.ca.gov."
+      },
+      {
+        "label": "California Vehicle Code 16000",
+        "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=16000",
+        "officialEvidence": "California Legislative Information (leginfo.legislature.ca.gov), the State of California's official statute site."
+      },
+      {
+        "label": "California Vehicle Code 20008",
+        "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=20008",
+        "officialEvidence": "California Legislative Information (leginfo.legislature.ca.gov), the State of California's official statute site."
+      },
+      {
+        "label": "DMV SR-1 form in Spanish (PDF)",
+        "url": "https://www.dmv.ca.gov/portal/file/report-of-traffic-accident-occurring-in-california-spanish-sr-1a-sp-pdf/",
+        "officialEvidence": "Hosted on dmv.ca.gov and linked as 'Spanish version (PDF)' from the official DMV SR-1 page. It returned HTTP 200 as a PDF marked 'SR 1 SP (REV. 6/2025) WWW'."
+      },
+      {
+        "label": "CHP Crash Investigation Manual, Chapter 10 (HPM 110.5, PDF)",
+        "url": "https://www.chp.ca.gov/siteassets/policy/hpm/hpm-110.5/hpm-110.5-ch-10.pdf",
+        "officialEvidence": "A CHP policy document hosted on chp.ca.gov, marked 'REVISED AUGUST 2025', and naming itself 'Highway Patrol Manual 110.5, Crash Investigation Manual'."
+      },
+      {
+        "label": "CHP Traffic page (What to do in a Traffic Crash / Request a Crash Report)",
+        "url": "https://www.chp.ca.gov/traffic/",
+        "officialEvidence": "Hosted on chp.ca.gov (HTTP 200). It links to the Crash Portal at crashes.chp.ca.gov and to the CHP 190 PDF."
+      },
+      {
+        "label": "California Crash Reporting System (CCRS) dataset",
+        "url": "https://data.ca.gov/@california-highway-patrol/ccrs",
+        "officialEvidence": "Hosted on data.ca.gov, which labels itself the 'Official website of the State of California'. The dataset author is the California Highway Patrol and the contact is ITSupport@chp.ca.gov."
+      }
+    ],
+    "gaps": [
+      {
+        "category": "fee",
+        "reason": "I could not confirm the CHP Crash Portal's price or any card or convenience fee. crashes.chp.ca.gov refused connections from both WebFetch and the fallback fetcher, and no chp.ca.gov page I read gives a portal fee. Non-official sources disagree: some say $22 and some say free. Neither figure should be published until someone confirms it on the portal."
+      },
+      {
+        "category": "fee",
+        "reason": "The CHP's FAQ pages post a page-based fee schedule ($10.00 per 01-25 pages and so on). But the Request a Crash Report page and the CHP 190 page both tell requesters to contact the Area office for the exact amount. The guide should present the schedule as CHP's posted rates and advise confirming with the office. For in-person payment, the only stated methods are 'cash or check' (FAQ). For mail, cards are explicitly not accepted."
+      },
+      {
+        "category": "timing",
+        "reason": "No official page I could open says how soon after a crash a CHP report is usually available. A search-engine snippet credited to the Crash Portal's registration page says reports are 'typically available within eight (8) business days', and news articles repeat this. I could not open the portal to confirm it. The CHP FAQ only says to call the office ahead of time."
+      },
+      {
+        "category": "request-online",
+        "reason": "I could not confirm what the Crash Portal requires because the portal would not load. Unconfirmed points include account registration, crash card or QR code details, accepted payment methods and whether downloads are immediate. Official CHP pages only link to its login page."
+      },
+      {
+        "category": "request-other",
+        "reason": "No official CHP page I read names a third-party vendor portal, such as LexisNexis BuyCrash or CARFAX Crashdocs, for CHP reports."
+      },
+      {
+        "category": "local-agencies",
+        "reason": "I did not research how individual city police departments and county sheriffs handle requests, what they charge, or which vendor portals they use. I found no statewide official directory of them. Only the general Vehicle Code 20012 rules apply statewide: disclosure to people with a proper interest, and a fee no higher than the actual cost."
+      },
+      {
+        "category": "who-holds",
+        "reason": "The CHP's SWITRS page returned HTTP 403, so I could not read how the statewide crash database (SWITRS/CCRS) relates to copies of individual reports. The data.ca.gov CCRS page only describes 'statistic crash records'."
+      },
+      {
+        "category": "who-can-request",
+        "reason": "No official source I read sets a time-based confidentiality or waiting period before release. Access is limited by the proper-interest rule in Vehicle Code 20012 and by CHP General Order 110.2."
+      },
+      {
+        "category": "other",
+        "reason": "The 'CHP 190' link in the body of the Request a Crash Report page (https://www.chp.ca.gov/EnforcementAndPlanningDivisionSite/Documents/CHP190.pdf) returned HTTP 403. The working form link is https://www.chp.ca.gov/siteassets/files/chp190.pdf, labeled 'CHP 190 - Crash Request Form (PDF)' on the same page."
+      },
+      {
+        "category": "self-report",
+        "reason": "I did not open the online SR-1 form itself (https://www.dmv.ca.gov/portal/dmv-virtual-office/accident-reporting/accident-reporting-form/), only the DMV page that links to it. Its exact steps are unverified."
+      },
+      {
+        "category": "self-report",
+        "reason": "correction contradicted: The leginfo text of VEH 20008(a) (read through a fetcher, since leginfo returns a Cloudflare 403 to plain requests) goes on after the quote ends: '...to the Department of the California Highway Patrol or, if the accident occurred within a city, to either the Department of th"
+      }
+    ]
+  },
+  {
+    "code": "DC",
+    "checkedOn": "2026-10-09",
+    "facts": [
+      {
+        "id": "F1",
+        "category": "who-holds",
+        "claim": "MPD's Public Documents Unit provides copies of accident reports (PD-10s) and incident/offense reports (PD-251s).",
+        "sourceUrl": "https://mpdc.dc.gov/service/request-accident-report-pd-10-or-incidentoffense-report-pd-251",
+        "quote": "The Public Documents Unit provides copies of Accident (PD-10s) and Incident/Offense Reports (PD-251s)."
+      },
+      {
+        "id": "F2",
+        "category": "who-holds",
+        "claim": "MPD says an officer at the scene of an automobile accident may write an Accident Report (PD-10) or an Incident/Offense Report (PD-251).",
+        "sourceUrl": "https://mpdc.dc.gov/service/request-accident-report-pd-10-or-incidentoffense-report-pd-251",
+        "quote": "When an officer arrives on the scene for an automobile accident or for a simple assault, he or she may write an Accident Report (PD-10) or an Incident/Offense Report (PD-251)."
+      },
+      {
+        "id": "F3",
+        "category": "who-holds",
+        "claim": "D.C. law defines an accident report as any record prepared as a result of a vehicular accident, also known as the Metropolitan Police Department Form PD-10.",
+        "sourceUrl": "https://code.dccouncil.gov/us/dc/council/code/sections/50-1401.01b",
+        "quote": "“Accident report” means any record prepared as a result of a vehicular accident, also known as the Metropolitan Police Department Form PD-10."
+      },
+      {
+        "id": "F4",
+        "category": "coverage",
+        "claim": "MPD training material says most traffic collisions in the District of Columbia do not require officers to take a Traffic Crash Report.",
+        "sourceUrl": "https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/publication/attachments/13.1%20Traffic%20Crashes_FINAL.pdf",
+        "quote": "Most traffic collisions in the District of Columbia do not require officers to take a Traffic Crash Report."
+      },
+      {
+        "id": "F5",
+        "category": "coverage",
+        "claim": "MPD training material says any injury, no matter how minor, must result in a Traffic Crash Report.",
+        "sourceUrl": "https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/publication/attachments/13.1%20Traffic%20Crashes_FINAL.pdf",
+        "quote": "Remember that any injury, no matter how minor, must result in a Traffic Crash Report being completed."
+      },
+      {
+        "id": "F6",
+        "category": "coverage",
+        "claim": "MPD training material lists, as a condition for a crash report on public space, damage that makes a vehicle inoperable and requires it to be towed from the scene.",
+        "sourceUrl": "https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/publication/attachments/13.1%20Traffic%20Crashes_FINAL.pdf",
+        "quote": "A motor vehicle sustains body or mechanical damage that renders it inoperable and the damage requires the vehicle to be towed from the scene."
+      },
+      {
+        "id": "F7",
+        "category": "coverage",
+        "claim": "MPD training material says that if none of the listed conditions apply and the vehicle damage is minor, no Traffic Crash Report is required.",
+        "sourceUrl": "https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/publication/attachments/13.1%20Traffic%20Crashes_FINAL.pdf",
+        "quote": "If none of the above conditions apply and the damage to the motor vehicle is minor, no Traffic Crash Report is required."
+      },
+      {
+        "id": "F8",
+        "category": "coverage",
+        "claim": "MPD training material says Traffic Crash Reports are always required for hit-and-run crashes.",
+        "sourceUrl": "https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/publication/attachments/13.1%20Traffic%20Crashes_FINAL.pdf",
+        "quote": "Traffic Crash Reports are always required for all hit and run traffic crashes."
+      },
+      {
+        "id": "F9",
+        "category": "coverage",
+        "claim": "MPD training material says a Traffic Crash Report is always required when a DC or federal government vehicle is involved in a collision.",
+        "sourceUrl": "https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/publication/attachments/13.1%20Traffic%20Crashes_FINAL.pdf",
+        "quote": "If a DC or federal government vehicle is involved in a collision, a Traffic Crash Report is always required."
+      },
+      {
+        "id": "F10",
+        "category": "coverage",
+        "claim": "MPD training material says crashes on private property other than those it lists require an Incident Report classified as Damage to Property.",
+        "sourceUrl": "https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/publication/attachments/13.1%20Traffic%20Crashes_FINAL.pdf",
+        "quote": "All other crashes that occur on private property require an Incident Report with the classification Damage to Property."
+      },
+      {
+        "id": "F11",
+        "category": "request-mail",
+        "claim": "PD-10 requests can be mailed to Metropolitan Police Department, Public Documents Section, ATTN: Accident/Incident Reports, 441 4th Street, NW, Room 550 South, Washington, DC 20001.",
+        "sourceUrl": "https://mpdc.dc.gov/service/request-accident-report-pd-10-or-incidentoffense-report-pd-251",
+        "quote": "Metropolitan Police Department Public Documents Section ATTN: Accident/Incident Reports 441 4th Street, NW, Room 550 South Washington, DC 20001"
+      },
+      {
+        "id": "F12",
+        "category": "request-mail",
+        "claim": "MPD asks that mailed requests be sent along with a self-addressed, stamped envelope.",
+        "sourceUrl": "https://mpdc.dc.gov/service/request-accident-report-pd-10-or-incidentoffense-report-pd-251",
+        "quote": "or mail request along with a self-addressed, stamped envelope to:"
+      },
+      {
+        "id": "F13",
+        "category": "request-mail",
+        "claim": "MPD offers email or mail-in PD-10 requests for people living outside the District or otherwise unable to come to the office in person.",
+        "sourceUrl": "https://mpdc.dc.gov/service/request-accident-report-pd-10-or-incidentoffense-report-pd-251",
+        "quote": "Request a PD-10 via Email or Mail-In (for persons living outside of the District, or who are otherwise unable to come to the office in person)."
+      },
+      {
+        "id": "F14",
+        "category": "request-other",
+        "claim": "MPD accepts PD-10 requests by email.",
+        "sourceUrl": "https://mpdc.dc.gov/service/request-accident-report-pd-10-or-incidentoffense-report-pd-251",
+        "quote": "To request a PD-10 via email, submit your email request to"
+      },
+      {
+        "id": "F15",
+        "category": "request-other",
+        "claim": "The email address the MPD page gives for PD-10 requests is mpd.public-docs@dc.gov.",
+        "sourceUrl": "https://mpdc.dc.gov/service/request-accident-report-pd-10-or-incidentoffense-report-pd-251",
+        "quote": "To request a PD-10 via email, submit your email request to mpd.public-docs@dc.gov or mail request along with a self-addressed, stamped envelope to:"
+      },
+      {
+        "id": "F16",
+        "category": "request-other",
+        "claim": "MPD gives (202) 727-4357 as the number to call for more information or help with a request.",
+        "sourceUrl": "https://mpdc.dc.gov/service/request-accident-report-pd-10-or-incidentoffense-report-pd-251",
+        "quote": "For more information or additional assistance, contact (202) 727-4357."
+      },
+      {
+        "id": "F17",
+        "category": "request-in-person",
+        "claim": "A PD-10 can be requested in person at MPD Headquarters.",
+        "sourceUrl": "https://mpdc.dc.gov/service/request-accident-report-pd-10-or-incidentoffense-report-pd-251",
+        "quote": "You may request an Accident Report (PD-10) at MPD Headquarters (address above)."
+      },
+      {
+        "id": "F18",
+        "category": "request-in-person",
+        "claim": "In-person PD-10 requests are by appointment only, scheduled by calling (202) 671-6705.",
+        "sourceUrl": "https://mpdc.dc.gov/service/request-accident-report-pd-10-or-incidentoffense-report-pd-251",
+        "quote": "NOTE: In-person requests are by appointment only. Schedule an appointment by calling (202) 671-6705."
+      },
+      {
+        "id": "F19",
+        "category": "request-in-person",
+        "claim": "MPD's Public Documents Section is at 441 4th Street, NW, Room 550 South, Washington, DC 20001, phone (202) 727-4357, Monday-Friday 9 am to 5 pm.",
+        "sourceUrl": "https://mpdc.dc.gov/service/request-accident-report-pd-10-or-incidentoffense-report-pd-251",
+        "quote": "MPD Public Documents Section 441 4th Street, NW, Room 550 South Washington, DC 20001 (202) 727-4357 Monday-Friday: 9 am - 5 pm"
+      },
+      {
+        "id": "F20",
+        "category": "request-in-person",
+        "claim": "MPD's Records Division offers extended hours on Tuesdays and Thursdays until 7 PM.",
+        "sourceUrl": "https://mpdc.dc.gov/service/request-accident-report-pd-10-or-incidentoffense-report-pd-251",
+        "quote": "NOTICE: The Records Division is offering extended hours on Tuesdays and Thursdays until 7 PM."
+      },
+      {
+        "id": "F21",
+        "category": "request-in-person",
+        "claim": "In its PD-251 (incident report) section, MPD says individuals must book an appointment through the page's scheduling link to get records in person.",
+        "sourceUrl": "https://mpdc.dc.gov/service/request-accident-report-pd-10-or-incidentoffense-report-pd-251",
+        "quote": "Individuals must make an appointment through the link below to obtain requests for records in person."
+      },
+      {
+        "id": "F22",
+        "category": "request-online",
+        "claim": "MPD says the quickest way to submit a FOIA request is through the District of Columbia Government's FOIA public access website.",
+        "sourceUrl": "https://mpdc.dc.gov/page/submit-foia-request-mpd",
+        "quote": "The quickest way to submit a Freedom of Information Act (FOIA) request is through the District of Columbia Government's Freedom of Information Act public access website."
+      },
+      {
+        "id": "F23",
+        "category": "request-mail",
+        "claim": "MPD's FOIA Officer is at 441 4th Street, NW, Suite 1100S, Washington, DC 20001, phone (202) 727-3721.",
+        "sourceUrl": "https://mpdc.dc.gov/page/submit-foia-request-mpd",
+        "quote": "441 4th Street, NW, Suite 1100S Washington, DC 20001 Phone: (202) 727-3721"
+      },
+      {
+        "id": "F24",
+        "category": "request-mail",
+        "claim": "MPD says a FOIA request sent by mail should go to the FOIA Officer's address on its page, with the envelope prominently marked \"FOIA Request.\"",
+        "sourceUrl": "https://mpdc.dc.gov/page/submit-foia-request-mpd",
+        "quote": "If the request is sent by mail, it should be sent to the address above and the envelope shall prominently be marked \"FOIA Request.\""
+      },
+      {
+        "id": "F25",
+        "category": "what-you-need",
+        "claim": "For email or mail PD-10 requests, MPD asks for as much as you have of: full name, date, location and time of the accident, and the six-digit report number (CCN).",
+        "sourceUrl": "https://mpdc.dc.gov/service/request-accident-report-pd-10-or-incidentoffense-report-pd-251",
+        "quote": "Your request should include as much of the following information as you have: Full Name Date of Accident or Incident Location of Accident or Incident Six Digit Report Number (CCN) Time of Accident or Incident"
+      },
+      {
+        "id": "F26",
+        "category": "what-you-need",
+        "claim": "A copy of a valid government-issued photo ID is required for email or mail PD-10 requests, and a scan or digital photo is acceptable.",
+        "sourceUrl": "https://mpdc.dc.gov/service/request-accident-report-pd-10-or-incidentoffense-report-pd-251",
+        "quote": "REQUIRED – Copy of a valid government-issued photo identification (scanned image or digital photograph is acceptable)"
+      },
+      {
+        "id": "F27",
+        "category": "what-you-need",
+        "claim": "A copy of the completed PD Form 10B (Application for PD Form 10 Accident Report) is required for email or mail PD-10 requests, and a scan or digital photo is acceptable.",
+        "sourceUrl": "https://mpdc.dc.gov/service/request-accident-report-pd-10-or-incidentoffense-report-pd-251",
+        "quote": "REQUIRED – Copy of the completed “PD Form 10B – Application for PD Form 10 Accident Report,\" which can be found at the end of this webpage (scanned image or digital photograph is acceptable)"
+      },
+      {
+        "id": "F28",
+        "category": "what-you-need",
+        "claim": "For in-person PD-10 requests, MPD lists your name with the date, location and time of the incident, or the six-digit CCN, along with valid government-issued photo identification.",
+        "sourceUrl": "https://mpdc.dc.gov/service/request-accident-report-pd-10-or-incidentoffense-report-pd-251",
+        "quote": "Your name AND the date; location; and time of incident, accident or offense, OR Six-digit accident or incident number (CCN) Valid government-issued photo identification"
+      },
+      {
+        "id": "F29",
+        "category": "what-you-need",
+        "claim": "Each MPD report gets a six-digit number called the CCN, and MPD says to call the station of the police district that responded if you need the report number.",
+        "sourceUrl": "https://mpdc.dc.gov/service/request-accident-report-pd-10-or-incidentoffense-report-pd-251",
+        "quote": "This report is given a six-digit identifying number (often referred to as the CCN). Please make a note of this number for future reference. (If you need to find out the report number, call the station of the police district that responded to the incident.)"
+      },
+      {
+        "id": "F30",
+        "category": "what-you-need",
+        "claim": "PD Form 10B includes a signed certification that the information on the application is true and accurate.",
+        "sourceUrl": "https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/service_content/attachments/PD%20Form%2010B_fillableform.pdf",
+        "quote": "I certify that I have read this application and know and understand its content; all information herein is true and accurate."
+      },
+      {
+        "id": "F31",
+        "category": "what-you-need",
+        "claim": "For an attorney or investigator requesting for the applicant, PD Form 10B lists a signed retainer agreement between the attorney/investigator and the client(s).",
+        "sourceUrl": "https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/service_content/attachments/PD%20Form%2010B_fillableform.pdf",
+        "quote": "Signed retainer agreement between the attorney/investigator and his/her client(s)"
+      },
+      {
+        "id": "F32",
+        "category": "what-you-need",
+        "claim": "PD Form 10B also lists a notarized document from the applicant stating that the PD-10 is requested in anticipation of or for pending litigation involving the crash.",
+        "sourceUrl": "https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/service_content/attachments/PD%20Form%2010B_fillableform.pdf",
+        "quote": "A notarized document from the Applicant stating that the PD-10 is being requested in anticipation of or for pending litigation involving the motor vehicle accident which is the subject of the PD-10"
+      },
+      {
+        "id": "F33",
+        "category": "what-you-need",
+        "claim": "For FOIA requests about yourself, MPD asks for the date, time and place of the incident or accident, the Central Complaint Number if available, and proof of your identity.",
+        "sourceUrl": "https://mpdc.dc.gov/page/submit-foia-request-mpd",
+        "quote": "If requesting records regarding yourself, provide the date, time, and place of the incident/accident/arrest and the Central Complaint Number, if available, along with proof of your identity"
+      },
+      {
+        "id": "F34",
+        "category": "fee",
+        "claim": "MPD says PD-10 copies are usually available to first-party requestors at no charge and to insurance companies for claim purposes at a fee of $3 for each PD requested.",
+        "sourceUrl": "https://mpdc.dc.gov/service/request-accident-report-pd-10-or-incidentoffense-report-pd-251",
+        "quote": "Copies of the PD-10 are usually available to first party requestors at no charge and insurance companies for claim purposes at a fee $3 for each PD requested."
+      },
+      {
+        "id": "F35",
+        "category": "fee",
+        "claim": "MPD's PD-10 section notes there is no fee for first-party requests.",
+        "sourceUrl": "https://mpdc.dc.gov/service/request-accident-report-pd-10-or-incidentoffense-report-pd-251",
+        "quote": "Note: There is a NO Fee for 1st Party Requests"
+      },
+      {
+        "id": "F36",
+        "category": "fee",
+        "claim": "MPD says fees for producing a PD-251 incident report are temporarily waived.",
+        "sourceUrl": "https://mpdc.dc.gov/service/request-accident-report-pd-10-or-incidentoffense-report-pd-251",
+        "quote": "Fees associated with production of a PD-251 are temporarily waived."
+      },
+      {
+        "id": "F37",
+        "category": "fee",
+        "claim": "MPD's FOIA page says the FOIA statute authorizes collecting fees for processing FOIA requests.",
+        "sourceUrl": "https://mpdc.dc.gov/page/submit-foia-request-mpd",
+        "quote": "The FOIA statute also authorizes the collection of fees for processing FOIA requests."
+      },
+      {
+        "id": "F38",
+        "category": "timing",
+        "claim": "MPD asks mail-in requesters to allow six weeks for processing from the date the request is made.",
+        "sourceUrl": "https://mpdc.dc.gov/service/request-accident-report-pd-10-or-incidentoffense-report-pd-251",
+        "quote": "For Mail-In requests, please allow six weeks for processing from the date the request is made."
+      },
+      {
+        "id": "F39",
+        "category": "timing",
+        "claim": "MPD's FOIA page says the DC FOIA statute requires public bodies to respond to a FOIA request within 15 business days, excluding Saturdays, Sundays and legal public holidays.",
+        "sourceUrl": "https://mpdc.dc.gov/page/submit-foia-request-mpd",
+        "quote": "The DC FOIA statute provides that public bodies are required to respond to a FOIA request within 15 business days (excluding Saturdays, Sundays, and legal public holidays)."
+      },
+      {
+        "id": "F40",
+        "category": "timing",
+        "claim": "Public bodies may extend the FOIA response time by an additional 10 business days for unusual circumstances as defined by DC Official Code § 2-532(d).",
+        "sourceUrl": "https://mpdc.dc.gov/page/submit-foia-request-mpd",
+        "quote": "Public bodies may extend the time for a response by an additional 10 business days (excluding Saturdays, Sundays, and legal public holidays) for unusual circumstances, as defined by DC Official Code § 2-532(d)."
+      },
+      {
+        "id": "F41",
+        "category": "who-can-request",
+        "claim": "MPD says PD-10 requests may be made by a first party only (an involved party, or that party's attorney, attorney staff or investigators), and third-party requests should go through MPD's FOIA Office.",
+        "sourceUrl": "https://mpdc.dc.gov/service/request-accident-report-pd-10-or-incidentoffense-report-pd-251",
+        "quote": "Requests for a PD 10/Traffic Crash Report may be made by a First Party ONLY (Involved Party OR Attorney/Attorney Staff/Investigators of Involved Party). Third Party requests should be submitted through the MPD's FOIA Office."
+      },
+      {
+        "id": "F42",
+        "category": "who-can-request",
+        "claim": "PD Form 10B lists a notarized document from the applicant authorizing the agent to obtain the PD-10 as a required document for an agent requesting on the applicant's behalf.",
+        "sourceUrl": "https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/service_content/attachments/PD%20Form%2010B_fillableform.pdf",
+        "quote": "Notarized document from the Applicant authorizing the agent to obtain the PD-10 on behalf of the Applicant."
+      },
+      {
+        "id": "F43",
+        "category": "who-can-request",
+        "claim": "Under D.C. Code § 50–1401.01b, personal information in accident reports that is otherwise barred from disclosure may be released to a person who shows sufficient written proof of one of the listed uses.",
+        "sourceUrl": "https://code.dccouncil.gov/us/dc/council/code/sections/50-1401.01b",
+        "quote": "Personal information contained in motor vehicle records or accident reports prohibited from disclosure by subsection (b) of this section may be released to a person upon the showing of sufficient written proof for the following uses:"
+      },
+      {
+        "id": "F44",
+        "category": "who-can-request",
+        "claim": "D.C. Code § 50–1401.01b also lists use by an insurer, insurance support organization or self-insured entity in connection with claims investigation, anti-fraud activities, rating or underwriting.",
+        "sourceUrl": "https://code.dccouncil.gov/us/dc/council/code/sections/50-1401.01b",
+        "quote": "For use by any insurer or insurance support organization, or by a self-insured entity, or its agents, employees, or contractors, in connection with claims of investigation activities, anti-fraud activities, rating, or underwriting;"
+      },
+      {
+        "id": "F45",
+        "category": "self-report",
+        "claim": "DC DMV tells drivers not to report any crash to DC DMV.",
+        "sourceUrl": "https://dmv.dc.gov/service/vehicle-insurance",
+        "quote": "Do not report any crash to DC DMV."
+      },
+      {
+        "id": "F46",
+        "category": "self-report",
+        "claim": "For a non-injury crash, DC DMV says to complete the Non-Injury Checklist and Guide and notify your insurance company, and to call 911 for a crash involving an injury.",
+        "sourceUrl": "https://dmv.dc.gov/service/vehicle-insurance",
+        "quote": "In the case of a non-injury vehicle crash, please complete the Non-Injury Checklist and Guide [PDF] and notify your insurance company. If you are involved in a crash involving an injury, call 911."
+      },
+      {
+        "id": "F47",
+        "category": "self-report",
+        "claim": "A Motor Vehicle Crash Report for PROPERTY DAMAGE ONLY form hosted on the MPD website says to use it only if no police report was taken and to complete and return it within 5 days of the crash.",
+        "sourceUrl": "https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/publication/attachments/DC_MotorVehicleCrashReport_Form.pdf",
+        "quote": "(Use only if NO police report was taken. Complete and return form within 5 DAYS of crash)"
+      },
+      {
+        "id": "F48",
+        "category": "self-report",
+        "claim": "MPD training material says that for minor-damage crashes where no Traffic Crash Report is required, officers must give the involved parties DDOT's Motor Vehicle Crash Report for Property Damage Only form.",
+        "sourceUrl": "https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/publication/attachments/13.1%20Traffic%20Crashes_FINAL.pdf",
+        "quote": "For crashes involving minor damage where no Traffic Crash Report is required, MPD officers must provide the involved parties with a Government of the District of Columbia Motor Vehicle Crash Report for Property Damage Only form from DDOT."
+      },
+      {
+        "id": "F49",
+        "category": "self-report",
+        "claim": "In its section on the DDOT property-damage-only form, MPD training material says it is the responsibility of the parties involved in the collision to forward the report to DDOT.",
+        "sourceUrl": "https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/publication/attachments/13.1%20Traffic%20Crashes_FINAL.pdf",
+        "quote": "It is the responsibility of the parties involved in the collision to forward the report to DDOT."
+      },
+      {
+        "id": "F50",
+        "category": "self-report",
+        "claim": "DDOT's Non-Injury Crash Checklist and Guide PDF is marked for informational purposes only.",
+        "sourceUrl": "https://ddot.dc.gov/sites/default/files/dc/sites/ddot/Non-Injury%20Crash%20Checklist%20and%20Guide.pdf",
+        "quote": "FOR INFORMATIONAL PURPOSES ONLY"
+      },
+      {
+        "id": "F51",
+        "category": "self-report",
+        "claim": "D.C. Code § 50–1301.10, Accident report — Required, is marked repealed.",
+        "sourceUrl": "https://code.dccouncil.gov/us/dc/council/code/titles/50/chapters/13/subchapters/III",
+        "quote": "§ 50–1301.10. Accident report — Required. [Repealed]"
+      },
+      {
+        "id": "F52",
+        "category": "self-report",
+        "claim": "Under D.C. Code § 50–2201.05c, a driver whose collision damages another's property must, if the owner or operator is not present, provide identifying information and the collision location to law enforcement or 911.",
+        "sourceUrl": "https://code.dccouncil.gov/us/dc/council/code/sections/50-2201.05c",
+        "quote": "where the owner or operator of the property or the owner of the domestic animal is not present, provide or cause another to provide identifying information and the location of the collision, to law enforcement or 911"
+      },
+      {
+        "id": "F53",
+        "category": "self-report",
+        "claim": "Under D.C. Code § 50–2201.05c, if another person is injured, the driver must call or have someone call 911 or emergency help if necessary, stay until law enforcement arrives, and give identifying information to law enforcement and the injured person.",
+        "sourceUrl": "https://code.dccouncil.gov/us/dc/council/code/sections/50-2201.05c",
+        "quote": "Where another person is injured, call or cause another to call 911 or call or cause another to call for an ambulance or other emergency assistance if necessary, remain on the scene until law enforcement arrives, and provide identifying information to law enforcement and to the injured person"
+      },
+      {
+        "id": "F54",
+        "category": "self-report",
+        "claim": "MPD's online police reporting tool lists 'This is not a traffic crash' among the conditions for filing a report online.",
+        "sourceUrl": "https://mpdc.dc.gov/service/file-police-report",
+        "quote": "This is not a traffic crash."
+      },
+      {
+        "id": "F55",
+        "category": "other",
+        "claim": "DDOT says to call 9-1-1 immediately if medical or police assistance is needed or the vehicles are damaged and cannot be driven.",
+        "sourceUrl": "https://ddot.dc.gov/page/what-do-after-non-injury-crash",
+        "quote": "If you are involved in or witness a crash where medical or police assistance is needed OR the vehicles are damaged and cannot be driven, call 9-1-1 IMMEDIATELY."
+      },
+      {
+        "id": "F56",
+        "category": "other",
+        "claim": "MPD training material says all Traffic Crash Reports must be submitted and approved by the end of the officer's tour of duty, and formal supplements can be added later.",
+        "sourceUrl": "https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/publication/attachments/13.1%20Traffic%20Crashes_FINAL.pdf",
+        "quote": "Although all Traffic Crash Reports must be submitted and approved by the end of your tour of duty, formal supplements can be made to the reports at any time afterwards."
+      },
+      {
+        "id": "F57",
+        "category": "other",
+        "claim": "DC DMV provides its insurance of record for a DC vehicle tag number online, for a fee, to people who have been in a crash.",
+        "sourceUrl": "https://dmv.dc.gov/service/insurance-records-crashes",
+        "quote": "If you have been in a crash and you need DC DMV's insurance of record of a DC vehicle tag number, you can obtain the information from DC DMV online for a fee."
+      },
+      {
+        "id": "F58",
+        "category": "who-can-request",
+        "claim": "Under D.C. Code § 50–1401.01b(c)(4), personal information in accident reports may be released for use in connection with an actual or contemplated civil, criminal, administrative or arbitral proceeding, including use by a person involved in the accident and listed on the accident report. It may not be used to solicit clients.",
+        "sourceUrl": "https://code.dccouncil.gov/us/dc/council/code/sections/50-1401.01b",
+        "quote": "(4) For use in connection with an actual or contemplated civil, criminal, administrative, or arbitral proceeding in a court or agency, or before a self-regulatory body for any of the following, except that the use shall not include the solicitation of clients, prohibited by § 22-3225.14:"
+      },
+      {
+        "id": "F59",
+        "category": "fee",
+        "claim": "MPD's Police Clearances and Reports page states a $3 fee for all Accident Reports (PD-10s). This conflicts with the PD-10 request page's 'NO Fee for 1st Party Requests', so the guide should flag the discrepancy or tell readers to confirm with the Public Documents Section.",
+        "sourceUrl": "https://mpdc.dc.gov/service/police-clearances-and-reports",
+        "quote": "There is a $3 fee for all Accident Reports (PD-10s); fees associated with production of an Incident/Offense Report (PD-251) are temporarily waived."
+      },
+      {
+        "id": "F60",
+        "category": "request-mail",
+        "claim": "MPD says every report request sent by mail needs a money order.",
+        "sourceUrl": "https://mpdc.dc.gov/service/police-clearances-and-reports",
+        "quote": "All requests for reports that are submitted by mail require a money order."
+      },
+      {
+        "id": "F61",
+        "category": "request-in-person",
+        "claim": "MPD lists Public Documents Section hours as 9:00 am to 5:00 pm on Monday, Wednesday and Friday, and 9:00 am to 7:00 pm on Tuesday and Thursday.",
+        "sourceUrl": "https://mpdc.dc.gov/service/police-clearances-and-reports",
+        "quote": "Monday, Wednesday, Friday 9:00 am-5:00 pm Tuesdays, Thursdays 9:00 am-7:00 pm"
+      },
+      {
+        "id": "F62",
+        "category": "request-in-person",
+        "claim": "The same MPD page gives (202) 727-4275 as the Public Documents Section phone, which differs from (202) 727-4357 on the request page. It also says walk-in appointments are available Monday through Friday.",
+        "sourceUrl": "https://mpdc.dc.gov/service/police-clearances-and-reports",
+        "quote": "Telephone: (202) 727-4275 Walk-In Appointments Available Monday through Friday"
+      },
+      {
+        "id": "F63",
+        "category": "request-mail",
+        "claim": "MPD's FOIA page says people who want copies of accident reports (PD-10) can request them in person or by US Mail from the Records Branch, Public Documents Section, 441 4th Street NW, 5th Floor. The page lists this under documents that do not require a FOIA request.",
+        "sourceUrl": "https://mpdc.dc.gov/page/submit-foia-request-mpd",
+        "quote": "However, Individuals interested in obtaining copies of police reports (PD-251) or accident reports (PD-10) may make the request directly in person or by US Mail to: Metropolitan Police Department Records Branch Public Documents Section 441 4th Street, NW, 5th Floor Washington, DC 20001"
+      },
+      {
+        "id": "F64",
+        "category": "request-other",
+        "claim": "MPD's FOIA Officer can be reached by email at foia.admin@dc.gov. The address is Cloudflare-obfuscated in the HTML and I decoded it.",
+        "sourceUrl": "https://mpdc.dc.gov/page/submit-foia-request-mpd",
+        "quote": "Phone: (202) 727-3721 Email: foia.admin@dc.gov"
+      },
+      {
+        "id": "F65",
+        "category": "what-you-need",
+        "claim": "For FOIA requests, MPD asks attorneys to attach proof that they represent the client, such as a retainer agreement or client authorization.",
+        "sourceUrl": "https://mpdc.dc.gov/page/submit-foia-request-mpd",
+        "quote": "In addition, if you are an attorney, please attach proof that you represent your client, e.g., retainer agreement or client authorization."
+      },
+      {
+        "id": "F66",
+        "category": "what-you-need",
+        "claim": "PD Form 10B asks applicants to bring or attach a government-issued photo ID, such as a driver's license, passport, U.S. Permanent Resident Card or military ID.",
+        "sourceUrl": "https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/service_content/attachments/PD%20Form%2010B_fillableform.pdf",
+        "quote": "A government-issued photographic identification (e.g., a driver's license, passport, U.S. Permanent Resident Card or military identification)"
+      },
+      {
+        "id": "F67",
+        "category": "who-can-request",
+        "claim": "PD Form 10B requires an attorney or investigator to provide their own government photo ID AND either a signed retainer agreement OR a notarized litigation and authorization document from the applicant. The notarized document is an alternative to the retainer agreement, not an extra item.",
+        "sourceUrl": "https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/service_content/attachments/PD%20Form%2010B_fillableform.pdf",
+        "quote": "of the attorney, investigator, and/or their agent; AND a Signed retainer agreement between the attorney/investigator and his/her client(s); OR A notarized document from the Applicant stating that the PD-10 is being requested in anticipation of or for pending litigation"
+      },
+      {
+        "id": "F68",
+        "category": "who-can-request",
+        "claim": "D.C. Code § 50–1401.01b(c)(4)(C) allows release, within the proceeding-related uses, for an accident-report investigation in anticipation of litigation by an attorney (or the attorney's agent) representing someone involved in the accident.",
+        "sourceUrl": "https://code.dccouncil.gov/us/dc/council/code/sections/50-1401.01b",
+        "quote": "(C) For an accident report, an investigation in anticipation of litigation by an attorney representing a person or entity involved in the motor vehicle accident and licensed to practice law in the District or any other United States jurisdiction, or the agent of the attorney;"
+      },
+      {
+        "id": "F69",
+        "category": "who-can-request",
+        "claim": "D.C. Code § 50–1401.01b(c)(12) allows release for any use when the requester shows written consent from the person who is the subject of the accident report.",
+        "sourceUrl": "https://code.dccouncil.gov/us/dc/council/code/sections/50-1401.01b",
+        "quote": "For any use if the requesting person demonstrates that he or she has obtained the written consent of the person who is the subject of the motor vehicle record or accident report."
+      },
+      {
+        "id": "F70",
+        "category": "who-can-request",
+        "claim": "Under D.C. law, MPD may require documentation to support a request for personal information and decides alone whether that documentation is sufficient.",
+        "sourceUrl": "https://code.dccouncil.gov/us/dc/council/code/sections/50-1401.01b",
+        "quote": "The Department and the Metropolitan Police Department may require documentation to support a request for personal information, and either department shall have the sole discretion to determine whether the documentation provided is sufficient to support the request."
+      },
+      {
+        "id": "F71",
+        "category": "other",
+        "claim": "Under D.C. Code § 50–1401.01b, the protected 'personal information' does not include information about the crash itself, driving violations or driver status.",
+        "sourceUrl": "https://code.dccouncil.gov/us/dc/council/code/sections/50-1401.01b",
+        "quote": "The term “personal information” shall not include information relating to vehicular crashes, driving violations, or driver status."
+      },
+      {
+        "id": "F72",
+        "category": "coverage",
+        "claim": "MPD training material says officers must investigate and report crashes on public space whenever there is a fatality or any reported injury, however minor.",
+        "sourceUrl": "https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/publication/attachments/13.1%20Traffic%20Crashes_FINAL.pdf",
+        "quote": "MPD Officers are required to investigate and prepare reports on traffic crashes that occur on highways and public space in Washington, DC when: A fatality or any reported injury (regardless of how severe) occurs."
+      },
+      {
+        "id": "F73",
+        "category": "coverage",
+        "claim": "MPD training material says a crash report is required regardless of damage when the owner or operator of the damaged vehicle or property is not at the scene.",
+        "sourceUrl": "https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/publication/attachments/13.1%20Traffic%20Crashes_FINAL.pdf",
+        "quote": "Damage to a motor vehicle or other property has occurred and the operator or owner of the damaged vehicle or property is not at the scene of the crash."
+      },
+      {
+        "id": "F74",
+        "category": "coverage",
+        "claim": "MPD training material says a crash report is required regardless of damage when a public transportation vehicle, such as a bus, taxicab or limousine, is involved.",
+        "sourceUrl": "https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/publication/attachments/13.1%20Traffic%20Crashes_FINAL.pdf",
+        "quote": "A public transportation motor vehicle is involved (e.g., bus, taxicab, limousine)."
+      },
+      {
+        "id": "F75",
+        "category": "coverage",
+        "claim": "On private property, MPD policy requires a Traffic Crash Report when a fatality or any injury occurs.",
+        "sourceUrl": "https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/publication/attachments/13.1%20Traffic%20Crashes_FINAL.pdf",
+        "quote": "Traffic Crash Reports are often required for incidents that occur on private property. Per MPD policy, such a report is required when: A fatality or injury occurs (regardless of the injury’s seriousness)."
+      },
+      {
+        "id": "F76",
+        "category": "fee",
+        "claim": "DC DMV charges $7.00 for an insurance record.",
+        "sourceUrl": "https://dmv.dc.gov/book/vehicle-fees/insurance-record",
+        "quote": "Insurance Record $7.00"
+      },
+      {
+        "id": "F77",
+        "category": "request-mail",
+        "claim": "DC DMV insurance records can be requested by mail with a letter, a check or money order payable to DC Treasurer, and the DC tag number, sent to DC DMV, PO Box 90120, Washington, DC 20090.",
+        "sourceUrl": "https://dmv.dc.gov/service/insurance-records-crashes",
+        "quote": "You can also obtain the insurance record information by mail, for a fee, by sending a letter with your contact information, a check/money order (made payable to DC Treasurer) and the DC tag number for which you need the insurance information to: DC DMV PO Box 90120 Washington, DC 20090"
+      },
+      {
+        "id": "F78",
+        "category": "other",
+        "claim": "The DC DMV insurance record shows only insurance information, with no personal information about the vehicle owner.",
+        "sourceUrl": "https://dmv.dc.gov/service/insurance-records-crashes",
+        "quote": "In all cases, the DC DMV insurance record will not include any personal information related to the vehicle owner."
+      },
+      {
+        "id": "F79",
+        "category": "fee",
+        "claim": "There is no initial fee to submit a DC FOIA request, but agencies may charge search, review and copying fees under 1 DCMR § 408.",
+        "sourceUrl": "https://dc.gov/page/freedom-information-act-foia",
+        "quote": "There is no initial fee for submitting a FOIA request. However, a public body may charge fees for searching, reviewing, and reproducing records as provided in 1 DCMR § 408."
+      },
+      {
+        "id": "F80",
+        "category": "self-report",
+        "claim": "MPD's online reporting tool does not accept traffic crashes. Incidents that don't qualify go to 911 or the nearest police district.",
+        "sourceUrl": "https://mpdc.dc.gov/service/file-police-report",
+        "quote": "If your report does not qualify for Online Reporting, you can call 911 or visit your nearest Police District."
+      },
+      {
+        "id": "F81",
+        "category": "other",
+        "claim": "DDOT advises drivers exchanging information after a non-injury crash not to give out their driver's license number or address.",
+        "sourceUrl": "https://ddot.dc.gov/page/what-do-after-non-injury-crash",
+        "quote": "Protect your ID. DO NOT provide your driver’s license number or address."
+      }
+    ],
+    "links": [
+      {
+        "label": "MPD: Request an Accident Report (PD-10) or an Incident/Offense Report (PD-251)",
+        "url": "https://mpdc.dc.gov/service/request-accident-report-pd-10-or-incidentoffense-report-pd-251",
+        "officialEvidence": "Hosted on mpdc.dc.gov, the Metropolitan Police Department's official DC government website. The beta.dc.gov service page for PD-10 reports links to it."
+      },
+      {
+        "label": "PD Form 10B – Application for PD Form 10 Accident Report (PDF)",
+        "url": "https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/service_content/attachments/PD%20Form%2010B_fillableform.pdf",
+        "officialEvidence": "Linked as the attachment on MPD's PD-10 request page and hosted on mpdc.dc.gov."
+      },
+      {
+        "label": "MPD: Submit a FOIA Request to MPD",
+        "url": "https://mpdc.dc.gov/page/submit-foia-request-mpd",
+        "officialEvidence": "Hosted on mpdc.dc.gov. MPD's PD-10 page sends third-party requests to MPD's FOIA Office."
+      },
+      {
+        "label": "MPD in-person appointment scheduler (PD-251 incident reports)",
+        "url": "https://go.nemoqappointment.com/Booking/Booking/Index/dc876re9gh",
+        "officialEvidence": "Vendor scheduling page linked as 'Schedule an Appointment' from MPD's official request page on mpdc.dc.gov."
+      },
+      {
+        "label": "MPD: Police Districts and Police Service Areas",
+        "url": "https://mpdc.dc.gov/patrolservices",
+        "officialEvidence": "Hosted on mpdc.dc.gov. It is the target of the 'police district' link on MPD's PD-10 request page (mpdc.dc.gov/node/158252 redirects here)."
+      },
+      {
+        "label": "D.C. Code § 50–1401.01b (release of personal information from accident reports)",
+        "url": "https://code.dccouncil.gov/us/dc/council/code/sections/50-1401.01b",
+        "officialEvidence": "D.C. Law Library at code.dccouncil.gov, the Council of the District of Columbia's official code site."
+      },
+      {
+        "label": "DC DMV: Vehicle Insurance",
+        "url": "https://dmv.dc.gov/service/vehicle-insurance",
+        "officialEvidence": "Hosted on dmv.dc.gov, the DC Department of Motor Vehicles' official website."
+      },
+      {
+        "label": "DDOT: What To Do After A Non-Injury Crash?",
+        "url": "https://ddot.dc.gov/page/what-do-after-non-injury-crash",
+        "officialEvidence": "Hosted on ddot.dc.gov, the District Department of Transportation's official website. MPD's old property-damage-form page (mpdc.dc.gov/publication/motor-vehicle-crash-report-property-damage-only-ddot) permanently redirects here."
+      },
+      {
+        "label": "DC DMV: Insurance Records for Crashes",
+        "url": "https://dmv.dc.gov/service/insurance-records-crashes",
+        "officialEvidence": "Hosted on dmv.dc.gov, the DC Department of Motor Vehicles' official website."
+      },
+      {
+        "label": "MPD: Police Clearances and Reports",
+        "url": "https://mpdc.dc.gov/service/police-clearances-and-reports",
+        "officialEvidence": "Hosted on mpdc.dc.gov (mpdc.dc.gov/service/police-reports serves the same page). It links to MPD's Accident Reports (PD-10s) page and to the same NEMO-Q 'Schedule an Appointment' link."
+      },
+      {
+        "label": "DC DMV Online Insurance Record Search",
+        "url": "https://public.dmv.washingtondc.gov/BusinessPages/Common/tran_start.aspx?ID=8038",
+        "officialEvidence": "Linked as 'online' from dmv.dc.gov/service/insurance-records-crashes. It resolves to the DC DMV 'Insurance Verification Search' page on public.dmv.washingtondc.gov."
+      },
+      {
+        "label": "DC Government: Freedom of Information Act (FOIA)",
+        "url": "https://dc.gov/page/freedom-information-act-foia",
+        "officialEvidence": "Hosted on dc.gov and linked from MPD's Submit a FOIA Request page as the 'DC Government FOIA Information Page'."
+      }
+    ],
+    "gaps": [
+      {
+        "category": "request-online",
+        "reason": "No official online portal for first-party PD-10 requests was found. MPD's page lists only email, mail and in-person (by appointment). No DC government page found names or links a vendor crash-report portal such as BuyCrash or Crashdocs. The only online portal found is the DC FOIA public access website, which is the third-party (FOIA) route."
+      },
+      {
+        "category": "request-other",
+        "reason": "The PD-10 email address on the MPD page is hidden by Cloudflare email protection in the page source, so text fetchers see '[email protected]'. I decoded it from the page's data-cfemail attribute as mpd.public-docs@dc.gov, which is what a browser shows. The quote for that fact is the browser-rendered sentence. Check it in a browser before publishing."
+      },
+      {
+        "category": "timing",
+        "reason": "No official source says how soon after a crash a PD-10 becomes available to request. The only time frames found are the six-week mail-in processing time and the DC FOIA response deadlines. MPD training material says officers must submit and approve reports by the end of their tour, but that is not a statement about public availability."
+      },
+      {
+        "category": "fee",
+        "reason": "MPD's page gives the $3 insurer fee but not the payment method, payee or any card or convenience fee. The page also says PD-10 requests are first-party only while describing insurer copies, and it doesn't explain how insurers request them. MPD's FOIA page says FOIA processing fees may be charged but gives no amounts."
+      },
+      {
+        "category": "request-mail",
+        "reason": "The header of PD Form 10B still shows an older address (MPD Freedom of Information Act (FOIA) Office, 300 Indiana Avenue, NW, Room 4153), and its footer is dated January 14, 2015 (GO-SPT-401.03 Attachment B). The current request page says to mail requests to the Public Documents Section at 441 4th Street, NW, Room 550 South. The guide should use the page's address, not the form header."
+      },
+      {
+        "category": "local-agencies",
+        "reason": "DC has no separate county or city crash-report system beyond MPD, and no DC government page was found that says what to do when another police agency operating in DC handled the crash (for example U.S. Park Police, U.S. Capitol Police or Metro Transit Police), or whether MPD holds those reports. MPD's page covers only reports written by MPD officers. Lead only, not recorded as a fact: the U.S. Park Police's own federal pages say crash reports for its Washington, D.C.-area incidents are requested from USPP Records (https://www.nps.gov/aboutus/foia/how-to-request-an-accident-report.htm, and https://www.nps.gov/subjects/uspp/foia-requests.htm, which gives USPP_Records@nps.gov). These are federal nps.gov pages, outside this task's state/DC source definition."
+      },
+      {
+        "category": "who-holds",
+        "reason": "No official source says outright whether MPD's Public Documents Section holds crash reports from every law-enforcement agency in DC or only its own. Its page describes only MPD officers' PD-10 and PD-251 reports. D.C. Code § 50–1731.07(b) says MPD gives DDOT a copy of each accident report, but no official page says DDOT gives individual reports to the public."
+      },
+      {
+        "category": "self-report",
+        "reason": "It is unclear whether DC drivers must currently file the Motor Vehicle Crash Report for PROPERTY DAMAGE ONLY form. The form PDF (created 2011) and MPD training material (approved 4/26/2023) describe it. But MPD's web page for the form now permanently redirects to DDOT's 'What To Do After A Non-Injury Crash?' page, which doesn't mention filing any form. DDOT's current checklist is marked for informational purposes only, DC DMV says not to report any crash to DMV, and the D.C. Code accident-report subchapter (§ 50–1301.10 et seq.) is repealed. The only submission details found are on a 2011 DDOT envelope PDF (DDOT - Safety Division Crash Records Box, PO Box 20164, Washington, DC 20077-7822; fax (703) 858-1358; www.ddot-hso.com/CrashForm), which I could not confirm as current. No official source gives a current legal deadline or dollar threshold for drivers to self-report."
+      },
+      {
+        "category": "who-can-request",
+        "reason": "No confidentiality waiting period was found. MPD sends third parties to FOIA, but no official source says what a non-involved third party receives (for example a full or a redacted PD-10)."
+      }
+    ]
+  },
+  {
+    "code": "TX",
+    "checkedOn": "2026-10-09",
+    "facts": [
+      {
+        "id": "F1",
+        "category": "who-holds",
+        "claim": "TxDOT is the custodian of crash records for the state of Texas.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "TxDOT is the custodian of crash records for the state of Texas."
+      },
+      {
+        "id": "F2",
+        "category": "who-holds",
+        "claim": "In the Texas Transportation Code subchapter on written collision reports, \"department\" means the Texas Department of Transportation.",
+        "sourceUrl": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.550.htm",
+        "quote": "In this subchapter, \"department\" means the Texas Department of Transportation."
+      },
+      {
+        "id": "F3",
+        "category": "who-holds",
+        "claim": "TxDOT collects crash reports from every law enforcement agency in Texas, for crashes on any public roadway and not just the state highway system.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Purchase/app/help-center/6/7?accessTypeId=3",
+        "quote": "TxDOT collects crash reports from every law enforcement agency in Texas and for crashes that occur on any public roadway in Texas, not just crashes occurring on the state highway system."
+      },
+      {
+        "id": "F4",
+        "category": "coverage",
+        "claim": "TxDOT collects crash reports from Texas law enforcement agencies for crashes on public roadways and the state highway system.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "TxDOT collects crash reports from Texas law enforcement agencies for crashes occurring on public roadways and the state highway system."
+      },
+      {
+        "id": "F5",
+        "category": "coverage",
+        "claim": "A law enforcement officer who investigates a motor vehicle collision in the regular course of duty must write a report if the collision caused injury, death, or apparent damage of $1,000 or more to any one person's property.",
+        "sourceUrl": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.550.htm",
+        "quote": "A law enforcement officer who in the regular course of duty investigates a motor vehicle collision shall make a written report of the collision if the collision resulted in injury to or the death of a person or damage to the property of any one person to the apparent extent of $1,000 or more."
+      },
+      {
+        "id": "F6",
+        "category": "coverage",
+        "claim": "The state retention schedule for crash reports and data is 10 years plus the current year.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "The state retention schedule for crash reports and data is 10 years plus the current year."
+      },
+      {
+        "id": "F7",
+        "category": "request-online",
+        "claim": "You can get a copy of a Texas Peace Officer’s Crash Report (CR-3) through TxDOT's Crash Report Online Purchase System.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "You may obtain a copy of a Texas Peace Officer’s Crash Report (CR-3) by using our Crash Report Online Purchase System link below."
+      },
+      {
+        "id": "F8",
+        "category": "request-online",
+        "claim": "Reports bought through the online system are delivered by email after purchase.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "Customers using the online system receive their report(s) via email following the purchase."
+      },
+      {
+        "id": "F9",
+        "category": "request-online",
+        "claim": "TxDOT's online application lets the public buy the Texas Peace Officer’s Crash Report (CR-3) 24 hours a day, 7 days a week, 365 days a year.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Crash-resource/docs/PurchaseUserGuide.pdf",
+        "quote": "TxDOT offers an application that will allow the public to purchase Texas Peace Officer’s Crash Report (CR-3) online 24 hours per day, 7 days per week, and 365 days per year."
+      },
+      {
+        "id": "F10",
+        "category": "request-mail",
+        "claim": "If you are unable to use the online system, you may buy a copy by completing request form CR-91 and mailing it with the required payment to the address shown on the form.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Purchase/app/help-center/6/14?accessTypeId=3",
+        "quote": "If you are unable to use the Crash Report Online Purchase System, you may purchase a copy of a Texas Peace Officer's Crash Report (CR-4) by completing the appropriate request form (CR-91) and mailing it with the required payment to the address shown on the form."
+      },
+      {
+        "id": "F11",
+        "category": "request-mail",
+        "claim": "The CR-91 form can be downloaded from TxDOT's crash records forms page.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Purchase/app/help-center/6/14?accessTypeId=3",
+        "quote": "The CR-91 is available for download at https://www.txdot.gov/data-maps/crash-reports-records/forms-law-enforcement.html."
+      },
+      {
+        "id": "F12",
+        "category": "request-mail",
+        "claim": "The CR-91 mailing address is Crash Data and Analysis, Texas Department of Transportation, P.O. Box 12879, Austin, Texas 78711.",
+        "sourceUrl": "https://www.txdot.gov/content/dam/formsanddocuments/txdot-gov/xdp/cr-91/CR-91.xdp/jcr:content?submitUrl=&profile=&source=fp",
+        "quote": "Crash Data and Analysis, Texas Department of Transportation, P.O. Box 12879, Austin, Texas 78711"
+      },
+      {
+        "id": "F13",
+        "category": "request-other",
+        "claim": "Subpoena and affidavit requests for crash records are filed through TxDOT's CRIS Request - TxDOT Subpoena and Affidavit Request System.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "You may file a subpoena or affidavit request by using our CRIS Request - TxDOT Subpoena and Affidavit Request System link below."
+      },
+      {
+        "id": "F14",
+        "category": "request-other",
+        "claim": "Effective January 1, 2025, TxDOT no longer accepts subpoena and affidavit requests by mail.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "Effective January 1, 2025, TxDOT will no longer accept subpoena and affidavit requests by mail."
+      },
+      {
+        "id": "F15",
+        "category": "request-other",
+        "claim": "TxDOT says the CR-91 is no longer required for subpoena and affidavit requests and that requests received by mail will be returned to the requesting company.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "The CR-91 is no longer required for subpoena and affidavit requests; additionally, all requests received by mail will be returned to the requesting company for their records."
+      },
+      {
+        "id": "F16",
+        "category": "what-you-need",
+        "claim": "The CRIS Purchase Help Center lists search options of name, driver license/identification card number, vehicle identification number (VIN), TxDOT Crash ID and agency case ID.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Purchase/app/help-center/6/18?accessTypeId=3",
+        "quote": "There are four options for searching: Name, Driver License/Identification Card Number, Vehicle Identification Number (VIN), TxDOT Crash ID, and Agency Case ID."
+      },
+      {
+        "id": "F17",
+        "category": "what-you-need",
+        "claim": "A name search requires the first and last name of a person involved in the crash.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Crash-resource/docs/PurchaseUserGuide.pdf",
+        "quote": "The First Name and Last Name fields are required for a Person Involved in Crash."
+      },
+      {
+        "id": "F18",
+        "category": "what-you-need",
+        "claim": "A name search can be for any person involved in the crash, including drivers, occupants, pedestrians, pedalcyclists and property damage owners.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Crash-resource/docs/PurchaseUserGuide.pdf",
+        "quote": "Name – This can be for any person involved in a crash including drivers, occupants, pedestrians, pedalcyclist, property damage owners, etc."
+      },
+      {
+        "id": "F19",
+        "category": "what-you-need",
+        "claim": "You can also search by the driver license or identification card number of any driver (or primary) involved in the crash.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Crash-resource/docs/PurchaseUserGuide.pdf",
+        "quote": "Driver License Number/Identification Card Number – This can be for any driver (or primary) involved in a crash."
+      },
+      {
+        "id": "F20",
+        "category": "what-you-need",
+        "claim": "County, city and crash date can be added to narrow a name search.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Crash-resource/docs/PurchaseUserGuide.pdf",
+        "quote": "Additional Information can be added to narrow the search results. a. County – County in which the crash occurred b. City – City in which the crash occurred c. Crash Date – The date on which the crash occurred"
+      },
+      {
+        "id": "F21",
+        "category": "what-you-need",
+        "claim": "To finish an online purchase you enter a valid email address and pay through Texas.gov.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Crash-resource/docs/PurchaseUserGuide.pdf",
+        "quote": "To finalize the Purchase, enter a valid email address and select the ‘Pay Now at Texas.gov’ button. All payments are processed through Texas.gov."
+      },
+      {
+        "id": "F22",
+        "category": "what-you-need",
+        "claim": "Online purchases must be paid by credit/debit card (VISA, MasterCard, American Express or Discover) or electronic check (ACH).",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Purchase/app/help-center/7/33?accessTypeId=3",
+        "quote": "Purchases must be made using a credit/debit card or electronic check (ACH). Accepted credit/debit cards include VISA, MasterCard, American Express, and Discover."
+      },
+      {
+        "id": "F23",
+        "category": "what-you-need",
+        "claim": "Choosing a non-redacted report online requires completing the Crash Report Purchase Certification form under Texas Transportation Code 550.065.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Crash-resource/docs/PurchaseUserGuide.pdf",
+        "quote": "If the Non-Redacted report type is selected, you will have to complete the Crash Report Purchase Certification form per Texas Transportation Code 550.065."
+      },
+      {
+        "id": "F24",
+        "category": "what-you-need",
+        "claim": "The purchase certification form requires your first and last name, plus an organization name if applicable.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Crash-resource/docs/PurchaseUserGuide.pdf",
+        "quote": "The First Name and Last Name Fields are mandatory. The Organization Name is optional and should be added if applicable."
+      },
+      {
+        "id": "F25",
+        "category": "what-you-need",
+        "claim": "The CR-91 mail form asks for the crash date and the crash location by county, city and street or highway.",
+        "sourceUrl": "https://www.txdot.gov/content/dam/formsanddocuments/txdot-gov/xdp/cr-91/CR-91.xdp/jcr:content?submitUrl=&profile=&source=fp",
+        "quote": "CRASH DATE MONTH/DAY/YEAR CRASH LOCATION COUNTY CITY STREET OR HIGHWAY"
+      },
+      {
+        "id": "F26",
+        "category": "what-you-need",
+        "claim": "The CR-91 includes fields for the driver's full name, date of birth and Texas DL number.",
+        "sourceUrl": "https://www.txdot.gov/content/dam/formsanddocuments/txdot-gov/xdp/cr-91/CR-91.xdp/jcr:content?submitUrl=&profile=&source=fp",
+        "quote": "DRIVER'S FULL NAME DRIVER INFORMATION (if available) DATE OF BIRTH TEXAS DL NUMBER"
+      },
+      {
+        "id": "F27",
+        "category": "what-you-need",
+        "claim": "Mail requests are paid by check or money order payable to the Texas Department of Transportation.",
+        "sourceUrl": "https://www.txdot.gov/content/dam/formsanddocuments/txdot-gov/xdp/cr-91/CR-91.xdp/jcr:content?submitUrl=&profile=&source=fp",
+        "quote": "Make check or M.O. payable to: Texas Department of Transportation"
+      },
+      {
+        "id": "F28",
+        "category": "what-you-need",
+        "claim": "The CR-91 includes a statement in which the requester certifies that they meet the requirements of Texas Transportation Code §550.065(c)(4).",
+        "sourceUrl": "https://www.txdot.gov/content/dam/formsanddocuments/txdot-gov/xdp/cr-91/CR-91.xdp/jcr:content?submitUrl=&profile=&source=fp",
+        "quote": "certify that I meet the requirements of Texas Transportation Code §550.065(c)(4)"
+      },
+      {
+        "id": "F29",
+        "category": "fee",
+        "claim": "TxDOT charges $6 for a regular copy of a crash report.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "$6 for a regular copy."
+      },
+      {
+        "id": "F30",
+        "category": "fee",
+        "claim": "TxDOT charges $8 for a certified copy, which is requested when a person needs an official document, such as for a legal proceeding.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "$8 for a certified copy - A certified copy is requested when a person needs an official document, such as for a legal proceeding."
+      },
+      {
+        "id": "F31",
+        "category": "fee",
+        "claim": "There is a minimal surcharge for using the Crash Report Online Purchase System.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "There is a minimal surcharge for using this system."
+      },
+      {
+        "id": "F32",
+        "category": "fee",
+        "claim": "Additional processing fees may be applied for credit card transactions.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "Additional processing fees may be applied for credit card transactions."
+      },
+      {
+        "id": "F33",
+        "category": "fee",
+        "claim": "Credit/debit card purchases carry a minimal Texas.gov fee, while electronic check (ACH) payments have no fee but a 10-day holding period before reports are released.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Crash-resource/docs/PurchaseUserGuide.pdf",
+        "quote": "The public will be charged a minimal Texas.gov fee for Certified and Uncertified crash reports for credit/debit card purchases. There is no fee for electronic check (ACH) payments, however, there is a 10-day holding period before reports will be released."
+      },
+      {
+        "id": "F34",
+        "category": "fee",
+        "claim": "In the online system an uncertified electronic copy costs $6.00, a certified electronic copy costs $8.00, and a Letter of \"No Records\" is free.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Purchase/app/help-center/7/32?accessTypeId=3",
+        "quote": "The cost for an Uncertified electronic copy is $6.00. The cost of a Certified electronic copy is $8.00. The cost of a Letter of \"No Records\" is free."
+      },
+      {
+        "id": "F35",
+        "category": "fee",
+        "claim": "State law sets the fee for a copy of a collision report at $6, and certification by the department (TxDOT) or the governmental entity costs an additional $2.",
+        "sourceUrl": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.550.htm",
+        "quote": "The fee for a copy of the collision report is $6. The copy may be certified by the department or the governmental entity for an additional fee of $2."
+      },
+      {
+        "id": "F36",
+        "category": "fee",
+        "claim": "State law lets the department or the governmental entity charge $6 for a certification that no report or information is on file.",
+        "sourceUrl": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.550.htm",
+        "quote": "The department or the governmental entity may issue a certification that no report or information is on file for a fee of $6."
+      },
+      {
+        "id": "F37",
+        "category": "fee",
+        "claim": "On the CR-91 mail form, a copy of the Peace Officer's Crash Report costs $6.00 each.",
+        "sourceUrl": "https://www.txdot.gov/content/dam/formsanddocuments/txdot-gov/xdp/cr-91/CR-91.xdp/jcr:content?submitUrl=&profile=&source=fp",
+        "quote": "Copy of Peace Officer's Crash Report - $6.00 each"
+      },
+      {
+        "id": "F38",
+        "category": "fee",
+        "claim": "On the CR-91 mail form, a certified copy of the Peace Officer's Crash Report costs $8.00 each.",
+        "sourceUrl": "https://www.txdot.gov/content/dam/formsanddocuments/txdot-gov/xdp/cr-91/CR-91.xdp/jcr:content?submitUrl=&profile=&source=fp",
+        "quote": "Certified Copy of Peace Officer's Crash Report - $8.00 each"
+      },
+      {
+        "id": "F39",
+        "category": "fee",
+        "claim": "The CR-91 says that if the officer's report is not on file when the request arrives, a certification saying so is provided instead and the fee is kept for the certification.",
+        "sourceUrl": "https://www.txdot.gov/content/dam/formsanddocuments/txdot-gov/xdp/cr-91/CR-91.xdp/jcr:content?submitUrl=&profile=&source=fp",
+        "quote": "The Law also provides that if an officer's report is not on file when a request for a copy of such report is received, a certification to that effect will be provided in lieu of the copy and the fee will be retained for the certification."
+      },
+      {
+        "id": "F40",
+        "category": "fee",
+        "claim": "Subpoena and affidavit requests through CRIS Request cost the required $8 fee plus a minimal surcharge.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "The customer must pay the required $8 fee with a minimal surcharge for their associated request(s)."
+      },
+      {
+        "id": "F41",
+        "category": "timing",
+        "claim": "The officer's report must be filed electronically with the department (TxDOT) no later than the 10th day after the collision.",
+        "sourceUrl": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.550.htm",
+        "quote": "The report required by Subsection (a) must be filed electronically with the department not later than the 10th day after the date of the collision."
+      },
+      {
+        "id": "F42",
+        "category": "timing",
+        "claim": "Once TxDOT receives a report, it may take up to 4 business days to process.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Purchase/app/help-center/6/9?accessTypeId=3",
+        "quote": "Once the report is received by TxDOT, it may take up to 4 business days to process."
+      },
+      {
+        "id": "F43",
+        "category": "timing",
+        "claim": "It can take up to 14 days from the crash date for a report to appear in the online search results.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Crash-resource/docs/PurchaseUserGuide.pdf",
+        "quote": "It can take up to 14 days from the Crash Date for your Crash Report to appear in Search Results."
+      },
+      {
+        "id": "F44",
+        "category": "timing",
+        "claim": "The CR-91 says mail requests should not be sent until at least 10 days after the crash date.",
+        "sourceUrl": "https://www.txdot.gov/content/dam/formsanddocuments/txdot-gov/xdp/cr-91/CR-91.xdp/jcr:content?submitUrl=&profile=&source=fp",
+        "quote": "Requests should not be submitted until at least 10 days after the crash date to allow time for receipt of the report."
+      },
+      {
+        "id": "F45",
+        "category": "timing",
+        "claim": "A request by mail may take up to 30 days to process.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Purchase/app/help-center/6/14?accessTypeId=3",
+        "quote": "Please note a request by mail may take up to 30 days to process."
+      },
+      {
+        "id": "F46",
+        "category": "timing",
+        "claim": "Non-redacted reports bought by credit card can be downloaded immediately, while electronic check purchases have a ten business day holding period.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Purchase/app/help-center/6/16?accessTypeId=3",
+        "quote": "Non-Redacted: Crash reports are available for immediate download if purchased by credit card. If purchasing with an electronic check, there is a ten business day holding period."
+      },
+      {
+        "id": "F47",
+        "category": "timing",
+        "claim": "Redacted reports go through a TxDOT review, and purchases of fewer than 100 reports are available for download within ten business days.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Purchase/app/help-center/6/16?accessTypeId=3",
+        "quote": "Redacted: Crash reports must go through a TxDOT review process. Purchases of less than 100 reports will be made available for download within ten business days"
+      },
+      {
+        "id": "F48",
+        "category": "timing",
+        "claim": "TxDOT lists a processing time of 20 business days for state or federal subpoena requests.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "State or Federal Subpoena - 20 business days"
+      },
+      {
+        "id": "F49",
+        "category": "timing",
+        "claim": "TxDOT lists a processing time of 10 business days for affidavit requests.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "Affidavit - 10 business days"
+      },
+      {
+        "id": "F50",
+        "category": "who-can-request",
+        "claim": "Under state law, crash report information is privileged and confidential except as provided by Subsections (c), (c-1) and (e) of §550.065.",
+        "sourceUrl": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.550.htm",
+        "quote": "Except as provided by Subsection (c), (c-1), or (e), the information is privileged and for the confidential use of:"
+      },
+      {
+        "id": "F51",
+        "category": "who-can-request",
+        "claim": "TxDOT releases a crash report on written request and payment of the fee to any person directly concerned in the accident or having proper interest therein.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "Texas Transportation Code §550.065 allows for the release of a crash report on written request and upon payment of the required fee to any person directly concerned in the accident or having proper interest therein, including:"
+      },
+      {
+        "id": "F52",
+        "category": "who-can-request",
+        "claim": "People entitled to the report include any person involved in the collision, the authorized representative of any person involved, and any driver involved.",
+        "sourceUrl": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.550.htm",
+        "quote": "(A) any person involved in the collision; (B) the authorized representative of any person involved in the collision; (C) a driver involved in the collision;"
+      },
+      {
+        "id": "F53",
+        "category": "who-can-request",
+        "claim": "An employer, parent or legal guardian of a driver involved, and the owner of a vehicle or property damaged in the collision, are also entitled.",
+        "sourceUrl": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.550.htm",
+        "quote": "(D) an employer, parent, or legal guardian of a driver involved in the collision; (E) the owner of a vehicle or property damaged in the collision;"
+      },
+      {
+        "id": "F54",
+        "category": "who-can-request",
+        "claim": "Insurance companies that issued a policy covering a vehicle or a person involved in the collision are also entitled.",
+        "sourceUrl": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.550.htm",
+        "quote": "(G) an insurance company that issued an insurance policy covering a vehicle involved in the collision; (H) an insurance company that issued a policy covering any person involved in the collision;"
+      },
+      {
+        "id": "F55",
+        "category": "who-can-request",
+        "claim": "Any person who may sue because of a death resulting from the collision is also entitled.",
+        "sourceUrl": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.550.htm",
+        "quote": "(L) any person who may sue because of death resulting from the collision; or"
+      },
+      {
+        "id": "F56",
+        "category": "who-can-request",
+        "claim": "The department or governmental entity that receives the report must create a redacted collision report that any person may request.",
+        "sourceUrl": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.550.htm",
+        "quote": "On receiving information to which this section applies, the department or the governmental entity that receives the information shall create a redacted collision report that may be requested by any person."
+      },
+      {
+        "id": "F57",
+        "category": "who-can-request",
+        "claim": "Redacted crash reports are available to anyone.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Purchase/app/help-center/6/12?accessTypeId=3",
+        "quote": "Redacted Crash Reports are available to anyone."
+      },
+      {
+        "id": "F58",
+        "category": "who-can-request",
+        "claim": "Persons or entities who do not meet the eligibility criteria receive a redacted copy of the crash report.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "Persons or entities who do not meet the criteria will receive a redacted copy of the crash report."
+      },
+      {
+        "id": "F59",
+        "category": "who-can-request",
+        "claim": "Requesters who do not fit the listed categories can explain how they meet the criteria in another way.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "If a person or entity does not meet any of these criteria, TxDOT does provide an option for the customer to identify how they meet the criteria in a manner that is not listed in the above reasons (A) through (L)."
+      },
+      {
+        "id": "F60",
+        "category": "who-can-request",
+        "claim": "If the justification submitted is insufficient or non-qualifying, a redacted copy is provided.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Crash-resource/docs/PurchaseUserGuide.pdf",
+        "quote": "A redacted copy will be provided if an insufficient or non-qualifying justification is submitted."
+      },
+      {
+        "id": "F61",
+        "category": "who-can-request",
+        "claim": "The CR-91 warns that providing false information on it violates Texas Penal Code §37.10 and could result in criminal penalties.",
+        "sourceUrl": "https://www.txdot.gov/content/dam/formsanddocuments/txdot-gov/xdp/cr-91/CR-91.xdp/jcr:content?submitUrl=&profile=&source=fp",
+        "quote": "Providing false information on this governmental record is a violation of Texas Penal Code §37.10 and could result in criminal penalties."
+      },
+      {
+        "id": "F62",
+        "category": "local-agencies",
+        "claim": "Texas Transportation Code §550.065 applies to crash report information held by the department (TxDOT) or another governmental entity.",
+        "sourceUrl": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.550.htm",
+        "quote": "This section applies only to the following information that is held by the department or another governmental entity:"
+      },
+      {
+        "id": "F63",
+        "category": "local-agencies",
+        "claim": "On written request and payment of any required fee, the department or the governmental entity must release the information to the persons the law lists.",
+        "sourceUrl": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.550.htm",
+        "quote": "On written request and payment of any required fee, the department or the governmental entity shall release the information to:"
+      },
+      {
+        "id": "F64",
+        "category": "local-agencies",
+        "claim": "If your crash was more than two weeks ago and your report is not available, contact the investigating agency, such as the police department, to ask whether the report has been submitted.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Crash-resource/docs/PurchaseUserGuide.pdf",
+        "quote": "If your crash happened more than two weeks ago and your report is not available, please reach out to the Investigating Agency, i.e. Police Department, to inquire if the report has been submitted."
+      },
+      {
+        "id": "F65",
+        "category": "local-agencies",
+        "claim": "TxDOT is the custodian of record for the crash report only, and subpoena requests for dash cam videos, field notes, photographs or other on-scene information should go to the investigating agency.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "TxDOT is the custodian of record for the crash report only. Any subpoena requests for dash cam videos, field notes, photographs, or other information taken on scene, should be submitted to the investigating agency."
+      },
+      {
+        "id": "F66",
+        "category": "self-report",
+        "claim": "Effective Sept. 1, 2017, under Senate Bill 312 of the 85th Texas Legislature, TxDOT no longer retains the Driver's Crash Report (Form CR-2).",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "Effective Sept. 1, 2017, per the 85th Texas Legislature Senate Bill 312, the Driver's Crash Report (Form CR-2) is no longer retained by TxDOT."
+      },
+      {
+        "id": "F67",
+        "category": "self-report",
+        "claim": "TxDOT no longer has any Driver’s Crash Reports in its custodial records and no longer hosts or provides copies of the CR-2 form.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "As a result, TxDOT no longer has any Driver’s Crash Reports in its custodial records and no longer hosts or provides copies of the CR-2 form."
+      },
+      {
+        "id": "F68",
+        "category": "self-report",
+        "claim": "Drivers in a crash not investigated by a police officer who were given a CR-2 or similar local agency form should keep that information for their records.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "Drivers involved in a crash not investigated by a police officer who were provided a CR-2 or similar local agency form should retain this information for their records."
+      },
+      {
+        "id": "F69",
+        "category": "self-report",
+        "claim": "Any CR-2 or similar local agency form submitted to TxDOT will be destroyed under its records retention policy.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "Please note that any CR-2 or similar local agency form submitted to TxDOT will be destroyed as required by our records retention policy."
+      },
+      {
+        "id": "F70",
+        "category": "self-report",
+        "claim": "Texas Transportation Code §550.065 refers to Sections 550.061 and 601.004 as former sections, covering reports required under them before September 1, 2017.",
+        "sourceUrl": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.550.htm",
+        "quote": "(B) former Section 550.061 or 601.004 before September 1, 2017; or"
+      },
+      {
+        "id": "F71",
+        "category": "self-report",
+        "claim": "A driver in a collision that causes injury or death, or leaves a vehicle unable to be normally and safely driven, must immediately give notice of the collision by the quickest means of communication.",
+        "sourceUrl": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.550.htm",
+        "quote": "The operator of a vehicle involved in a collision resulting in injury to or death of a person or damage to a vehicle to the extent that it cannot be normally and safely driven shall immediately by the quickest means of communication give notice of the collision to the:"
+      },
+      {
+        "id": "F72",
+        "category": "self-report",
+        "claim": "If the collision happened in a municipality, that notice goes to the local police department.",
+        "sourceUrl": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.550.htm",
+        "quote": "(1) local police department if the collision occurred in a municipality;"
+      },
+      {
+        "id": "F73",
+        "category": "self-report",
+        "claim": "A municipality may, by ordinance, require a driver involved in a collision to file a report with a designated municipal department if the collision causes injury or death or apparent total property damage of $25 or more.",
+        "sourceUrl": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.550.htm",
+        "quote": "A municipality by ordinance may require the operator of a vehicle involved in a collision to file with a designated municipal department: (1) a report of the collision, if the collision results in injury to or the death of a person or the apparent total property damage is $25 or more;"
+      },
+      {
+        "id": "F74",
+        "category": "other",
+        "claim": "Because of their confidential nature, crash reports are not available for online viewing by the general public.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "Due to their confidential nature, crash reports are not available for online viewing by the general public."
+      },
+      {
+        "id": "F75",
+        "category": "other",
+        "claim": "After purchase, additional copies can be made at no charge and the download feature is available for 10 days from the date of purchase.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Crash-resource/docs/PurchaseUserGuide.pdf",
+        "quote": "Once a report is purchased, additional copies can be made at no charge and a download feature is available for 10 days from the date of purchase."
+      },
+      {
+        "id": "F76",
+        "category": "other",
+        "claim": "The CRIS help desk phone line is (844) CRIS-HLP, open 7:00 AM to 7:00 PM, 7 days a week, 365 days a year.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Crash-resource/docs/PurchaseUserGuide.pdf",
+        "quote": "Phone: (844) CRIS-HLP, 7:00 AM – 7:00 PM, 7 days per week, 365 days per year."
+      },
+      {
+        "id": "F77",
+        "category": "who-can-request",
+        "claim": "State law also entitles an employee or authorized representative of a vehicle storage facility that stored a vehicle involved in the collision to the full report.",
+        "sourceUrl": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.550.htm",
+        "quote": "(M) an employee or authorized representative of a vehicle storage facility, as defined by Section 2303.002, Occupations Code, that stored a vehicle involved in the collision."
+      },
+      {
+        "id": "F78",
+        "category": "who-can-request",
+        "claim": "A person under contract to provide claims or underwriting information to a policyholder or insurer is also entitled to the full report.",
+        "sourceUrl": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.550.htm",
+        "quote": "(I) a person under contract to provide claims or underwriting information to a person described by Paragraph (F), (G), or (H);"
+      },
+      {
+        "id": "F79",
+        "category": "who-can-request",
+        "claim": "FCC-licensed radio and television stations are also entitled to the full report.",
+        "sourceUrl": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.550.htm",
+        "quote": "(J) a radio or television station that holds a license issued by the Federal Communications Commission;"
+      },
+      {
+        "id": "F80",
+        "category": "who-can-request",
+        "claim": "The report must also be released to the court where a case involving a person in the collision is pending, if the report is subpoenaed.",
+        "sourceUrl": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.550.htm",
+        "quote": "(3) the court in which a case involving a person involved in the collision is pending if the report is subpoenaed; or"
+      },
+      {
+        "id": "F81",
+        "category": "who-can-request",
+        "claim": "TxDOT also releases reports to federal, Texas state and Texas local government agencies.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "An agency of the United States, this state (Texas), or a local government of this state (Texas)"
+      },
+      {
+        "id": "F82",
+        "category": "who-can-request",
+        "claim": "Redacted reports hide all personal information, including phone numbers, addresses and dates of birth.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Purchase/app/help-center/6/12?accessTypeId=3",
+        "quote": "Redacted: All personal information including but not limited to phone numbers, addresses, and dates of birth will be hidden from view. Redacted Crash Reports are available to anyone."
+      },
+      {
+        "id": "F83",
+        "category": "who-can-request",
+        "claim": "On the CR-91, a requester who does not check a qualification or give sufficient justification receives a redacted copy.",
+        "sourceUrl": "https://www.txdot.gov/content/dam/formsanddocuments/txdot-gov/xdp/cr-91/CR-91.xdp/jcr:content?submitUrl=&profile=&source=fp",
+        "quote": "If you did not indicate that you meet the qualifications of Texas Transportation Code §550.065 (c)(4) by either checking a qualification listed above or providing sufficient justification for your qualification, then a redacted copy will be provided."
+      },
+      {
+        "id": "F84",
+        "category": "request-online",
+        "claim": "Only one non-redacted report can be bought per purchase; any additional reports in the cart must be redacted.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Crash-resource/docs/PurchaseUserGuide.pdf",
+        "quote": "Only one Non-Redacted report can be purchased. Any additional purchased reports will be required to be Redacted."
+      },
+      {
+        "id": "F85",
+        "category": "request-online",
+        "claim": "Electronic check payments funded by a foreign source cannot be processed.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Crash-resource/docs/PurchaseUserGuide.pdf",
+        "quote": "NOTE – Payments being funded by a FOREIGN source cannot be processed."
+      },
+      {
+        "id": "F86",
+        "category": "request-online",
+        "claim": "To download a report again, use the 'Download Previous Purchase' button and enter the Local Reference ID from the purchase receipt.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Crash-resource/docs/PurchaseUserGuide.pdf",
+        "quote": "Select the green ‘Download Previous Purchase’ button. 4. Enter the Local Reference ID provided on the Purchase Receipt Confirmation."
+      },
+      {
+        "id": "F87",
+        "category": "what-you-need",
+        "claim": "Advanced name-search fields include license plate number and investigating agency, among others.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Crash-resource/docs/PurchaseUserGuide.pdf",
+        "quote": "a. License Plate Number – The license plate number for any vehicle involved in the crash. b. Investigating Agency – The law enforcement agency that investigated the crash and submitted the crash report."
+      },
+      {
+        "id": "F88",
+        "category": "what-you-need",
+        "claim": "On the CR-91, an organization name is required when the requester qualifies under categories G through K (insurers, claims contractors, broadcasters, newspapers).",
+        "sourceUrl": "https://www.txdot.gov/content/dam/formsanddocuments/txdot-gov/xdp/cr-91/CR-91.xdp/jcr:content?submitUrl=&profile=&source=fp",
+        "quote": "Organization Name (If checking G, H, I, J, or K above):"
+      },
+      {
+        "id": "F89",
+        "category": "fee",
+        "claim": "A certified copy includes a certification signed by the Custodian of Motor Vehicle Crash Records with the TxDOT seal. Certified copies are usually needed for legal proceedings or employment verification.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Crash-resource/docs/PurchaseUserGuide.pdf",
+        "quote": "This document includes the signature of the Custodian of Motor Vehicle Crash Records as well as the official Texas Department of Transportation seal. Certified reports are usually required for legal proceedings, employment verification, etc."
+      },
+      {
+        "id": "F90",
+        "category": "fee",
+        "claim": "For card purchases, the online total includes a Texas.gov processing fee and surcharge.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Crash-resource/docs/PurchaseUserGuide.pdf",
+        "quote": "The price for each report is shown, as well as the Total Price that includes a processing fee and surcharge from Texas.gov for credit card purchases."
+      },
+      {
+        "id": "F91",
+        "category": "timing",
+        "claim": "Non-redacted purchases that rely on a written justification are not available for immediate download.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Crash-resource/docs/PurchaseUserGuide.pdf",
+        "quote": "Note 2 - Reports that require justification will not be made immediately available."
+      },
+      {
+        "id": "F92",
+        "category": "timing",
+        "claim": "A combined affidavit and state or federal subpoena request takes 10 business days.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "Affidavit and a State or Federal Subpoena - 10 business days"
+      },
+      {
+        "id": "F93",
+        "category": "request-other",
+        "claim": "TxDOT will not supply bulk copies of crash reports. For bulk requests it provides matching crash ID numbers, and each report must then be bought individually.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "The Texas Transportation Code requires that all crash records be purchased and therefore bulk requests for multiple crash reports cannot be provided. Crash ID numbers corresponding to the request parameters will be provided instead, allowing the requestor to purchase at their leisure."
+      },
+      {
+        "id": "F94",
+        "category": "request-other",
+        "claim": "In CRIS Request, subpoena and affidavit requesters search for the report and upload their legal documents in PDF format.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "Customers using the online system can search for the desired crash report(s), upload any documentation such as the subpoena, affidavit and any associated legal documents in PDF format to initiate their request for a subpoena and/or affidavit."
+      },
+      {
+        "id": "F95",
+        "category": "request-other",
+        "claim": "Information needed from the Texas Department of Public Safety needs a separate request to TxDPS.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "If any information is required from the Texas Department of Public Safety (TxDPS), a separate request must be submitted to TxDPS and will not be considered part of the request."
+      },
+      {
+        "id": "F96",
+        "category": "request-other",
+        "claim": "Government agencies can use CRIS Request to ask for a standalone certified crash report.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Request/app/home",
+        "quote": "If you represent a government agency, you can request a standalone certified Crash Report."
+      },
+      {
+        "id": "F97",
+        "category": "local-agencies",
+        "claim": "A collision report that a city requires a driver to file is confidential to that city department and subject to §550.065.",
+        "sourceUrl": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.550.htm",
+        "quote": "A report filed under Subsection (a) is for the confidential use of the municipal department and subject to the provisions of Section 550.065."
+      },
+      {
+        "id": "F98",
+        "category": "self-report",
+        "claim": "If the crash happened no more than 100 feet outside city limits, the driver's immediate notice goes to the local police department or the sheriff's office.",
+        "sourceUrl": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.550.htm",
+        "quote": "(2) local police department or the sheriff's office if the collision occurred not more than 100 feet outside the limits of a municipality; or"
+      },
+      {
+        "id": "F99",
+        "category": "self-report",
+        "claim": "The retention period for all CR-2 driver's reports expired on January 1, 2019.",
+        "sourceUrl": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "quote": "As of Jan. 1, 2019, the retention period expired for all CR-2 forms."
+      },
+      {
+        "id": "F100",
+        "category": "other",
+        "claim": "The CRIS Help Desk can also be reached by email at support@crishlp.com.",
+        "sourceUrl": "https://cris.dot.state.tx.us/public/Crash-resource/docs/PurchaseUserGuide.pdf",
+        "quote": "Email: support@crishlp.com"
+      },
+      {
+        "id": "F101",
+        "category": "request-mail",
+        "claim": "The CR-91 form gives a phone number for questions: 844/274-7457.",
+        "sourceUrl": "https://www.txdot.gov/content/dam/formsanddocuments/txdot-gov/xdp/cr-91/CR-91.xdp/jcr:content?submitUrl=&profile=&source=fp",
+        "quote": "Questions? Call: 844/274-7457"
+      }
+    ],
+    "links": [
+      {
+        "label": "TxDOT Crash reports and records",
+        "url": "https://www.txdot.gov/data-maps/crash-reports-records.html",
+        "officialEvidence": "Texas Department of Transportation page on txdot.gov, the agency's official .gov site."
+      },
+      {
+        "label": "Form CR-91, Request for Copy of Peace Officer's Crash Report (Rev. 08/23)",
+        "url": "https://www.txdot.gov/content/dam/formsanddocuments/txdot-gov/xdp/cr-91/CR-91.xdp/jcr:content?submitUrl=&profile=&source=fp",
+        "officialEvidence": "Hosted on txdot.gov and listed as 'CR-91 Request for Peace Officer's Crash Report (Rev. 8/22/2023)' on TxDOT's crash records forms page."
+      },
+      {
+        "label": "TxDOT Crash records forms page",
+        "url": "https://www.txdot.gov/data-maps/crash-reports-records/forms-law-enforcement.html",
+        "officialEvidence": "Texas Department of Transportation page on txdot.gov."
+      },
+      {
+        "label": "CRIS Purchase Help Center",
+        "url": "https://cris.dot.state.tx.us/public/Purchase/app/help-center",
+        "officialEvidence": "Help Center of TxDOT's Crash Report Online Purchase System, on the Texas state domain cris.dot.state.tx.us."
+      },
+      {
+        "label": "CRIS Purchase User Guide (V29.0, June 2025)",
+        "url": "https://cris.dot.state.tx.us/public/Crash-resource/docs/PurchaseUserGuide.pdf",
+        "officialEvidence": "TxDOT Crash Data & Analysis, Traffic Safety Division document, linked from the CRIS Purchase Help Center on cris.dot.state.tx.us."
+      },
+      {
+        "label": "CRIS Request – TxDOT Subpoena and Affidavit Request System",
+        "url": "https://cris.dot.state.tx.us/public/Request/app/home",
+        "officialEvidence": "Linked from TxDOT's crash reports page as 'CRIS Request - TxDOT Subpoena and Affidavit Request System', on the Texas state domain cris.dot.state.tx.us."
+      },
+      {
+        "label": "Texas Transportation Code Chapter 550 (Collisions and Collision Reports)",
+        "url": "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.550.htm",
+        "officialEvidence": "Official Texas Legislature statutes site (statutes.capitol.texas.gov). TxDOT's crash reports page links to this chapter."
+      },
+      {
+        "label": "TxDOT Crash Report Online Purchase System",
+        "url": "https://cris.dot.state.tx.us/public/Purchase/app/home",
+        "officialEvidence": "Linked as 'Crash Report Online Purchase System' from TxDOT's crash reports page. It redirects to cris.dot.state.tx.us, a Texas state .tx.us domain, which describes itself as part of TxDOT's CRIS Application Suite."
+      },
+      {
+        "label": "CRIS Query Tool",
+        "url": "https://cris.dot.state.tx.us/public/Query/app/home",
+        "officialEvidence": "Linked as 'CRIS Query Tool' from TxDOT's crash reports page. Page title 'CRIS Query'. The metadata says it is 'part of the CRIS Application Suite provided by the Texas Department of Transportation (TxDOT)'."
+      }
+    ],
+    "gaps": [
+      {
+        "category": "fee",
+        "reason": "No official page I read gives the exact amount of the Texas.gov surcharge or card processing fee. TxDOT calls it only a 'minimal surcharge' or 'minimal Texas.gov fee'. Finding the amount would mean starting a purchase, which was out of scope."
+      },
+      {
+        "category": "request-in-person",
+        "reason": "No official TxDOT page describes an in-person or walk-in way to get a crash report from TxDOT. The state pages describe only online purchase and the CR-91 mail form. Whether a local police department or sheriff offers walk-in copies varies by agency and was not researched agency by agency."
+      },
+      {
+        "category": "request-mail",
+        "reason": "Official sources do not agree cleanly on mail. The live CRIS Purchase Help Center says you can still buy a copy by mailing the CR-91, and the CR-91 (Rev. 08/23) is still posted. TxDOT's main crash records page no longer mentions mail purchases of ordinary copies. It also says that since January 1, 2025 subpoena and affidavit requests are no longer accepted by mail, the CR-91 is no longer required for them, and 'all requests received by mail will be returned'. Confirm with the CRIS help desk before telling readers to mail an ordinary request."
+      },
+      {
+        "category": "other",
+        "reason": "The form number is inconsistent. TxDOT's crash records page, its CRASH page, its forms page and the CRIS Purchase User Guide call the officer's report the CR-3. The live CRIS Purchase Help Center, the purchase portal home page and the CRIS Request page call it the CR-4. I found no official explanation. Claims above keep each source's own form number."
+      },
+      {
+        "category": "who-holds",
+        "reason": "The Texas Department of Public Safety page on crash records (https://www.dps.texas.gov/node/415) could not be opened: the connection was refused. So I include no DPS-specific facts, such as what DPS keeps for trooper-investigated crashes."
+      },
+      {
+        "category": "local-agencies",
+        "reason": "State sources show that TxDOT collects reports from every law enforcement agency. They also show that a governmental entity holding a report must release it under the same §550.065 rules and $6/$2 statutory fee. Each city police department's or sheriff's own request process, any extra fees, and any vendor portal it uses were not checked."
+      },
+      {
+        "category": "self-report",
+        "reason": "No current official source I read says plainly whether drivers must file their own written crash report with a state agency. It also gives no current form, deadline or threshold for one. TxDOT says it no longer keeps or provides the CR-2 and destroys any CR-2 submitted. The statute calls the old sections 550.061 and 601.004 'former'. The current law requires immediate notice to police for certain crashes (§550.026) and lets cities require reports by ordinance (§550.067). The CR-2's former deadline and threshold were not confirmed on a current official page."
+      },
+      {
+        "category": "who-can-request",
+        "reason": "No official source I read sets a time-based confidentiality period. Access depends on the requester's relationship to the crash under §550.065. Others get a redacted copy."
+      },
+      {
+        "category": "timing",
+        "reason": "Official sources give only maximums, not a typical wait. These are: officers have 10 days to file, TxDOT may need up to 4 business days to process, a report can take up to 14 days to appear online, and mail can take up to 30 days."
+      },
+      {
+        "category": "timing",
+        "reason": "addition unverifiable: Help Center page 6/16 (live, TxDOT CRIS) supports the first sentence: '...purchases of 100 reports or more will be made available for download within twenty business days.' It does not say the e-check hold is 'extra' or additional to the review. It says only 'For electronic ch"
+      },
+      {
+        "category": "request-other",
+        "reason": "addition unverifiable: The quoted example appears on the txdot.gov page, but the full rule is: 'TxDOT cannot fulfill bulk requests that require searching any confidential fields as provided in Transportation Code 550.065(f), unless the requestor is otherwise entitled to such information under sectio"
+      }
+    ]
+  }
+]

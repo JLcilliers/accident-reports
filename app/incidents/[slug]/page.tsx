@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { stripHtmlAndPublisher } from "@/lib/text";
 import type { AccidentFacts } from "@/lib/seo/extractAccidentFacts";
 import { parseArticleMeta, buildKeywordsString } from "@/lib/seo/parseArticleMeta";
+import { getGuideByCode } from "@/lib/crashReportGuides";
 import {
   buildLocationInfo,
   logLocationResolution,
@@ -142,6 +143,7 @@ export default async function IncidentPage({
     day: "numeric",
   });
   const cleanedHeadline = stripHtmlAndPublisher(incident.headline) ?? incident.headline;
+  const reportGuide = getGuideByCode(incident.state);
 
   // JSON-LD structured data
   const seoHeadline = incident.seoTitle || incident.headline;
@@ -274,6 +276,7 @@ export default async function IncidentPage({
                 location={location}
                 formattedDate={formattedDate}
                 summary={incident.summary ? stripHtmlAndPublisher(incident.summary) : null}
+                reportGuide={reportGuide ? { href: `/crash-reports/${reportGuide.slug}`, stateName: reportGuide.name } : null}
               />
 
               {/* Key Facts Card */}
@@ -318,6 +321,33 @@ export default async function IncidentPage({
               <div className="mb-6">
                 <ActionStepsGrid />
               </div>
+
+              {/* Crash Report Guide */}
+              {reportGuide && (
+                <section className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 mb-6">
+                  <h2 className="flex items-center gap-2.5 text-lg sm:text-xl font-semibold text-slate-900 mb-3">
+                    <svg className="w-5 h-5 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                    </svg>
+                    Getting the Official Crash Report
+                  </h2>
+                  <p className="text-slate-600 text-[15px] leading-relaxed mb-4">
+                    The official report is written by the law-enforcement agency that handled the
+                    crash. Our {reportGuide.name} guide explains who keeps crash reports{" "}
+                    {reportGuide.inName}, how to request a copy, and where the official request
+                    pages are.
+                  </p>
+                  <Link
+                    href={`/crash-reports/${reportGuide.slug}`}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white font-semibold rounded-xl transition-colors"
+                  >
+                    Read the {reportGuide.name} guide
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                    </svg>
+                  </Link>
+                </section>
+              )}
 
               {/* Why Report Is Important */}
               <section className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 mb-6">
@@ -390,6 +420,17 @@ export default async function IncidentPage({
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                       </svg>
                       Accidents in {incident.state}
+                    </Link>
+                  )}
+                  {reportGuide && (
+                    <Link
+                      href={`/crash-reports/${reportGuide.slug}`}
+                      className="flex items-center gap-2 text-sm text-[var(--primary)] hover:text-[var(--primary-hover)] transition"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                      </svg>
+                      Crash reports {reportGuide.inName}
                     </Link>
                   )}
                   <Link

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+import LogoMark from "@/components/LogoMark";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
@@ -40,16 +40,13 @@ export default function Header() {
           {/* Logo */}
           <Link
             href="/"
-            className="flex items-center hover:opacity-80 transition-opacity"
+            className="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
+            aria-label="CarCrashReport.com home"
           >
-            <Image
-              src="https://res.cloudinary.com/dovgh19xr/image/upload/v1764100024/Untitled_design_49_d4kmjg.png"
-              alt="CarCrashReport.com"
-              width={180}
-              height={40}
-              className="h-8 lg:h-10 w-auto"
-              priority
-            />
+            <LogoMark className="h-8 w-8 lg:h-9 lg:w-9" />
+            <span className="text-lg lg:text-xl font-semibold tracking-tight text-neutral-900">
+              CarCrashReport<span className="text-[#2A7D6E]">.com</span>
+            </span>
           </Link>
 
           {/* Desktop Navigation - Centered */}
@@ -83,6 +80,16 @@ export default function Header() {
               }`}
             >
               News
+            </Link>
+            <Link
+              href="/crash-reports"
+              className={`text-sm font-medium transition-colors ${
+                isTransparent
+                  ? "text-neutral-700 hover:text-neutral-900"
+                  : "text-neutral-500 hover:text-neutral-900"
+              }`}
+            >
+              Crash Reports
             </Link>
             <Link
               href="/how-it-works"
@@ -196,6 +203,13 @@ export default function Header() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 News
+              </Link>
+              <Link
+                href="/crash-reports"
+                className="px-4 py-3 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 rounded-lg transition-colors text-sm font-medium"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Crash Reports
               </Link>
               <Link
                 href="/how-it-works"

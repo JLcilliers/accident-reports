@@ -1,12 +1,15 @@
 /**
- * HeroSection - Top section of incident page with headline and meta
+ * HeroSection - Top section of incident page with headline, meta, and crash report guide link
  */
+
+import Link from "next/link";
 
 interface HeroSectionProps {
   headline: string;
   location: string;
   formattedDate: string;
   summary?: string | null;
+  reportGuide?: { href: string; stateName: string } | null;
 }
 
 const CalendarIcon = () => (
@@ -22,7 +25,7 @@ const LocationIcon = () => (
   </svg>
 );
 
-export function HeroSection({ headline, location, formattedDate, summary }: HeroSectionProps) {
+export function HeroSection({ headline, location, formattedDate, summary, reportGuide }: HeroSectionProps) {
   return (
     <header className="mb-8">
       {/* Meta info */}
@@ -52,6 +55,22 @@ export function HeroSection({ headline, location, formattedDate, summary }: Hero
         </div>
       )}
 
+      {reportGuide && (
+        <div className="flex flex-wrap items-center gap-3">
+          <Link
+            href={reportGuide.href}
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white font-semibold rounded-xl transition-colors"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+            </svg>
+            How to Get the Crash Report
+          </Link>
+          <span className="text-sm text-slate-500">
+            {reportGuide.stateName} guide from official sources
+          </span>
+        </div>
+      )}
     </header>
   );
 }
