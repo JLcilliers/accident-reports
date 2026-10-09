@@ -35,7 +35,7 @@ function vehicleClasses(text: string, facts: AccidentFacts | null): string[] {
     if (found.length < 2) found.push(cls);
   };
   for (const v of facts?.vehicles ?? []) {
-    const t = v.type.toLowerCase();
+    const t = typeof v?.type === "string" ? v.type.toLowerCase() : "";
     const rule = VEHICLE_RULES.find(([re]) => re.test(t));
     if (rule) add(rule[1]);
   }
@@ -94,7 +94,7 @@ export function buildScene({ headline, articleBody, extractedFacts }: SceneInput
     ...(extractedFacts?.roads ?? []),
     extractedFacts?.timeOfCrashApprox,
     extractedFacts?.causeOrAllegations,
-    ...(extractedFacts?.vehicles ?? []).map((v) => v.type),
+    ...(extractedFacts?.vehicles ?? []).map((v) => v?.type),
     articleBody?.slice(0, 3000),
   ]
     .filter(Boolean)
