@@ -33,6 +33,7 @@ export interface AttemptLog {
 export interface IllustrationResult {
   status: "OK" | "FAILED";
   url: string | null;
+  alt: string | null;
   model: string;
   costUsd: number;
   attempts: AttemptLog[];
@@ -77,7 +78,7 @@ export async function createIllustration(key: string, scene: string): Promise<Il
         cacheControlMaxAge: 31536000,
       });
       console.log(`[images] ${key} attempt ${attempt} passed the check, cost $${costUsd.toFixed(6)}`);
-      return { status: "OK", url: blob.url, model: IMAGE_MODEL, costUsd, attempts };
+      return { status: "OK", url: blob.url, alt: checked.alt, model: IMAGE_MODEL, costUsd, attempts };
     } catch (error) {
       costUsd += attemptCost;
       const message = error instanceof Error ? error.message : String(error);
@@ -86,5 +87,5 @@ export async function createIllustration(key: string, scene: string): Promise<Il
     }
   }
 
-  return { status: "FAILED", url: null, model: IMAGE_MODEL, costUsd, attempts };
+  return { status: "FAILED", url: null, alt: null, model: IMAGE_MODEL, costUsd, attempts };
 }

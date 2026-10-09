@@ -6,7 +6,7 @@ export const ILLUSTRATION_HEIGHT = 675;
 
 export const DEFAULT_ILLUSTRATION = {
   src: "/images/default-illustration.webp",
-  alt: "Illustration of a car on a quiet two-lane highway curving through low hills at dusk",
+  alt: "A car drives on a highway at night under a full moon with rolling hills in the background",
 };
 
 export interface Illustration {

@@ -89,7 +89,7 @@ export async function GET(req: NextRequest) {
           data: {
             imageStatus: result.status,
             imageUrl: result.url,
-            imageAlt: result.status === "OK" ? scene.alt : null,
+            imageAlt: result.alt,
             imageModel: result.model,
             imageCostUsd: result.costUsd,
             imageAttempts: result.attempts.length,
@@ -101,7 +101,7 @@ export async function GET(req: NextRequest) {
           slug: incident.slug,
           status: result.status,
           url: result.url,
-          alt: scene.alt,
+          alt: result.alt,
           scene: scene.description,
           costUsd: result.costUsd,
           attempts: result.attempts,

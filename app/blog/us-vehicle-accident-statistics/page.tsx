@@ -172,7 +172,7 @@ export default function USVehicleAccidentStatisticsPage() {
                 <span>25 min read</span>
               </div>
 
-              <IllustrationFigure illustration={illustration} priority className="mt-8" />
+              <IllustrationFigure illustration={illustration} preload sizes="(min-width: 768px) 768px, 100vw" className="mt-8" />
             </div>
           </div>
         </div>

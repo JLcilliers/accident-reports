@@ -3,11 +3,13 @@ import { ILLUSTRATION_HEIGHT, ILLUSTRATION_WIDTH, type Illustration } from "@/li
 
 export default function IllustrationFigure({
   illustration,
-  priority = false,
+  preload = false,
+  sizes = "(min-width: 768px) 720px, 100vw",
   className = "",
 }: {
   illustration: Illustration;
-  priority?: boolean;
+  preload?: boolean;
+  sizes?: string;
   className?: string;
 }) {
   return (
@@ -17,9 +19,8 @@ export default function IllustrationFigure({
         alt={illustration.alt}
         width={ILLUSTRATION_WIDTH}
         height={ILLUSTRATION_HEIGHT}
-        sizes="(min-width: 768px) 720px, 100vw"
-        priority={priority}
-        unoptimized
+        sizes={sizes}
+        preload={preload}
         className="w-full h-auto"
       />
       <figcaption className="absolute left-3 bottom-3 rounded-md bg-white/90 px-2 py-0.5 text-xs font-medium text-neutral-700">

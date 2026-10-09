@@ -75,14 +75,25 @@ const CHECK_SCHEMA = {
       plates: { type: "boolean" },
       gore: { type: "boolean" },
       photorealistic: { type: "boolean" },
+      alt: { type: "string" },
     },
-    required: ["people", "text", "plates", "gore", "photorealistic"],
+    required: ["people", "text", "plates", "gore", "photorealistic", "alt"],
     additionalProperties: false,
   },
 };
 
-/** Asks a small vision model yes/no questions about a generated image. */
-export async function checkImage(webp: Buffer): Promise<{ check: ImageCheck; costUsd: number }> {
+const ALT_BANNED_START = /^(an?\s+)?(image|picture|photo|illustration|drawing)\s+(of|showing)\s+/i;
+
+/** Tidies vision-model alt text: no "image of" opener, no digit runs, at most 124 characters. */
+export function cleanAlt(raw: string): string {
+  let alt = raw.replace(/\s+/g, " ").trim().replace(ALT_BANNED_START, "");
+  alt = alt.replace(/\b\d{2,}\b/g, "").replace(/\s{2,}/g, " ").trim().replace(/[.\s]+$/, "");
+  if (alt.length > 124) alt = alt.slice(0, 124).replace(/\s+\S*$/, "");
+  return alt.charAt(0).toUpperCase() + alt.slice(1);
+}
+
+/** Asks a small vision model yes/no questions about a generated image and for alt text describing it. */
+export async function checkImage(webp: Buffer): Promise<{ check: ImageCheck; alt: string; costUsd: number }> {
   const json = await postJson("/chat/completions", {
     model: CHECK_MODEL,
     temperature: 0,
@@ -95,7 +106,10 @@ export async function checkImage(webp: Buffer): Promise<{ check: ImageCheck; cos
             text:
               "Answer each question about this image strictly. people: does it show any person, face, body or silhouette of a person, " +
               "including inside a vehicle? text: any readable text, letters or numbers? plates: any vehicle number plate? " +
-              "gore: any blood, injury, body or gore? photorealistic: does it look like a photograph rather than a flat illustration?",
+              "gore: any blood, injury, body or gore? photorealistic: does it look like a photograph rather than a flat illustration? " +
+              "alt: describe what this illustration shows for a screen reader in one plain phrase under 120 characters, " +
+              "for example \"A pickup truck and a sedan on a wet two-lane highway at dusk in flat teal tones\". " +
+              "Do not start with \"image of\", \"picture of\" or \"illustration of\", and do not mention names, brands, numbers or plate text.",
           },
           { type: "image_url", image_url: { url: `data:image/webp;base64,${webp.toString("base64")}` } },
         ],
@@ -106,9 +120,13 @@ export async function checkImage(webp: Buffer): Promise<{ check: ImageCheck; cos
   const choices = json.choices as { message?: { content?: string } }[] | undefined;
   const content = choices?.[0]?.message?.content;
   if (!content) throw new Error("Image check returned no answer");
-  const parsed = JSON.parse(content) as ImageCheck;
+  const parsed = JSON.parse(content) as ImageCheck & { alt?: unknown };
+  const check: ImageCheck = { people: false, text: false, plates: false, gore: false, photorealistic: false };
   for (const key of ["people", "text", "plates", "gore", "photorealistic"] as const) {
     if (typeof parsed[key] !== "boolean") throw new Error(`Image check answer is missing "${key}"`);
+    check[key] = parsed[key];
   }
-  return { check: parsed, costUsd: costOf(json) };
+  const alt = typeof parsed.alt === "string" ? cleanAlt(parsed.alt) : "";
+  if (alt.length < 10) throw new Error("Image check returned no usable alt text");
+  return { check, alt, costUsd: costOf(json) };
 }

@@ -296,7 +296,7 @@ export default async function IncidentPage({
               />
 
               {/* Illustration */}
-              <IllustrationFigure illustration={illustration} priority className="mb-6" />
+              <IllustrationFigure illustration={illustration} preload className="mb-6" />
 
               {/* Key Facts Card */}
               <div className="mb-6">

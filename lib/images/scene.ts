@@ -14,7 +14,6 @@ export interface SceneInput {
 
 export interface Scene {
   description: string;
-  alt: string;
 }
 
 const VEHICLE_RULES: [RegExp, string][] = [
@@ -110,8 +109,5 @@ export function buildScene({ headline, articleBody, extractedFacts }: SceneInput
   const sky = weather(text);
   const roadWithWeather = sky ? `${sky} ${road}` : road;
 
-  const description = `${vehicles} stopped on a ${roadWithWeather} ${time}`;
-  const alt = `Illustration of ${vehicles} on a ${roadWithWeather} ${time}`.slice(0, 124);
-
-  return { description, alt };
+  return { description: `${vehicles} stopped on a ${roadWithWeather} ${time}` };
 }
