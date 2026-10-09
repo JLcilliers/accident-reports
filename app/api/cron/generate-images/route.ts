@@ -23,8 +23,12 @@ const CONCURRENCY = 4;
 export async function GET(req: NextRequest) {
   const authHeader = req.headers.get("authorization");
   const cronSecret = process.env.CRON_SECRET;
+  const testParam = req.nextUrl.searchParams.get("test");
+  const testMode = testParam !== null;
+  // Preview deployments sit behind Vercel Authentication, so test mode there needs no cron secret.
+  const previewTest = testMode && process.env.VERCEL_ENV === "preview";
 
-  if (process.env.NODE_ENV === "production") {
+  if (process.env.NODE_ENV === "production" && !previewTest) {
     if (!cronSecret) {
       console.error("CRON_SECRET is not configured");
       return NextResponse.json({ error: "Server misconfiguration" }, { status: 500 });
@@ -34,8 +38,6 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  const testParam = req.nextUrl.searchParams.get("test");
-  const testMode = testParam !== null;
   const requested = testMode ? Math.max(1, Math.min(MAX_PER_RUN, Number(testParam) || 5)) : MAX_PER_RUN;
 
   const sinceRaw = process.env.IMAGE_SINCE;
