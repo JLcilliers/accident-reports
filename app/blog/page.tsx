@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { DEFAULT_ILLUSTRATION, ILLUSTRATION_HEIGHT, ILLUSTRATION_WIDTH } from "@/lib/images/display";
 import Link from "next/link";
 import PageContainer from "@/components/PageContainer";
 import { BlogCard } from "@/components/blog";
@@ -18,6 +19,7 @@ export const metadata: Metadata = {
     url: `${BASE_URL}/blog`,
     siteName: "CarCrashReport",
     type: "website",
+    images: [{ url: DEFAULT_ILLUSTRATION.src, width: ILLUSTRATION_WIDTH, height: ILLUSTRATION_HEIGHT, alt: DEFAULT_ILLUSTRATION.alt }],
   },
 };
 
