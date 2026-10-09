@@ -17,6 +17,12 @@ export interface BlogPost {
   readingTime: string;
   featured: boolean;
   image?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  imageStatus?: "NONE" | "OK" | "FAILED";
+  imageModel?: string;
+  imageCostUsd?: number;
+  imageGeneratedAt?: string;
 }
 
 export const blogPosts: BlogPost[] = [

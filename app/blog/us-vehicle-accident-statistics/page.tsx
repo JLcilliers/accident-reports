@@ -2,10 +2,19 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { TableOfContents, StatCard } from "@/components/blog";
 import { getBlogPost } from "@/data/blog-posts";
+import {
+  ILLUSTRATION_HEIGHT,
+  ILLUSTRATION_WIDTH,
+  absoluteImageUrl,
+  pickIllustration,
+} from "@/lib/images/display";
+import IllustrationFigure from "@/components/IllustrationFigure";
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.carcrashreport.com";
 const post = getBlogPost("us-vehicle-accident-statistics");
 const LAST_UPDATED = "December 2025";
+const illustration = pickIllustration(post ?? {});
+const imageUrl = absoluteImageUrl(illustration.src);
 
 export const metadata: Metadata = {
   title: "United States Car Accident Statistics, Causes, and Prevention (2025)",
@@ -21,6 +30,11 @@ export const metadata: Metadata = {
     type: "article",
     publishedTime: post?.publishedAt,
     modifiedTime: post?.updatedAt,
+    images: [{ url: imageUrl, width: ILLUSTRATION_WIDTH, height: ILLUSTRATION_HEIGHT, alt: illustration.alt }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [imageUrl],
   },
 };
 
@@ -43,6 +57,7 @@ const tocItems = [
 const articleJsonLd = {
   "@context": "https://schema.org",
   "@type": "Article",
+  image: [imageUrl],
   headline: "United States Vehicle Accident Statistics, Causes, and Prevention",
   description: "Fresh United States car accident statistics, causes, and safety tips. Explore 2023 crash data, high-risk groups, and evidence-based prevention strategies.",
   datePublished: post?.publishedAt,
@@ -156,6 +171,8 @@ export default function USVehicleAccidentStatisticsPage() {
                 <span className="text-neutral-300">•</span>
                 <span>25 min read</span>
               </div>
+
+              <IllustrationFigure illustration={illustration} priority className="mt-8" />
             </div>
           </div>
         </div>
