@@ -120,7 +120,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title,
       description,
-      images: [imageUrl],
+      images: [{ url: imageUrl, alt: illustration.alt }],
     },
   };
 }
