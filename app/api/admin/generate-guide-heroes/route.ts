@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createIllustration } from "@/lib/images/illustrate";
+import { compositionByName, seedOf, type Composition } from "@/lib/images/compositions";
+import { GUIDE_COMPOSITIONS, GUIDE_INDEX_PLACE, GUIDE_PLACES, GUIDE_URBAN_COMPOSITIONS } from "@/lib/images/guideScenes";
+import { createIllustration, type DrawPlan } from "@/lib/images/illustrate";
 import { openRouterReady } from "@/lib/images/openrouter";
-import { GUIDE_INDEX_SCENE, GUIDE_SCENES } from "@/lib/images/guideScenes";
 
 export const maxDuration = 300;
 
@@ -11,11 +12,26 @@ const MAX_PER_CALL = 12;
 const RUN_BUDGET_MS = 270_000;
 const MIN_BATCH_MS = 150_000;
 
+const ALL = ["index", ...Object.keys(GUIDE_PLACES)];
+
+/**
+ * The composition for a guide hero and its fallback. Guides take turns through the list in alphabetical
+ * order, so neighbouring states never share a composition and all of them get used.
+ */
+function compositionsFor(slug: string): [Composition, Composition] {
+  const place = slug === "index" ? GUIDE_INDEX_PLACE : GUIDE_PLACES[slug];
+  const pool = place.urban ? GUIDE_URBAN_COMPOSITIONS : GUIDE_COMPOSITIONS;
+  const position = ALL.filter((s) => (s === "index" ? GUIDE_INDEX_PLACE : GUIDE_PLACES[s]).urban === place.urban).indexOf(slug);
+  const first = compositionByName(pool[position % pool.length]) as Composition;
+  const second = compositionByName(pool[(position + 1) % pool.length]) as Composition;
+  return [first, second];
+}
+
 /**
  * Generates hero illustrations for the crash-report guides on request only (never scheduled).
  * `?slugs=texas,arizona` or `?slugs=all`; "index" is the guides index page. At most 12 per call:
  * anything not drawn comes back in `remaining` for the next call.
- * Returns each Blob URL, alt text and cost so they can be stored with the guide data.
+ * Returns each Blob URL, alt text, composition and cost so they can be stored with the guide data.
  *
  * @route GET /api/admin/generate-guide-heroes
  */
@@ -27,8 +43,7 @@ export async function GET(req: NextRequest) {
   }
 
   const requested = [...new Set((req.nextUrl.searchParams.get("slugs") || "").split(",").map((s) => s.trim()).filter(Boolean))];
-  const all = ["index", ...Object.keys(GUIDE_SCENES)];
-  const wanted = requested.includes("all") ? all : requested.filter((s) => all.includes(s));
+  const wanted = requested.includes("all") ? ALL : requested.filter((s) => ALL.includes(s));
   if (wanted.length === 0) {
     return NextResponse.json({ error: "Pass ?slugs=all or a comma-separated list of guide slugs" }, { status: 400 });
   }
@@ -44,9 +59,33 @@ export async function GET(req: NextRequest) {
     const batch = slugs.slice(i, i + CONCURRENCY);
     const done = await Promise.all(
       batch.map(async (slug) => {
-        const scene = slug === "index" ? GUIDE_INDEX_SCENE : GUIDE_SCENES[slug];
-        const result = await createIllustration(`guides/${slug}`, scene, deadline);
-        const item = { slug, status: result.status, url: result.url, alt: result.alt, model: result.model, costUsd: result.costUsd, attempts: result.attempts };
+        const place = slug === "index" ? GUIDE_INDEX_PLACE : GUIDE_PLACES[slug];
+        const plan: DrawPlan = {
+          cues: {
+            vehicles: ["car"],
+            road: place.urban ? "city" : "highway",
+            crosswalk: false,
+            bridge: false,
+            tunnel: false,
+            time: null,
+            weather: null,
+            season: place.season ?? "summer",
+          },
+          seed: seedOf(slug),
+          compositions: compositionsFor(slug),
+          place: place.place,
+        };
+        const result = await createIllustration(`guides/${slug}`, plan, deadline);
+        const item = {
+          slug,
+          status: result.status,
+          url: result.url,
+          alt: result.alt,
+          model: result.model,
+          composition: result.composition,
+          costUsd: result.costUsd,
+          attempts: result.attempts,
+        };
         // Logged as each image finishes, so the URLs and alt text survive even if the response is lost.
         console.log(`[generate-guide-heroes] ${JSON.stringify(item)}`);
         return item;
