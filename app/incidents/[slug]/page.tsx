@@ -5,6 +5,13 @@ import { stripHtmlAndPublisher } from "@/lib/text";
 import type { AccidentFacts } from "@/lib/seo/extractAccidentFacts";
 import { parseArticleMeta, buildKeywordsString } from "@/lib/seo/parseArticleMeta";
 import {
+  ILLUSTRATION_HEIGHT,
+  ILLUSTRATION_WIDTH,
+  absoluteImageUrl,
+  pickIllustration,
+} from "@/lib/images/display";
+import IllustrationFigure from "@/components/IllustrationFigure";
+import {
   buildLocationInfo,
   logLocationResolution,
 } from "@/lib/location";
@@ -91,6 +98,8 @@ export async function generateMetadata({
 
   description = description.slice(0, 160);
   const keywords = buildKeywordsString(parsedMeta);
+  const illustration = pickIllustration(incident);
+  const imageUrl = absoluteImageUrl(illustration.src);
 
   return {
     title,
@@ -105,6 +114,13 @@ export async function generateMetadata({
       type: "article",
       publishedTime: incident.occurredAt.toISOString(),
       modifiedTime: (incident.updatedAt ?? incident.occurredAt).toISOString(),
+      images: [{ url: imageUrl, width: ILLUSTRATION_WIDTH, height: ILLUSTRATION_HEIGHT, alt: illustration.alt }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [{ url: imageUrl, alt: illustration.alt }],
     },
   };
 }
@@ -168,11 +184,14 @@ export default async function IncidentPage({
     });
   }
 
+  const illustration = pickIllustration(incident);
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
     headline: seoHeadline,
     description: seoDescription,
+    image: [absoluteImageUrl(illustration.src)],
     articleBody: incident.articleBody || undefined,
     datePublished: incident.occurredAt.toISOString(),
     dateModified: (incident.updatedAt ?? incident.occurredAt).toISOString(),
@@ -275,6 +294,9 @@ export default async function IncidentPage({
                 formattedDate={formattedDate}
                 summary={incident.summary ? stripHtmlAndPublisher(incident.summary) : null}
               />
+
+              {/* Illustration */}
+              <IllustrationFigure illustration={illustration} preload className="mb-6" />
 
               {/* Key Facts Card */}
               <div className="mb-6">

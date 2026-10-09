@@ -17,6 +17,12 @@ enum ArticleQualityStatus {
   FAILED
 }
 
+enum ImageStatus {
+  NONE
+  OK
+  FAILED
+}
+
 model Incident {
   id         String   @id @default(cuid())
   slug       String   @unique
@@ -42,11 +48,21 @@ model Incident {
   // Structured facts extracted from news sources (JSON)
   extractedFacts Json?    // Companies, vehicles, people, agencies, etc.
 
+  // Generated illustration (stored on Vercel Blob)
+  imageUrl         String?
+  imageAlt         String?
+  imageStatus      ImageStatus @default(NONE)
+  imageModel       String?
+  imageCostUsd     Decimal?    @db.Decimal(10, 6)
+  imageGeneratedAt DateTime?
+  imageAttempts    Int         @default(0)
+
   sources IncidentSource[]
 
   @@index([occurredAt])
   @@index([city, state])
   @@index([createdAt])
+  @@index([imageStatus, createdAt])
 }
 
 model IncidentSource {
