@@ -1,8 +1,9 @@
 import { createHash } from "crypto";
-import { list, put } from "@vercel/blob";
+import { list } from "@vercel/blob";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import type { AccidentFacts } from "@/lib/seo/extractAccidentFacts";
+import { putBefore } from "@/lib/images/blob";
 import { buildScene } from "@/lib/images/scene";
 import { MAX_ATTEMPTS, createIllustration, type AttemptLog } from "@/lib/images/illustrate";
 import { IMAGE_MODEL, openRouterReady } from "@/lib/images/openrouter";
@@ -160,11 +161,10 @@ async function runTest(requested: number) {
         (incident) => `tests/${day}/${incident.slug}`,
         deadline,
         async (incident, item) => {
-          await put(`${prefix}${incident.slug}.json`, JSON.stringify({ ...item, headline: incident.headline }), {
+          await putBefore(deadline, `${prefix}${incident.slug}.json`, JSON.stringify({ ...item, headline: incident.headline }), {
             access: "public",
             contentType: "application/json",
             addRandomSuffix: true,
-            abortSignal: AbortSignal.timeout(15_000),
           });
         }
       ))

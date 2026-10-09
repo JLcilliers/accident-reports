@@ -1,5 +1,5 @@
 import sharp from "sharp";
-import { put } from "@vercel/blob";
+import { putBefore } from "@/lib/images/blob";
 import { IMAGE_MODEL, ImageCheckError, checkImage, generateImage, type ImageCheck } from "@/lib/images/openrouter";
 
 export const IMAGE_WIDTH = 1200;
@@ -8,8 +8,6 @@ export const MAX_ATTEMPTS = 2;
 // Comfortably more than one generation and its check (about 45 s at the slow end), so an attempt that
 // starts is not cut off after it has been paid for. With less time left it is skipped.
 const MIN_ATTEMPT_MS = 60_000;
-// The upload may run a little past the OpenRouter deadline, but never past the function's own limit.
-const UPLOAD_GRACE_MS = 15_000;
 
 const HOUSE_STYLE =
   "Flat editorial illustration in a minimal vector style for a traffic news website. " +
@@ -95,12 +93,11 @@ export async function createIllustration(key: string, scene: string, deadline = 
     }
 
     try {
-      const blob = await put(`illustrations/${key}.webp`, webp, {
+      const blob = await putBefore(deadline, `illustrations/${key}.webp`, webp, {
         access: "public",
         contentType: "image/webp",
         addRandomSuffix: true,
         cacheControlMaxAge: 31536000,
-        abortSignal: AbortSignal.timeout(Math.max(1_000, Math.min(30_000, deadline + UPLOAD_GRACE_MS - Date.now()))),
       });
       console.log(`[images] ${key} attempt ${attempt} passed the check, cost $${costUsd.toFixed(6)}`);
       return { status: "OK", url: blob.url, alt: checked.alt, model: IMAGE_MODEL, costUsd, attempts };
