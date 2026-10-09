@@ -16,11 +16,12 @@ const RULES =
   "no logos or brand badges, no recognisable car models, no real landmarks, no damage, debris, injuries, blood or emergency victims, " +
   "and nothing photorealistic.";
 
-const STRICT =
-  "Show the vehicles from a distance with dark, opaque windows so no one can be seen inside, and leave the roadside free of any signs.";
+const VIEW = "Show every vehicle in side profile with dark, opaque windows so no one can be seen inside.";
+
+const STRICT = "Keep the vehicles small and far away, and leave the roadside free of any signs.";
 
 export function buildPrompt(scene: string, strict: boolean): string {
-  return `${HOUSE_STYLE} Scene: ${scene}. ${strict ? `${STRICT} ` : ""}${RULES}`;
+  return `${HOUSE_STYLE} Scene: ${scene}. ${VIEW} ${strict ? `${STRICT} ` : ""}${RULES}`;
 }
 
 export interface AttemptLog {

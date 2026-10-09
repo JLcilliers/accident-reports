@@ -2,7 +2,7 @@ const API = "https://openrouter.ai/api/v1";
 
 export const IMAGE_MODEL = process.env.IMAGE_MODEL || "openai/gpt-5-image-mini";
 export const IMAGE_QUALITY = process.env.IMAGE_QUALITY || "low";
-export const CHECK_MODEL = process.env.IMAGE_CHECK_MODEL || "google/gemini-2.5-flash-lite";
+export const CHECK_MODEL = process.env.IMAGE_CHECK_MODEL || "google/gemini-2.5-flash";
 
 export interface ImageCheck {
   people: boolean;
@@ -92,35 +92,47 @@ export function cleanAlt(raw: string): string {
   return alt.charAt(0).toUpperCase() + alt.slice(1);
 }
 
-/** Asks a small vision model yes/no questions about a generated image and for alt text describing it. */
+/** Asks a vision model yes/no questions about a generated image and for alt text describing it. */
 export async function checkImage(webp: Buffer): Promise<{ check: ImageCheck; alt: string; costUsd: number }> {
-  const json = await postJson("/chat/completions", {
-    model: CHECK_MODEL,
-    temperature: 0,
-    messages: [
-      {
-        role: "user",
-        content: [
-          {
-            type: "text",
-            text:
-              "Answer each question about this image strictly. people: does it show any person, face, body or silhouette of a person, " +
-              "including inside a vehicle? text: any readable text, letters or numbers? plates: any vehicle number plate? " +
-              "gore: any blood, injury, body or gore? photorealistic: does it look like a photograph rather than a flat illustration? " +
-              "alt: describe what this illustration shows for a screen reader in one plain phrase under 120 characters, " +
-              "for example \"A pickup truck and a sedan on a wet two-lane highway at dusk in flat teal tones\". " +
-              "Do not start with \"image of\", \"picture of\" or \"illustration of\", and do not mention names, brands, numbers or plate text.",
-          },
-          { type: "image_url", image_url: { url: `data:image/webp;base64,${webp.toString("base64")}` } },
-        ],
-      },
-    ],
-    response_format: { type: "json_schema", json_schema: CHECK_SCHEMA },
-  });
-  const choices = json.choices as { message?: { content?: string } }[] | undefined;
-  const content = choices?.[0]?.message?.content;
-  if (!content) throw new Error("Image check returned no answer");
-  const parsed = JSON.parse(content) as ImageCheck & { alt?: unknown };
+  let costUsd = 0;
+  let parsed: (ImageCheck & { alt?: unknown }) | null = null;
+  // A provider error can cut the JSON answer short, so ask once more before giving up on the image.
+  for (let ask = 1; ask <= 2 && !parsed; ask++) {
+    const json = await postJson("/chat/completions", {
+      model: CHECK_MODEL,
+      temperature: 0,
+      messages: [
+        {
+          role: "user",
+          content: [
+            {
+              type: "text",
+              text:
+                "Answer each question about this image strictly. Look closely at every vehicle window before answering. " +
+                "people: is there any person, face, head, body or silhouette of a person anywhere, including a head, shoulders or " +
+                "seated figure seen through a vehicle window? Answer true if any shape inside a vehicle could be read as a person's head. " +
+                "text: any readable text, letters or numbers? plates: is there a license plate, or a blank rectangular plate-shaped " +
+                "panel where a license plate would go, on any vehicle? gore: any blood, injury, body or gore? " +
+                "photorealistic: does it look like a photograph rather than a flat illustration? " +
+                "alt: describe what this illustration shows for a screen reader in one plain phrase under 120 characters, " +
+                "for example \"A pickup truck and a sedan on a wet two-lane highway at dusk in flat teal tones\". " +
+                "Do not start with \"image of\", \"picture of\" or \"illustration of\", and do not mention names, brands, numbers or plate text.",
+            },
+            { type: "image_url", image_url: { url: `data:image/webp;base64,${webp.toString("base64")}` } },
+          ],
+        },
+      ],
+      response_format: { type: "json_schema", json_schema: CHECK_SCHEMA },
+    });
+    costUsd += costOf(json);
+    const choices = json.choices as { message?: { content?: string } }[] | undefined;
+    try {
+      parsed = JSON.parse(choices?.[0]?.message?.content ?? "") as ImageCheck & { alt?: unknown };
+    } catch {
+      parsed = null;
+    }
+  }
+  if (!parsed) throw new Error("Image check returned no valid answer");
   const check: ImageCheck = { people: false, text: false, plates: false, gore: false, photorealistic: false };
   for (const key of ["people", "text", "plates", "gore", "photorealistic"] as const) {
     if (typeof parsed[key] !== "boolean") throw new Error(`Image check answer is missing "${key}"`);
@@ -128,5 +140,5 @@ export async function checkImage(webp: Buffer): Promise<{ check: ImageCheck; alt
   }
   const alt = typeof parsed.alt === "string" ? cleanAlt(parsed.alt) : "";
   if (alt.length < 10) throw new Error("Image check returned no usable alt text");
-  return { check, alt, costUsd: costOf(json) };
+  return { check, alt, costUsd };
 }
