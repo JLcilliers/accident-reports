@@ -4,6 +4,7 @@ export interface ClaimedIncident {
   id: string;
   slug: string;
   headline: string;
+  summary: string | null;
   articleBody: string | null;
   extractedFacts: Prisma.JsonValue;
 }
@@ -21,8 +22,8 @@ export interface SavedIllustration {
 const CLAIM_LOCK = 7140021;
 
 /**
- * Claims up to `maxPerRun` incidents that have an article and no image yet and were created on or after
- * `start`, keeping the total for the current UTC day within `dailyLimit`.
+ * Claims up to `maxPerRun` incidents that have no image yet and were created on or after `start`, with or
+ * without an article, keeping the total for the current UTC day within `dailyLimit`.
  *
  * Every attempt is reserved up front, so a crash mid-run never leads to an automatic retry. The claim is a
  * single UPDATE under an advisory lock, so overlapping runs can neither pick the same incident nor go over
@@ -47,17 +48,36 @@ export async function claimIncidents(
          SET "imageAttempts" = ${maxAttempts}, "imageGeneratedAt" = (NOW() AT TIME ZONE 'UTC')
        WHERE id IN (
          SELECT id FROM "Incident"
-          WHERE "articleBody" IS NOT NULL
-            AND "imageStatus" = 'NONE'
+          WHERE "imageStatus" = 'NONE'
             AND "imageAttempts" < ${maxAttempts}
             AND "createdAt" >= ${start.toISOString()}::timestamp
           ORDER BY "createdAt" ASC
           LIMIT ${take}
           FOR UPDATE SKIP LOCKED
        )
-      RETURNING id, slug, headline, "articleBody", "extractedFacts"`) as ClaimedIncident[];
+      RETURNING id, slug, headline, summary, "articleBody", "extractedFacts"`) as ClaimedIncident[];
     return { usedToday, claimed };
   });
+}
+
+/** Marks the imageModel of incidents whose coverage is not about a road crash, so they can be found later. */
+export const NOT_A_CRASH_MARK = "not a road crash";
+
+/**
+ * Records that an incident's coverage is not about a road crash: it gets no image and, being FAILED with
+ * every attempt used, is never claimed again. imageGeneratedAt is cleared, so it does not count towards the
+ * daily limit.
+ */
+export async function markNotACrash(db: PrismaClient, id: string): Promise<void> {
+  await db.$executeRaw`
+    UPDATE "Incident"
+       SET "imageStatus" = 'FAILED'::"ImageStatus",
+           "imageUrl" = NULL,
+           "imageAlt" = NULL,
+           "imageModel" = ${NOT_A_CRASH_MARK},
+           "imageCostUsd" = 0,
+           "imageGeneratedAt" = NULL
+     WHERE id = ${id}`;
 }
 
 /** Stores a generation outcome, leaving updatedAt alone for the same reason as the claim. */
