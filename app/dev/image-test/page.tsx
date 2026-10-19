@@ -87,7 +87,7 @@ export default async function ImageTestPage({ searchParams }: { searchParams: Pr
               )}
               <div className="space-y-2 p-4 text-sm text-neutral-700">
                 <p className="font-semibold text-neutral-900">{r.compositionLabel ?? r.composition ?? "No composition (older test)"}</p>
-                {r.headline && <p className="text-neutral-500">For: {r.headline}</p>}
+                {r.headline && <p className="line-clamp-2 text-neutral-500">For: {r.headline}</p>}
                 {r.look && (
                   <p>
                     {r.look.time}, {r.look.weather}, {r.look.season}
