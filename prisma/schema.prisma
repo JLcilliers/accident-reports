@@ -44,6 +44,8 @@ model Incident {
   // Article quality tracking
   articleQualityStatus ArticleQualityStatus? @default(OK)
   articleQualityNotes  String?               // Validation warnings or error details
+  articleAttempts      Int?                  @default(0) // Generation attempts; the cron gives up after 2
+  articleAttemptedAt   DateTime?             // Last attempt, counted against ARTICLE_DAILY_LIMIT
 
   // Structured facts extracted from news sources (JSON)
   extractedFacts Json?    // Companies, vehicles, people, agencies, etc.

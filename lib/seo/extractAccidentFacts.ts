@@ -98,7 +98,7 @@ Respond with valid JSON only matching this structure:
 
   try {
     const response = await getOpenAI().chat.completions.create({
-      model: "openai/gpt-4o-mini",
+      model: process.env.FACTS_MODEL || "openai/gpt-4o-mini",
       messages: [
         {
           role: "system",
@@ -120,7 +120,8 @@ Respond with valid JSON only matching this structure:
       return null;
     }
 
-    const parsed = JSON.parse(content) as AccidentFacts;
+    // Claude models may wrap the JSON in a ```json fence even when asked for a JSON object
+    const parsed = JSON.parse(content.replace(/^\s*```(?:json)?\s*|\s*```\s*$/g, "")) as AccidentFacts;
 
     // Validate and ensure arrays are initialized
     return {

@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { extractAccidentFacts } from "@/lib/seo/extractAccidentFacts";
-import { generateIncidentArticle } from "@/lib/seo/generateIncidentArticle";
+import { generateIncidentArticle, incidentSourceTexts } from "@/lib/seo/generateIncidentArticle";
+import { claimArticle } from "@/lib/seo/claim";
 import type { AccidentFacts } from "@/lib/seo/extractAccidentFacts";
 
 export const runtime = "nodejs";
@@ -11,15 +12,21 @@ export const maxDuration = 300; // Allow up to 5 minutes for this route
 // Same format as the image cron's cutoff: a full date-time with an explicit zone.
 const START_FORMAT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d{1,3})?)?(Z|[+-]\d{2}:\d{2})$/;
 
+// After this many attempts an incident is marked FAILED and never picked again automatically.
+const MAX_ATTEMPTS = 2;
+const MAX_PER_RUN = 10;
+// An incident (facts plus article) takes up to about 25 s, so a new one starts only while 60 s remain.
+const RUN_BUDGET_MS = 270_000;
+const MIN_ITEM_MS = 60_000;
+
 /**
  * Cron job endpoint for backfilling SEO content on existing incidents.
  *
- * This endpoint:
- * 1. Finds incidents created on or after IMAGE_START_DATE without SEO content or extracted facts,
- *    so the older backlog without articles is never billed
- * 2. Extracts structured facts from news sources through OpenRouter
- * 3. Generates SEO articles using the extracted facts
- * 4. Updates the incidents with both facts and generated content
+ * This endpoint claims incidents one at a time (see claimArticle) that were created on or after
+ * IMAGE_START_DATE, have no article and are covered by at least two publishers, so the older backlog is
+ * never billed. For each it extracts structured facts and then writes the article, both through OpenRouter.
+ * Each incident gets at most MAX_ATTEMPTS attempts, and attempts per UTC day stay within ARTICLE_DAILY_LIMIT
+ * (default 100; 0 stops generation).
  *
  * Protected by CRON_SECRET for Vercel Cron Jobs authentication.
  *
@@ -63,102 +70,89 @@ export async function GET(req: NextRequest) {
     });
   }
 
+  const limitRaw = process.env.ARTICLE_DAILY_LIMIT?.trim();
+  const dailyLimit = limitRaw ? Number(limitRaw) : 100;
+  if (!Number.isInteger(dailyLimit) || dailyLimit < 0) {
+    return NextResponse.json({ ok: true, disabled: true, reason: "ARTICLE_DAILY_LIMIT is not a whole number of 0 or more" });
+  }
+
   const startTime = Date.now();
-  const limit = parseInt(req.nextUrl.searchParams.get("limit") || "10", 10);
+  const deadline = startTime + RUN_BUDGET_MS;
+  const limit = Math.min(parseInt(req.nextUrl.searchParams.get("limit") || "10", 10) || 10, MAX_PER_RUN);
 
-  // Find incidents without SEO content OR without extracted facts
-  const incidents = await prisma.incident.findMany({
-    where: {
-      createdAt: { gte: start },
-      OR: [
-        { articleBody: null },
-        { extractedFacts: { equals: Prisma.DbNull } },
-      ],
-    },
-    include: {
-      sources: {
-        take: 5,
-        select: { title: true, snippet: true },
-      },
-    },
-    orderBy: { createdAt: "desc" },
-    take: Math.min(limit, 50), // Cap at 50 per run to avoid timeouts
-  });
-
-  console.log(`[generate-seo] Found ${incidents.length} incidents needing processing`);
-
+  let incidentsProcessed = 0;
   let factsExtracted = 0;
   let articlesGenerated = 0;
   let failed = 0;
+  let usedTodayBefore: number | null = null;
   const errors: string[] = [];
 
-  for (const incident of incidents) {
+  while (incidentsProcessed < limit && deadline - Date.now() > MIN_ITEM_MS) {
+    const { usedToday, claimed: incident } = await claimArticle(prisma, { start, dailyLimit, maxAttempts: MAX_ATTEMPTS });
+    usedTodayBefore ??= usedToday;
+    if (!incident) break;
+    incidentsProcessed++;
+
     try {
-      // Build combined text from sources for fact extraction
-      const combinedText = incident.sources
-        .map((s) => `${s.title}. ${s.snippet || ""}`)
-        .join("\n\n") || `${incident.headline}. ${incident.summary || ""}`;
+      const sources = await prisma.incidentSource.findMany({
+        where: { incidentId: incident.id },
+        take: 5,
+        select: { title: true, snippet: true, publisher: true },
+      });
 
-      // Check if we need to extract facts
-      let facts: AccidentFacts | null = incident.extractedFacts as AccidentFacts | null;
-
+      let facts = incident.extractedFacts as AccidentFacts | null;
       if (!facts) {
         console.log(`[generate-seo] Extracting facts for: ${incident.slug}`);
+        const combinedText = incidentSourceTexts(sources).join("\n\n") || incident.headline;
         facts = await extractAccidentFacts(incident.headline, combinedText);
-
         if (facts) {
           factsExtracted++;
+          await prisma.incident.update({
+            where: { id: incident.id },
+            data: { extractedFacts: facts as unknown as Prisma.InputJsonValue },
+          });
         }
       }
 
-      // Check if we need to generate article
-      let seoContent = null;
-      if (!incident.articleBody) {
-        console.log(`[generate-seo] Generating article for: ${incident.slug}`);
-        seoContent = await generateIncidentArticle(
-          {
-            headline: incident.headline,
-            summary: incident.summary,
-            city: incident.city,
-            state: incident.state,
-            occurredAt: incident.occurredAt,
-            sources: incident.sources,
-          },
-          facts // Pass extracted facts to enrich the article
-        );
+      console.log(`[generate-seo] Generating article for: ${incident.slug} (attempt ${incident.articleAttempts})`);
+      const seoContent = await generateIncidentArticle(
+        {
+          headline: incident.headline,
+          summary: incident.summary,
+          city: incident.city,
+          state: incident.state,
+          occurredAt: incident.occurredAt,
+          sources,
+        },
+        facts
+      );
+      if (!seoContent) throw new Error("No article generated");
 
-        if (seoContent) {
-          articlesGenerated++;
-        }
-      }
-
-      // Update incident with facts and/or SEO content
-      if (facts || seoContent) {
-        await prisma.incident.update({
-          where: { id: incident.id },
-          data: {
-            ...(facts && !incident.extractedFacts && { extractedFacts: facts as unknown as Prisma.InputJsonValue }),
-            ...(seoContent && {
-              seoTitle: seoContent.seoTitle,
-              seoDescription: seoContent.seoDescription,
-              articleBody: seoContent.articleBody,
-            }),
-          },
-        });
-        console.log(`[generate-seo] Updated: ${incident.slug}`);
-      } else {
-        failed++;
-        errors.push(`No content generated for ${incident.slug}`);
-      }
+      await prisma.incident.update({
+        where: { id: incident.id },
+        data: {
+          seoTitle: seoContent.seoTitle,
+          seoDescription: seoContent.seoDescription,
+          articleBody: seoContent.articleBody,
+          articleQualityStatus: "OK",
+          articleQualityNotes: null,
+        },
+      });
+      articlesGenerated++;
+      console.log(`[generate-seo] Updated: ${incident.slug}`);
     } catch (error) {
       failed++;
       const message = error instanceof Error ? error.message : String(error);
       errors.push(`${incident.slug}: ${message}`);
       console.error(`[generate-seo] Error for ${incident.slug}:`, message);
+      await prisma.incident.update({
+        where: { id: incident.id },
+        data: {
+          articleQualityNotes: message.slice(0, 1000),
+          ...(incident.articleAttempts >= MAX_ATTEMPTS && { articleQualityStatus: "FAILED" }),
+        },
+      });
     }
-
-    // Small delay to avoid rate limiting (increased for two API calls)
-    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 
   const duration = Date.now() - startTime;
@@ -166,7 +160,9 @@ export async function GET(req: NextRequest) {
   const response = {
     ok: true,
     duration: `${duration}ms`,
-    incidentsProcessed: incidents.length,
+    dailyLimit,
+    usedTodayBefore,
+    incidentsProcessed,
     factsExtracted,
     articlesGenerated,
     failed,

@@ -3,9 +3,11 @@ import { readFileSync } from "fs";
 import { join } from "path";
 import type { AccidentFacts } from "./extractAccidentFacts";
 import {
+  findCopiedRun,
   validateIncidentArticle,
   type ArticleValidationResult,
 } from "./validateIncidentArticle";
+import { cleanRssSnippet } from "../text";
 
 // Lazy-initialized OpenAI client (created on first use to allow dotenv to run first)
 let openaiClient: OpenAI | null = null;
@@ -21,8 +23,29 @@ function getOpenAI(): OpenAI {
 }
 
 // Configuration constants
-const SITE_NAME = "AccidentFacts";
-const REPORT_SERVICE_PHRASE = `${SITE_NAME} is not a law firm and does not create official police reports. Our free service helps you find and request the official crash report from the correct agency and connect with additional resources if needed.`;
+const SITE_NAME = "CarCrashReport.com";
+const DEFAULT_ARTICLE_MODEL = "anthropic/claude-haiku-5.5";
+
+// Word budget for the reporting sections, scaled to the source text so a thin story stays short,
+// plus an allowance for the fixed general sections (what to do, how to get the report, disclaimer).
+const REPORTING_WORDS_PER_SOURCE_WORD = 3;
+const MIN_REPORTING_WORDS = 80;
+const MAX_REPORTING_WORDS = 450;
+const GENERAL_SECTION_WORDS = 320;
+
+const STATE_NAMES: Record<string, string> = {
+  AL: "Alabama", AK: "Alaska", AZ: "Arizona", AR: "Arkansas", CA: "California",
+  CO: "Colorado", CT: "Connecticut", DE: "Delaware", FL: "Florida", GA: "Georgia",
+  HI: "Hawaii", ID: "Idaho", IL: "Illinois", IN: "Indiana", IA: "Iowa",
+  KS: "Kansas", KY: "Kentucky", LA: "Louisiana", ME: "Maine", MD: "Maryland",
+  MA: "Massachusetts", MI: "Michigan", MN: "Minnesota", MS: "Mississippi", MO: "Missouri",
+  MT: "Montana", NE: "Nebraska", NV: "Nevada", NH: "New Hampshire", NJ: "New Jersey",
+  NM: "New Mexico", NY: "New York", NC: "North Carolina", ND: "North Dakota", OH: "Ohio",
+  OK: "Oklahoma", OR: "Oregon", PA: "Pennsylvania", RI: "Rhode Island", SC: "South Carolina",
+  SD: "South Dakota", TN: "Tennessee", TX: "Texas", UT: "Utah", VT: "Vermont",
+  VA: "Virginia", WA: "Washington", WV: "West Virginia", WI: "Wisconsin", WY: "Wyoming",
+  DC: "District of Columbia",
+};
 
 interface IncidentData {
   headline: string;
@@ -30,7 +53,30 @@ interface IncidentData {
   city?: string | null;
   state?: string | null;
   occurredAt: Date;
-  sources?: { title: string; snippet?: string | null }[];
+  sources?: { title: string; snippet?: string | null; publisher?: string | null }[];
+}
+
+/**
+ * The distinct texts the sources give us: each title, plus the cleaned snippet when it says more than the title.
+ * Google News snippets are usually just the headline and publisher again.
+ */
+export function incidentSourceTexts(sources: { title: string; snippet?: string | null }[]): string[] {
+  const texts = new Set<string>();
+  for (const source of sources) {
+    const title = source.title.trim();
+    if (title) texts.add(title);
+    const snippet = cleanRssSnippet(source.snippet);
+    const headline = title.replace(/\s+-\s+[^-]+$/, "");
+    if (snippet && !snippet.startsWith(headline)) texts.add(snippet);
+  }
+  return [...texts];
+}
+
+/** Markdown link to the state's crash report guide, or null when the state isn't known. */
+function stateGuideLink(state?: string | null): string | null {
+  const name = state ? STATE_NAMES[state.trim().toUpperCase()] : undefined;
+  if (!name) return null;
+  return `[${name} crash report guide](/crash-reports/${name.toLowerCase().replace(/ /g, "-")})`;
 }
 
 interface SeoContent {
@@ -59,7 +105,6 @@ function loadPromptTemplate(): string {
 
   // Replace placeholders
   template = template.replace(/\{\{SITE_NAME\}\}/g, SITE_NAME);
-  template = template.replace(/\{\{REPORT_SERVICE_PHRASE\}\}/g, REPORT_SERVICE_PHRASE);
 
   return template;
 }
@@ -99,20 +144,20 @@ function parseArticleResponse(content: string): {
 }
 
 /**
- * Generate SEO-optimized article content for an incident using OpenAI.
+ * Generate SEO-optimized article content for an incident through OpenRouter (ARTICLE_MODEL).
  *
- * Uses the 12-section article format defined in lib/seo/prompts/article-prompt.md.
+ * Uses the article format defined in lib/seo/prompts/article-prompt.md.
  * When extractedFacts are provided, the article will include specific details
  * about companies, vehicles, people, agencies, and other case-relevant information.
+ * Makes one model call; a draft that fails the article check or repeats 12 or more words
+ * of a source in a row throws, and the caller decides whether to try again.
  *
  * @param incident - Basic incident data
  * @param facts - Optional extracted facts for richer content
- * @param retryCount - Internal retry counter (max 1 retry on validation failure)
  */
 export async function generateIncidentArticle(
   incident: IncidentData,
-  facts?: AccidentFacts | null,
-  retryCount: number = 0
+  facts?: AccidentFacts | null
 ): Promise<SeoContent | null> {
   if (!process.env.OPENROUTER_API_KEY) {
     console.log("[SEO] OpenRouter API key not configured, skipping article generation");
@@ -140,11 +185,19 @@ export async function generateIncidentArticle(
     day: "numeric",
   });
 
-  // Gather source snippets for context
-  const sourceContext = incident.sources
-    ?.slice(0, 5)
-    .map((s) => `- ${s.title}${s.snippet ? `: ${s.snippet}` : ""}`)
-    .join("\n") || "";
+  // Gather source text for context, and size the article to it
+  const sourceTexts = incidentSourceTexts(incident.sources?.slice(0, 5) ?? []);
+  const sourceContext = sourceTexts.map((text) => `- ${text}`).join("\n");
+  const publishers = [...new Set((incident.sources ?? []).map((s) => s.publisher?.trim()).filter(Boolean))].join(", ") || "not named";
+  const sourceWords = sourceTexts.join(" ").split(/\s+/).filter(Boolean).length;
+  const reportingWords = Math.min(
+    MAX_REPORTING_WORDS,
+    Math.max(MIN_REPORTING_WORDS, sourceWords * REPORTING_WORDS_PER_SOURCE_WORD)
+  );
+  const maxWords = reportingWords + GENERAL_SECTION_WORDS;
+  const guideLink = stateGuideLink(incident.state ?? facts?.state);
+  const articleNotes = `WORD BUDGET: at most ${reportingWords} words for the reporting sections (Key Facts through Traffic Impact) and at most ${maxWords} words for the whole article. Shorter is fine when the sources say little.
+STATE CRASH REPORT GUIDE LINK: ${guideLink ?? "none (do not link to any guide)"}`;
 
   // Build entity summaries from extracted facts
   const companies = facts?.companiesMentioned?.join(", ") || "none specified";
@@ -174,7 +227,7 @@ EXTRACTED FACTS (use these as your primary source):
 ${JSON.stringify(facts, null, 2)}
 
 BASIC INFO:
-- Date: ${dateStr}
+- Date first reported: ${dateStr}
 - Location: ${location}
 - Companies mentioned: ${companies}
 - Vehicles involved: ${vehicles}
@@ -186,14 +239,16 @@ BASIC INFO:
 - Time of crash: ${facts.timeOfCrashApprox || "not specified"}
 - Cause/allegations: ${facts.causeOrAllegations || "not specified"}
 
-NEWS SOURCES:
+NEWS SOURCES (published by: ${publishers}):
 ${sourceContext || "No additional sources"}
+
+${articleNotes}
 
 Remember:
 1. Start with the JSON meta block inside \`\`\`json ... \`\`\`
 2. Then the # Headline
 3. Then all required sections with exact headings
-4. Use only facts provided - do not invent details`;
+4. Use only facts provided - do not invent details, and leave out anything marked "not specified"`;
   } else {
     // Fallback prompt when no facts are available
     userPrompt = `Generate a complete article following the exact format specified in your instructions.
@@ -201,23 +256,25 @@ Remember:
 INCIDENT DETAILS:
 - Headline: ${incident.headline}
 - Location: ${location}
-- Date: ${dateStr}
+- Date first reported: ${dateStr}
 - Summary: ${incident.summary || "No summary available"}
 
-NEWS SOURCES:
+NEWS SOURCES (published by: ${publishers}):
 ${sourceContext || "No additional sources"}
+
+${articleNotes}
 
 Remember:
 1. Start with the JSON meta block inside \`\`\`json ... \`\`\`
 2. Then the # Headline
 3. Then all required sections with exact headings
 4. Use ONLY information from the headline, summary, and news sources
-5. If something is not known, say so plainly (e.g., "identities have not been released")`;
+5. If something is not known, leave it out`;
   }
 
   try {
     const response = await getOpenAI().chat.completions.create({
-      model: "openai/gpt-4o",
+      model: process.env.ARTICLE_MODEL || DEFAULT_ARTICLE_MODEL,
       messages: [
         {
           role: "system",
@@ -228,7 +285,8 @@ Remember:
           content: userPrompt,
         },
       ],
-      max_tokens: 5500,
+      // Haiku 5.5 spends up to ~4,100 reasoning tokens before writing, so leave room for both
+      max_tokens: 8000,
       temperature: 0.4,
     });
 
@@ -242,7 +300,7 @@ Remember:
     const { meta, body } = parseArticleResponse(content);
 
     // Validate article using central validator
-    const validation = validateIncidentArticle(body);
+    const validation = validateIncidentArticle(body, { maxWords });
 
     if (!validation.ok) {
       console.warn("[SEO] Article validation failed:", {
@@ -250,17 +308,14 @@ Remember:
         warnings: validation.warnings,
         headline: incident.headline,
       });
-
-      // Retry once if validation fails
-      if (retryCount < 1) {
-        console.log("[SEO] Retrying article generation...");
-        return generateIncidentArticle(incident, facts, retryCount + 1);
-      }
-
-      // After retry, throw error so caller can handle it
       throw new Error(
         `Generated article failed validation: ${validation.errors.join("; ")}`
       );
+    }
+
+    const copied = findCopiedRun(body, [incident.headline, incident.summary ?? "", ...sourceTexts]);
+    if (copied) {
+      throw new Error(`Generated article repeats 12 or more words of a source: "${copied}"`);
     }
 
     // Log warnings for tracking (but don't fail)
