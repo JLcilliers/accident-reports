@@ -36,15 +36,16 @@ interface ItemResult {
 }
 
 /**
- * Cron: generate illustrations for incidents whose article was published on or after IMAGE_START_DATE.
+ * Cron: generate illustrations for incidents created on or after IMAGE_START_DATE, with or without an article.
  *
  * Scheduled runs do nothing until IMAGE_START_DATE (an ISO date-time with a zone) is set, and then only
- * claim incidents created on or after it, so an article that existed before that moment never gets an
+ * claim incidents created on or after it, so an incident that existed before that moment never gets an
  * image. They first check that OpenRouter accepts the key and has credit, claim four incidents at a time,
  * stay within IMAGE_DAILY_LIMIT (default 50; 0 stops generation) and never retry an item automatically.
+ * Without an article, the scene comes from the headline, summary and news-source snippets.
  *
  * `?test=N` is a dry run that never writes to the database: it draws illustrations for the N most recent
- * incidents with an article (at most 12 a call and 36 a day) and stores each image, with a JSON record of
+ * incidents (at most 12 a call and 36 a day) and stores each image, with a JSON record of
  * its result, under illustrations/tests/<UTC day>/.
  *
  * @route GET /api/cron/generate-images
@@ -147,10 +148,9 @@ async function runTest(requested: number) {
   }
 
   const incidents = await prisma.incident.findMany({
-    where: { articleBody: { not: null } },
     orderBy: { createdAt: "desc" },
     take,
-    select: { id: true, slug: true, headline: true, articleBody: true, extractedFacts: true },
+    select: { id: true, slug: true, headline: true, summary: true, articleBody: true, extractedFacts: true },
   });
 
   const results: ItemResult[] = [];
@@ -187,10 +187,21 @@ async function illustrateBatch(
     incidents.map(async (incident) => {
       let item: ItemResult;
       try {
+        const sources = await prisma.incidentSource.findMany({
+          where: { incidentId: incident.id },
+          take: 5,
+          select: { title: true, snippet: true },
+        });
+        // Google News snippets are HTML (a link and the publisher's name); only their words matter here.
+        const sourceText = [incident.summary, ...sources.flatMap((source) => [source.title, source.snippet])]
+          .filter(Boolean)
+          .join(" ")
+          .replace(/<[^>]*>|&nbsp;/g, " ");
         const scene = buildScene({
           headline: incident.headline,
           articleBody: incident.articleBody,
           extractedFacts: incident.extractedFacts as AccidentFacts | null,
+          sourceText,
         });
         const result = await createIllustration(keyFor(incident), scene.description, deadline);
         item = {

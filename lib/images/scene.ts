@@ -10,6 +10,8 @@ export interface SceneInput {
   headline: string;
   articleBody: string | null;
   extractedFacts: AccidentFacts | null;
+  // Summary and news-source titles and snippets, for incidents that have no article yet.
+  sourceText?: string | null;
 }
 
 export interface Scene {
@@ -87,9 +89,10 @@ function weather(text: string): string | null {
   return null;
 }
 
-export function buildScene({ headline, articleBody, extractedFacts }: SceneInput): Scene {
+export function buildScene({ headline, articleBody, extractedFacts, sourceText }: SceneInput): Scene {
   const text = [
     headline,
+    sourceText?.slice(0, 3000),
     extractedFacts?.primaryLocation,
     ...(extractedFacts?.roads ?? []),
     extractedFacts?.timeOfCrashApprox,

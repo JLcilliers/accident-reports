@@ -11,7 +11,7 @@
     },
     {
       "path": "/api/cron/generate-images",
-      "schedule": "20 * * * *"
+      "schedule": "20,50 * * * *"
     }
   ]
 }
