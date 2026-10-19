@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { extractAccidentFacts } from "@/lib/seo/extractAccidentFacts";
 import { generateIncidentArticle, incidentSourceTexts } from "@/lib/seo/generateIncidentArticle";
 import { claimArticle } from "@/lib/seo/claim";
+import { checkRoadCrash } from "@/lib/seo/checkRoadCrash";
 import type { AccidentFacts } from "@/lib/seo/extractAccidentFacts";
 
 export const runtime = "nodejs";
@@ -23,8 +24,10 @@ const MIN_ITEM_MS = 60_000;
  * Cron job endpoint for backfilling SEO content on existing incidents.
  *
  * This endpoint claims incidents one at a time (see claimArticle) that were created on or after
- * IMAGE_START_DATE, have no article and are covered by at least two publishers, so the older backlog is
- * never billed. For each it extracts structured facts and then writes the article, both through OpenRouter.
+ * IMAGE_START_DATE, have no article and are covered by at least two independent publishers, so the older
+ * backlog is never billed. For each it first checks that the coverage is about a real road crash (anything
+ * else is marked NOT_A_CRASH and never claimed again), then extracts structured facts and writes the article,
+ * all through OpenRouter.
  * Each incident gets at most MAX_ATTEMPTS attempts, and attempts per UTC day stay within ARTICLE_DAILY_LIMIT
  * (default 100; 0 stops generation).
  *
@@ -83,6 +86,7 @@ export async function GET(req: NextRequest) {
   let incidentsProcessed = 0;
   let factsExtracted = 0;
   let articlesGenerated = 0;
+  let notACrash = 0;
   let failed = 0;
   let usedTodayBefore: number | null = null;
   const errors: string[] = [];
@@ -99,6 +103,17 @@ export async function GET(req: NextRequest) {
         take: 5,
         select: { title: true, snippet: true, publisher: true },
       });
+
+      const crashCheck = await checkRoadCrash(incident.headline, incidentSourceTexts(sources));
+      if (!crashCheck.crash) {
+        await prisma.incident.update({
+          where: { id: incident.id },
+          data: { articleQualityStatus: "NOT_A_CRASH", articleQualityNotes: crashCheck.reason || null },
+        });
+        notACrash++;
+        console.log(`[generate-seo] Not a road crash, skipped for good: ${incident.slug} (${crashCheck.reason})`);
+        continue;
+      }
 
       let facts = incident.extractedFacts as AccidentFacts | null;
       if (!facts) {
@@ -165,6 +180,7 @@ export async function GET(req: NextRequest) {
     incidentsProcessed,
     factsExtracted,
     articlesGenerated,
+    notACrash,
     failed,
     errors: errors.slice(0, 10), // Limit errors in response
   };

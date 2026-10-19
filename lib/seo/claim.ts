@@ -16,14 +16,18 @@ export interface ClaimedArticle {
 const CLAIM_LOCK = 7140022;
 
 /**
- * Claims one incident created on or after `start` that has no article, fewer than `maxAttempts` attempts and
- * coverage from at least two different publishers, keeping the attempts made in the current UTC day within
- * `dailyLimit`.
+ * Claims one incident created on or after `start` that has no article, fewer than `maxAttempts` attempts, has
+ * not been found to be something other than a road crash, and has coverage from at least two independent
+ * publishers, keeping the attempts made in the current UTC day within `dailyLimit`.
+ *
+ * Syndicated copies count as one publisher: sources carrying the same headline (ignoring case and punctuation)
+ * are one story however many stations ran it. Google News snippets only repeat the headline and the publisher's
+ * name, so comparing headlines covers them too.
  *
  * The attempt is counted before the model is called, so a crash mid-run still uses it up. An incident is tried
  * at most once per UTC day, which makes the count of incidents attempted today the count of attempts today.
- * Incidents with a single publisher are never claimed, so they cost nothing; one becomes eligible if a second
- * publisher's coverage is ingested later. The claim is a single UPDATE under an advisory lock, so overlapping
+ * Incidents without two independent publishers are never claimed, so they cost nothing; one becomes eligible if
+ * independent coverage is ingested later. The claim is a single UPDATE under an advisory lock, so overlapping
  * runs can neither pick the same incident nor go over the daily limit together.
  */
 export async function claimArticle(
@@ -49,7 +53,10 @@ export async function claimArticle(
             AND COALESCE(i."articleAttempts", 0) < ${maxAttempts}
             AND (i."articleAttemptedAt" IS NULL OR i."articleAttemptedAt" < ${dayStart.toISOString()}::timestamp)
             AND i."createdAt" >= ${start.toISOString()}::timestamp
-            AND (SELECT COUNT(DISTINCT lower(trim(s.publisher))) FROM "IncidentSource" s
+            AND i."articleQualityStatus" IS DISTINCT FROM 'NOT_A_CRASH'
+            AND (SELECT LEAST(COUNT(DISTINCT lower(trim(s.publisher))),
+                              COUNT(DISTINCT regexp_replace(lower(s.title), '[^a-z0-9]+', '', 'g')))
+                   FROM "IncidentSource" s
                   WHERE s."incidentId" = i.id AND trim(s.publisher) <> '') >= 2
           ORDER BY i."createdAt" DESC
           LIMIT 1
