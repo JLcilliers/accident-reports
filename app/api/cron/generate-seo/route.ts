@@ -8,12 +8,16 @@ import type { AccidentFacts } from "@/lib/seo/extractAccidentFacts";
 export const runtime = "nodejs";
 export const maxDuration = 300; // Allow up to 5 minutes for this route
 
+// Same format as the image cron's cutoff: a full date-time with an explicit zone.
+const START_FORMAT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d{1,3})?)?(Z|[+-]\d{2}:\d{2})$/;
+
 /**
  * Cron job endpoint for backfilling SEO content on existing incidents.
  *
  * This endpoint:
- * 1. Finds incidents without SEO content or extracted facts
- * 2. Extracts structured facts from news sources using OpenAI
+ * 1. Finds incidents created on or after IMAGE_START_DATE without SEO content or extracted facts,
+ *    so the older backlog without articles is never billed
+ * 2. Extracts structured facts from news sources through OpenRouter
  * 3. Generates SEO articles using the extracted facts
  * 4. Updates the incidents with both facts and generated content
  *
@@ -41,12 +45,22 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  // Check if OpenAI API key is configured
-  if (!process.env.OPENAI_API_KEY) {
+  // Check if OpenRouter API key is configured
+  if (!process.env.OPENROUTER_API_KEY) {
     return NextResponse.json(
-      { error: "OPENAI_API_KEY not configured" },
+      { error: "OPENROUTER_API_KEY not configured" },
       { status: 500 }
     );
+  }
+
+  const startRaw = process.env.IMAGE_START_DATE?.trim();
+  const start = startRaw && START_FORMAT.test(startRaw) ? new Date(startRaw) : null;
+  if (!start || Number.isNaN(start.getTime())) {
+    return NextResponse.json({
+      ok: true,
+      disabled: true,
+      reason: "IMAGE_START_DATE is not set to a full ISO date-time with a zone",
+    });
   }
 
   const startTime = Date.now();
@@ -55,6 +69,7 @@ export async function GET(req: NextRequest) {
   // Find incidents without SEO content OR without extracted facts
   const incidents = await prisma.incident.findMany({
     where: {
+      createdAt: { gte: start },
       OR: [
         { articleBody: null },
         { extractedFacts: { equals: Prisma.DbNull } },

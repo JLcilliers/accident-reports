@@ -13,7 +13,8 @@ let openaiClient: OpenAI | null = null;
 function getOpenAI(): OpenAI {
   if (!openaiClient) {
     openaiClient = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
+      apiKey: process.env.OPENROUTER_API_KEY,
+      baseURL: "https://openrouter.ai/api/v1",
     });
   }
   return openaiClient;
@@ -113,8 +114,8 @@ export async function generateIncidentArticle(
   facts?: AccidentFacts | null,
   retryCount: number = 0
 ): Promise<SeoContent | null> {
-  if (!process.env.OPENAI_API_KEY) {
-    console.log("[SEO] OpenAI API key not configured, skipping article generation");
+  if (!process.env.OPENROUTER_API_KEY) {
+    console.log("[SEO] OpenRouter API key not configured, skipping article generation");
     return null;
   }
 
@@ -216,7 +217,7 @@ Remember:
 
   try {
     const response = await getOpenAI().chat.completions.create({
-      model: "gpt-4o",
+      model: "openai/gpt-4o",
       messages: [
         {
           role: "system",
