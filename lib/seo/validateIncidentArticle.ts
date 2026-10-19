@@ -33,6 +33,7 @@ const DISALLOWED_CONTENT: { pattern: RegExp; label: string }[] = [
   { pattern: /https?:\/\/|www\./i, label: "web address" },
   { pattern: /\]\((?!\/crash-reports\/[a-z-]+\))[^)]*\)/, label: "link other than a state crash report guide" },
   { pattern: /\b[A-Z][a-z]+ (Law Firm|Law Group|Law Offices?)\b|\b(LLP|PLLC|Attorneys at Law)\b|& Associates\b/, label: "law firm name" },
+  { pattern: /\b(story|article) (will|may) be updated\b|\bdeveloping story\b|\bcheck back\b|\bstay tuned\b/i, label: "publisher's note that the story will be updated" },
 ];
 
 // Phrases that could create legal liability (errors if present)

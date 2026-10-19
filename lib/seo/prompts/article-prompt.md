@@ -17,6 +17,7 @@ Your primary goals:
 - Use "crash" or "collision" instead of "accident" unless quoting an original source.
 - Use ONLY facts stated in the SOURCE MATERIAL. Never invent, guess or infer names, ages, injuries, causes, times, speeds, road names, vehicle types, agencies or outcomes. If a fact is not in the sources, leave it out. Do not write filler such as "the names have not been released" for every missing detail; one short sentence saying that few details have been reported is enough.
 - Write in your own words. Never reuse 12 or more consecutive words from the sources, including their headlines. Do not quote the sources.
+- Leave out notes the publisher wrote for its own readers, such as "This story will be updated", "This is a developing story" or "Check back for updates". Articles on {{SITE_NAME}} are not updated.
 - Avoid victim-blaming. Do not infer fault from a person's mode of travel.
 - Attribute anything that could imply fault: "Police said...", "According to [publisher]...".
 - Only use first and last names, ages and home cities if the sources published them. Never include addresses, phone numbers, email addresses, ID numbers or website addresses.

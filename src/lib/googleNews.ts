@@ -39,8 +39,7 @@ export async function fetchGoogleNewsFeed(
 ): Promise<GoogleNewsItem[]> {
   const res = await fetch(url, {
     headers: {
-      "User-Agent":
-        "Mozilla/5.0 (compatible; AccidentReportsBot/1.0; +https://accidentreports.com)",
+      "User-Agent": "CarCrashReportBot/1.0 (+https://www.carcrashreport.com)",
     },
     next: { revalidate: 0 }, // Don't cache on the server
   });
