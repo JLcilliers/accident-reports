@@ -73,7 +73,7 @@ function roadType(text: string): Road {
 }
 
 function timeOfDay(text: string): Time | null {
-  const clock = text.match(/\b(\d{1,2})(?::\d{2})?\s*(a\.?m\.?|p\.?m\.?)/);
+  const clock = text.match(/\b(\d{1,2})(?::\d{2})?\s*(a\.?m\.?|p\.?m\.?)(?![a-z])/);
   if (clock) {
     let hour = Number(clock[1]) % 12;
     if (clock[2].startsWith("p")) hour += 12;
@@ -89,9 +89,9 @@ function timeOfDay(text: string): Time | null {
 }
 
 function weather(text: string): Weather | null {
-  if (/\bsnow|\bicy\b|black ice|\bsleet|blizzard|winter storm/.test(text)) return "snow";
-  if (/\brain|wet road|wet pavement|downpour|hydroplan|thunderstorm/.test(text)) return "rain";
-  if (/\bfog/.test(text)) return "fog";
+  if (/\bsnow(?:s|y|ing|ed|fall|storms?|plows?)?\b|\bicy\b|black ice|\bsleet(?:y|ing)?\b|blizzard|winter storm/.test(text)) return "snow";
+  if (/\brain(?:s|y|ing|ed|fall|storms?)?\b|wet road|wet pavement|downpour|hydroplan|thunderstorm/.test(text)) return "rain";
+  if (/\bfog(?:gy)?\b/.test(text)) return "fog";
   return null;
 }
 
@@ -118,6 +118,11 @@ export function sceneCues({ headline, articleBody, extractedFacts, sourceText, o
     .filter(Boolean)
     .join(" ")
     .toLowerCase();
+  // Time and weather leave out the place and road names, so a town like Snowflake is not read as snow.
+  const conditions = [headline, extractedFacts?.timeOfCrashApprox, extractedFacts?.causeOrAllegations, articleBody?.slice(0, 3000)]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
 
   return {
     vehicles: vehicleClasses(text, extractedFacts),
@@ -125,8 +130,8 @@ export function sceneCues({ headline, articleBody, extractedFacts, sourceText, o
     crosswalk: /pedestrian|crosswalk/.test(text),
     bridge: /\bbridge\b|overpass|viaduct/.test(text),
     tunnel: /\btunnel\b/.test(text),
-    time: timeOfDay(text),
-    weather: weather(text),
+    time: timeOfDay(conditions),
+    weather: weather(conditions),
     season: season(occurredAt),
   };
 }

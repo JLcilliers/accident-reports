@@ -286,13 +286,21 @@ async function illustrateBatch(
       });
       const seed = seedOf(incident.slug);
       const first = forced?.[i] ?? pickComposition(cues, history.names, seed);
-      const second = forced?.[i] ?? pickComposition(cues, history.names, seed, [first.name]);
       history.names.unshift(first.name);
-      return { incident, plan: { cues, seed, compositions: [first, second] } };
+      return { incident, plan: { cues, seed, compositions: [first, first] } };
     } catch (error) {
       return { incident, error: error instanceof Error ? error.message : String(error) };
     }
   });
+  // Second attempts are planned once every first composition is in the history, so a second attempt
+  // never shares a composition with another image in the same batch.
+  const seconds: string[] = [];
+  planned.forEach(({ plan }, i) => {
+    if (!plan || forced?.[i]) return;
+    plan.compositions[1] = pickComposition(plan.cues, history.names, plan.seed, [plan.compositions[0].name, ...seconds]);
+    seconds.push(plan.compositions[1].name);
+  });
+  // Shared by the batch: each new image's hash is added as soon as it passes, so later checks compare with it.
   const similarity = { hashes: [...history.hashes], threshold: SIMILARITY_THRESHOLD };
 
   const items = await Promise.all(
@@ -319,6 +327,7 @@ async function illustrateBatch(
       } else try {
         if (!plan) throw new Error(error);
         const result = await createIllustration(keyFor(incident), plan, deadline, similarity);
+        if (result.status === "OK" && result.hash) similarity.hashes.unshift(result.hash);
         item = {
           slug: incident.slug,
           status: result.status,

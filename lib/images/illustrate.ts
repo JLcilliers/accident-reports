@@ -56,13 +56,14 @@ function vehicleSentence(framing: Framing, classes: string[]): string {
   const names = list.length === 2 && list[0] === list[1] && !/motorcycle|bicycle/.test(list[0]) ? [`two ${list[0]}s`] : list.map(vehicleNoun);
   const all = names.join(" and ");
   const lead = all.charAt(0).toUpperCase() + all.slice(1);
+  const twoWheeled = (cls: string) => /motorcycle|bicycle/.test(cls);
   switch (framing) {
     case "none":
       return "There are no vehicles anywhere in the picture.";
     case "above":
-      return `${lead} seen from directly above as simple shapes, showing only their roofs.`;
+      return `${lead} seen from directly above as simple shapes${list.some(twoWheeled) ? "" : ", showing only their roofs"}.`;
     case "distant":
-      return `${lead}, small in the distance, with fully dark windows.`;
+      return `${lead}, small in the distance${list.every(twoWheeled) ? "" : ", with fully dark windows"}.`;
     case "rear":
       return `${names[0].charAt(0).toUpperCase() + names[0].slice(1)} seen from behind and slightly to one side, with fully dark, opaque windows and no license plate.`;
     case "lights":
@@ -127,12 +128,25 @@ function failedChecks(check: ImageCheck): string[] {
   return (Object.keys(check) as (keyof ImageCheck)[]).filter((k) => check[k]);
 }
 
+/** An image that passed the check, waiting to be uploaded. */
+interface Candidate {
+  webp: Buffer;
+  alt: string;
+  composition: string;
+  look: Look;
+  prompt: string;
+  hash: string;
+  nearest: number | null;
+  log: AttemptLog;
+}
+
 /**
  * Generates an illustration, checks it with a vision model and uploads it to Vercel Blob. At most
  * MAX_ATTEMPTS generations: a second one uses the plan's second composition, with a stricter prompt when
- * the check rejected the first. Any "yes" from the check discards an image, and so does a hash at or
- * under the similarity threshold while a second attempt is still possible. Nothing runs past `deadline`
- * (epoch ms), so a caller can always store the outcome before its time limit.
+ * the check rejected the first. Any "yes" from the check discards an image. A hash at or under the
+ * similarity threshold sets the image aside for a second attempt; it is still used when that attempt
+ * fails, is skipped or comes out more similar. Nothing runs past `deadline` (epoch ms), so a caller can
+ * always store the outcome before its time limit.
  */
 export async function createIllustration(
   key: string,
@@ -143,6 +157,8 @@ export async function createIllustration(
   const attempts: AttemptLog[] = [];
   let costUsd = 0;
   let strict = false;
+  let chosen: Candidate | null = null;
+  let setAside: Candidate | null = null;
 
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
     const composition = plan.compositions[attempt - 1] ?? plan.compositions[0];
@@ -186,26 +202,44 @@ export async function createIllustration(
       strict = true;
       continue;
     }
-    if (similarity && nearest !== null && nearest <= similarity.threshold && attempt < MAX_ATTEMPTS) {
-      log.error = `too similar to a recent image (distance ${nearest})`;
-      console.log(`[images] ${key} attempt ${attempt} ${log.error}`);
-      continue;
+    const candidate: Candidate = { webp, alt: checked.alt, composition: composition.name, look, prompt, hash, nearest, log };
+    if (similarity && nearest !== null && nearest <= similarity.threshold) {
+      if (attempt < MAX_ATTEMPTS) {
+        log.error = `too similar to a recent image (distance ${nearest})`;
+        console.log(`[images] ${key} attempt ${attempt} ${log.error}`);
+        setAside = candidate;
+        continue;
+      }
+      // The last attempt is too similar as well: keep whichever image is further from the recent ones.
+      if (setAside && setAside.nearest !== null && setAside.nearest > nearest) {
+        log.error = `too similar to a recent image (distance ${nearest})`;
+        break;
+      }
     }
+    chosen = candidate;
+    break;
+  }
 
+  if (!chosen && setAside) {
+    chosen = setAside;
+    chosen.log.error += ", kept as no later attempt was better";
+  }
+  if (chosen) {
     try {
-      const blob = await putBefore(deadline, `illustrations/${key}.webp`, webp, {
+      const blob = await putBefore(deadline, `illustrations/${key}.webp`, chosen.webp, {
         access: "public",
         contentType: "image/webp",
         addRandomSuffix: true,
         cacheControlMaxAge: 31536000,
       });
-      console.log(`[images] ${key} attempt ${attempt} (${composition.name}) passed, cost $${costUsd.toFixed(6)}`);
-      return { status: "OK", url: blob.url, alt: checked.alt, model: IMAGE_MODEL, composition: composition.name, look, prompt, hash, nearest, costUsd, attempts };
+      console.log(`[images] ${key} attempt ${chosen.log.attempt} (${chosen.composition}) passed, cost $${costUsd.toFixed(6)}`);
+      const { alt, composition, look, prompt, hash, nearest } = chosen;
+      return { status: "OK", url: blob.url, alt, model: IMAGE_MODEL, composition, look, prompt, hash, nearest, costUsd, attempts };
     } catch (error) {
       // The image passed; only storing it failed, so paying for another generation would not help.
-      log.error = `upload failed: ${error instanceof Error ? error.message : String(error)}`;
-      console.error(`[images] ${key} attempt ${attempt} ${log.error}`);
-      break;
+      const failure = `upload failed: ${error instanceof Error ? error.message : String(error)}`;
+      chosen.log.error = chosen.log.error ? `${chosen.log.error}; ${failure}` : failure;
+      console.error(`[images] ${key} attempt ${chosen.log.attempt} ${failure}`);
     }
   }
 
