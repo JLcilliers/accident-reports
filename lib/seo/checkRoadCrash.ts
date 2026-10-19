@@ -50,7 +50,7 @@ export async function checkRoadCrash(headline: string, sourceTexts: string[]): P
     response_format: { type: "json_object" },
     max_tokens: 1000,
     temperature: 0,
-  });
+  }, { timeout: 20_000, maxRetries: 1 }); // A short answer: a slow call fails fast instead of eating the cron run's time.
 
   const content = response.choices[0]?.message?.content ?? "";
   let parsed: Partial<RoadCrashCheck> = {};
