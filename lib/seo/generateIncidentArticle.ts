@@ -4,6 +4,7 @@ import { join } from "path";
 import type { AccidentFacts } from "./extractAccidentFacts";
 import {
   findCopiedRun,
+  findCopiedRuns,
   validateIncidentArticle,
   type ArticleValidationResult,
 } from "./validateIncidentArticle";
@@ -54,6 +55,8 @@ interface IncidentData {
   state?: string | null;
   occurredAt: Date;
   sources?: { title: string; snippet?: string | null; publisher?: string | null }[];
+  /** The story's text from a publisher's own site (see fetchPublisherText). Never stored or shown. */
+  publisherText?: string | null;
 }
 
 /**
@@ -187,9 +190,13 @@ export async function generateIncidentArticle(
 
   // Gather source text for context, and size the article to it
   const sourceTexts = incidentSourceTexts(incident.sources?.slice(0, 5) ?? []);
-  const sourceContext = sourceTexts.map((text) => `- ${text}`).join("\n");
+  const publisherText = incident.publisherText?.trim() || "";
+  const sourceContext = [
+    ...sourceTexts.map((text) => `- ${text}`),
+    ...(publisherText ? [`\nFULL STORY FROM A PUBLISHER'S SITE (the fullest account; use its facts, never its wording):\n${publisherText}`] : []),
+  ].join("\n");
   const publishers = [...new Set((incident.sources ?? []).map((s) => s.publisher?.trim()).filter(Boolean))].join(", ") || "not named";
-  const sourceWords = sourceTexts.join(" ").split(/\s+/).filter(Boolean).length;
+  const sourceWords = [...sourceTexts, publisherText].join(" ").split(/\s+/).filter(Boolean).length;
   const reportingWords = Math.min(
     MAX_REPORTING_WORDS,
     Math.max(MIN_REPORTING_WORDS, sourceWords * REPORTING_WORDS_PER_SOURCE_WORD)
@@ -197,7 +204,8 @@ export async function generateIncidentArticle(
   const maxWords = reportingWords + GENERAL_SECTION_WORDS;
   const guideLink = stateGuideLink(incident.state ?? facts?.state);
   const articleNotes = `WORD BUDGET: at most ${reportingWords} words for the reporting sections (Key Facts through Traffic Impact) and at most ${maxWords} words for the whole article. Shorter is fine when the sources say little.
-STATE CRASH REPORT GUIDE LINK: ${guideLink ?? "none (do not link to any guide)"}`;
+STATE CRASH REPORT GUIDE LINK: ${guideLink ?? "none (do not link to any guide)"}${publisherText ? `
+PUBLISHER'S STORY: take only its facts. Restate each one in a sentence built your own way, with different wording and order; no 12 consecutive words may match the story, not even a list of vehicles or a description of injuries.` : ""}`;
 
   // Build entity summaries from extracted facts
   const companies = facts?.companiesMentioned?.join(", ") || "none specified";
@@ -273,79 +281,101 @@ Remember:
   }
 
   try {
-    const response = await getOpenAI().chat.completions.create({
-      model: process.env.ARTICLE_MODEL || DEFAULT_ARTICLE_MODEL,
-      messages: [
-        {
-          role: "system",
-          content: promptTemplate,
-        },
-        {
-          role: "user",
-          content: userPrompt,
-        },
-      ],
-      // Haiku 5.5 spends up to ~4,100 reasoning tokens before writing, so leave room for both
-      max_tokens: 8000,
-      temperature: 0.4,
-    });
+    const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [
+      {
+        role: "system",
+        content: promptTemplate,
+      },
+      {
+        role: "user",
+        content: userPrompt,
+      },
+    ];
 
-    const content = response.choices[0]?.message?.content;
-    if (!content) {
-      console.error("[SEO] Empty response from OpenAI");
-      return null;
-    }
-
-    // Parse the response
-    const { meta, body } = parseArticleResponse(content);
-
-    // Validate article using central validator
-    const validation = validateIncidentArticle(body, { maxWords });
-
-    if (!validation.ok) {
-      console.warn("[SEO] Article validation failed:", {
-        errors: validation.errors,
-        warnings: validation.warnings,
-        headline: incident.headline,
+    // Given a publisher's full story, the model tends to keep its wording for plain facts such as a list of
+    // vehicles, so a draft that repeats a source gets one rewrite before the article fails.
+    for (let draft = 1; ; draft++) {
+      const response = await getOpenAI().chat.completions.create({
+        model: process.env.ARTICLE_MODEL || DEFAULT_ARTICLE_MODEL,
+        messages,
+        // Haiku 5.5 spends up to ~4,100 reasoning tokens before writing, so leave room for both
+        max_tokens: 8000,
+        temperature: 0.4,
       });
-      throw new Error(
-        `Generated article failed validation: ${validation.errors.join("; ")}`
-      );
+
+      const content = response.choices[0]?.message?.content;
+      if (!content) {
+        console.error("[SEO] Empty response from OpenAI");
+        return null;
+      }
+
+      // Parse the response
+      const { meta, body } = parseArticleResponse(content);
+
+      // Validate article using central validator
+      const validation = validateIncidentArticle(body, { maxWords });
+
+      if (!validation.ok) {
+        console.warn("[SEO] Article validation failed:", {
+          errors: validation.errors,
+          warnings: validation.warnings,
+          headline: incident.headline,
+        });
+        throw new Error(
+          `Generated article failed validation: ${validation.errors.join("; ")}`
+        );
+      }
+
+      const copied = findCopiedRun(body, [incident.headline, incident.summary ?? "", ...sourceTexts]);
+      const copiedFromPublisher = !copied && publisherText ? findCopiedRun(body, [publisherText]) : null;
+      if (copied || copiedFromPublisher) {
+        if (draft === 1) {
+          const passages = findCopiedRuns(body, [incident.headline, incident.summary ?? "", ...sourceTexts, publisherText]);
+          messages.push(
+            { role: "assistant", content },
+            {
+              role: "user",
+              content: `Your article repeats these passages from the sources word for word:\n${passages.map((passage) => `- "${passage}"`).join("\n")}\nRewrite every sentence that contains one in your own words, for example by regrouping or reordering the details, leave the rest as it is, and return the whole article in the same format.`,
+            }
+          );
+          continue;
+        }
+        if (copied) {
+          throw new Error(`Generated article repeats 12 or more words of a source: "${copied}"`);
+        }
+        // Not quoted, so none of the publisher's text ends up in the stored error notes.
+        throw new Error("Generated article repeats 12 or more words of the publisher's story");
+      }
+
+      // Log warnings for tracking (but don't fail)
+      if (validation.warnings.length > 0) {
+        console.log("[SEO] Article warnings (review recommended):", {
+          warnings: validation.warnings,
+          headline: incident.headline,
+        });
+      }
+
+      // Extract SEO fields from meta block or generate fallbacks
+      const seoTitle =
+        meta?.seo_title ||
+        `${incident.city || "Local"} Crash Report - ${dateStr}`.slice(0, 70);
+      const seoDescription =
+        meta?.meta_description ||
+        `Details about a crash in ${location} on ${dateStr}. Learn what happened and how to get the official report.`.slice(
+          0,
+          170
+        );
+
+      return {
+        seoTitle: seoTitle.slice(0, 70),
+        seoDescription: seoDescription.slice(0, 170),
+        articleBody: body,
+        primaryKeyword: meta?.primary_keyword,
+        secondaryKeywords: meta?.secondary_keywords,
+        // Include validation result for caller to use
+        validation,
+      };
     }
-
-    const copied = findCopiedRun(body, [incident.headline, incident.summary ?? "", ...sourceTexts]);
-    if (copied) {
-      throw new Error(`Generated article repeats 12 or more words of a source: "${copied}"`);
-    }
-
-    // Log warnings for tracking (but don't fail)
-    if (validation.warnings.length > 0) {
-      console.log("[SEO] Article warnings (review recommended):", {
-        warnings: validation.warnings,
-        headline: incident.headline,
-      });
-    }
-
-    // Extract SEO fields from meta block or generate fallbacks
-    const seoTitle =
-      meta?.seo_title ||
-      `${incident.city || "Local"} Crash Report - ${dateStr}`.slice(0, 70);
-    const seoDescription =
-      meta?.meta_description ||
-      `Details about a crash in ${location} on ${dateStr}. Learn what happened and how to get the official report.`.slice(
-        0,
-        170
-      );
-
-    return {
-      seoTitle: seoTitle.slice(0, 70),
-      seoDescription: seoDescription.slice(0, 170),
-      articleBody: body,
-      primaryKeyword: meta?.primary_keyword,
-      secondaryKeywords: meta?.secondary_keywords,
-      // Include validation result for caller to use
-      validation,
-    };
   } catch (error) {
     console.error("[SEO] Failed to generate article:", error);
     throw error; // Re-throw so caller can handle

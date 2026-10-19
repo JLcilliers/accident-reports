@@ -214,6 +214,29 @@ export function findCopiedRun(markdown: string, sources: string[], runLength = 1
   return null;
 }
 
+/** Every passage of `runLength` or more consecutive words the article shares with the sources, overlaps merged. */
+export function findCopiedRuns(markdown: string, sources: string[], runLength = 12): string[] {
+  const seen = new Set<string>();
+  for (const source of sources) {
+    const words = wordsOf(source);
+    for (let i = 0; i + runLength <= words.length; i++) seen.add(words.slice(i, i + runLength).join(" "));
+  }
+  const words = wordsOf(markdown);
+  const runs: string[] = [];
+  let from = 0;
+  let to = -1;
+  for (let i = 0; i + runLength <= words.length; i++) {
+    if (!seen.has(words.slice(i, i + runLength).join(" "))) continue;
+    if (i > to) {
+      if (to >= 0) runs.push(words.slice(from, to).join(" "));
+      from = i;
+    }
+    to = i + runLength;
+  }
+  if (to >= 0) runs.push(words.slice(from, to).join(" "));
+  return runs;
+}
+
 /**
  * Quick validation check - just returns true/false.
  * Useful for simple pass/fail checks without full error details.

@@ -3,8 +3,9 @@ import { Prisma } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { extractAccidentFacts } from "@/lib/seo/extractAccidentFacts";
 import { generateIncidentArticle, incidentSourceTexts } from "@/lib/seo/generateIncidentArticle";
-import { claimArticle } from "@/lib/seo/claim";
+import { claimArticle, releaseForSecondPublisher } from "@/lib/seo/claim";
 import { checkRoadCrash } from "@/lib/seo/checkRoadCrash";
+import { fetchPublisherText } from "@/lib/seo/fetchPublisherText";
 import type { AccidentFacts } from "@/lib/seo/extractAccidentFacts";
 
 export const runtime = "nodejs";
@@ -16,18 +17,20 @@ const START_FORMAT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d{1,3})?)?(Z|[+-]
 // After this many attempts an incident is marked FAILED and never picked again automatically.
 const MAX_ATTEMPTS = 2;
 const MAX_PER_RUN = 10;
-// An incident (facts plus article) takes up to about 25 s, so a new one starts only while 60 s remain.
+// An incident (text lookup up to 25 s, then facts plus up to two article drafts) takes up to about 70 s, so a
+// new one starts only while 75 s remain.
 const RUN_BUDGET_MS = 270_000;
-const MIN_ITEM_MS = 60_000;
+const MIN_ITEM_MS = 75_000;
 
 /**
  * Cron job endpoint for backfilling SEO content on existing incidents.
  *
  * This endpoint claims incidents one at a time (see claimArticle) that were created on or after
- * IMAGE_START_DATE, have no article and are covered by at least two independent publishers, so the older
- * backlog is never billed. For each it first checks that the coverage is about a real road crash (anything
- * else is marked NOT_A_CRASH and never claimed again), then extracts structured facts and writes the article,
- * all through OpenRouter.
+ * IMAGE_START_DATE and have no article, so the older backlog is never billed. For each it looks for the story's
+ * full text on a publisher's own site (see fetchPublisherText); an incident covered by only one publisher goes
+ * ahead only when that text is found, and otherwise waits for a second publisher. It then checks that the
+ * coverage is about a real road crash (anything else is marked NOT_A_CRASH and never claimed again), extracts
+ * structured facts and writes the article, all through OpenRouter. The publisher's text is model input only.
  * Each incident gets at most MAX_ATTEMPTS attempts, and attempts per UTC day stay within ARTICLE_DAILY_LIMIT
  * (default 100; 0 stops generation).
  *
@@ -87,6 +90,8 @@ export async function GET(req: NextRequest) {
   let factsExtracted = 0;
   let articlesGenerated = 0;
   let notACrash = 0;
+  let withPublisherText = 0;
+  let waitingForSecondPublisher = 0;
   let failed = 0;
   let usedTodayBefore: number | null = null;
   const errors: string[] = [];
@@ -101,8 +106,17 @@ export async function GET(req: NextRequest) {
       const sources = await prisma.incidentSource.findMany({
         where: { incidentId: incident.id },
         take: 5,
-        select: { title: true, snippet: true, publisher: true },
+        select: { title: true, snippet: true, publisher: true, publisherDomain: true },
       });
+
+      const publisherText = await fetchPublisherText(sources);
+      if (publisherText) withPublisherText++;
+      if (!publisherText && incident.publishers < 2) {
+        await releaseForSecondPublisher(prisma, incident.id);
+        waitingForSecondPublisher++;
+        console.log(`[generate-seo] One publisher and no text from its site, waiting for a second: ${incident.slug}`);
+        continue;
+      }
 
       const crashCheck = await checkRoadCrash(incident.headline, incidentSourceTexts(sources));
       if (!crashCheck.crash) {
@@ -118,7 +132,7 @@ export async function GET(req: NextRequest) {
       let facts = incident.extractedFacts as AccidentFacts | null;
       if (!facts) {
         console.log(`[generate-seo] Extracting facts for: ${incident.slug}`);
-        const combinedText = incidentSourceTexts(sources).join("\n\n") || incident.headline;
+        const combinedText = [...incidentSourceTexts(sources), publisherText ?? ""].filter(Boolean).join("\n\n") || incident.headline;
         facts = await extractAccidentFacts(incident.headline, combinedText);
         if (facts) {
           factsExtracted++;
@@ -138,6 +152,7 @@ export async function GET(req: NextRequest) {
           state: incident.state,
           occurredAt: incident.occurredAt,
           sources,
+          publisherText,
         },
         facts
       );
@@ -181,6 +196,8 @@ export async function GET(req: NextRequest) {
     factsExtracted,
     articlesGenerated,
     notACrash,
+    withPublisherText,
+    waitingForSecondPublisher,
     failed,
     errors: errors.slice(0, 10), // Limit errors in response
   };

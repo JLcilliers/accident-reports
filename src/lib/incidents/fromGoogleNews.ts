@@ -305,6 +305,7 @@ export function toIncidentCandidates(
       headline: item.title.trim(),
       link: item.link,
       publisher: item.source,
+      publisherDomain: item.sourceDomain,
       occurredAt,
       snippet: item.description,
       ...location,
