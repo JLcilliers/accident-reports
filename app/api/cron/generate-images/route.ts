@@ -7,7 +7,8 @@ import { putBefore } from "@/lib/images/blob";
 import { buildScene } from "@/lib/images/scene";
 import { MAX_ATTEMPTS, createIllustration, type AttemptLog } from "@/lib/images/illustrate";
 import { IMAGE_MODEL, openRouterReady } from "@/lib/images/openrouter";
-import { claimIncidents, saveIllustration, type ClaimedIncident } from "@/lib/images/store";
+import { NOT_A_CRASH_MARK, claimIncidents, markNotACrash, saveIllustration, type ClaimedIncident } from "@/lib/images/store";
+import { checkRoadCrash } from "@/lib/seo/checkRoadCrash";
 
 export const maxDuration = 300;
 
@@ -25,13 +26,14 @@ const START_FORMAT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d{1,3})?)?(Z|[+-]
 
 interface ItemResult {
   slug: string;
-  status: "OK" | "FAILED";
+  status: "OK" | "FAILED" | "NOT_A_CRASH";
   url: string | null;
   alt: string | null;
   model: string;
   scene: string;
   costUsd: number;
   attempts: AttemptLog[];
+  reason?: string;
   error?: string;
 }
 
@@ -42,7 +44,9 @@ interface ItemResult {
  * claim incidents created on or after it, so an incident that existed before that moment never gets an
  * image. They first check that OpenRouter accepts the key and has credit, claim four incidents at a time,
  * stay within IMAGE_DAILY_LIMIT (default 50; 0 stops generation) and never retry an item automatically.
- * Without an article, the scene comes from the headline, summary and news-source snippets.
+ * Without an article, the scene comes from the headline, summary and news-source snippets. Before drawing,
+ * a small model (CRASH_CHECK_MODEL) checks that the coverage is about a road crash; an incident that is not
+ * gets no image and is never claimed again. When the check gives no clear answer, the image is drawn.
  *
  * `?test=N` is a dry run that never writes to the database: it draws illustrations for the N most recent
  * incidents (at most 12 a call and 36 a day) and stores each image, with a JSON record of
@@ -103,19 +107,22 @@ async function runScheduled() {
     if (claimed.length === 0) break;
 
     const batch = await illustrateBatch(claimed, (incident) => incident.slug, deadline, (incident, item) =>
-      saveIllustration(prisma, incident.id, {
-        status: item.status,
-        url: item.url,
-        alt: item.alt,
-        model: item.model,
-        costUsd: item.costUsd,
-        attempts: item.attempts.filter((attempt) => !attempt.skipped).length,
-      })
+      item.status === "NOT_A_CRASH"
+        ? markNotACrash(prisma, incident.id)
+        : saveIllustration(prisma, incident.id, {
+            status: item.status,
+            url: item.url,
+            alt: item.alt,
+            model: item.model,
+            costUsd: item.costUsd,
+            attempts: item.attempts.filter((attempt) => !attempt.skipped).length,
+          })
     );
     results.push(...batch);
 
     // A whole batch failing without a single billed call means the provider is refusing work; stop claiming.
-    if (batch.every((item) => item.status === "FAILED" && item.costUsd === 0)) {
+    const drawn = batch.filter((item) => item.status !== "NOT_A_CRASH");
+    if (drawn.length > 0 && drawn.every((item) => item.status === "FAILED" && item.costUsd === 0)) {
       stoppedEarly = "every image in the last batch failed before anything was billed";
       console.error(`[generate-images] Stopped early: ${stoppedEarly}`);
       break;
@@ -193,27 +200,35 @@ async function illustrateBatch(
           select: { title: true, snippet: true },
         });
         // Google News snippets are HTML (a link and the publisher's name); only their words matter here.
-        const sourceText = [incident.summary, ...sources.flatMap((source) => [source.title, source.snippet])]
-          .filter(Boolean)
-          .join(" ")
-          .replace(/<[^>]*>|&nbsp;/g, " ");
-        const scene = buildScene({
-          headline: incident.headline,
-          articleBody: incident.articleBody,
-          extractedFacts: incident.extractedFacts as AccidentFacts | null,
-          sourceText,
+        const texts = [incident.summary, ...sources.flatMap((source) => [source.title, source.snippet])]
+          .map((text) => (text ?? "").replace(/<[^>]*>|&nbsp;/g, " ").replace(/\s+/g, " ").trim())
+          .filter(Boolean);
+        const crashCheck = await checkRoadCrash(incident.headline, [...new Set(texts)]).catch((error) => {
+          console.error(`[generate-images] ${incident.slug}: crash check failed, drawing anyway: ${error instanceof Error ? error.message : String(error)}`);
+          return null;
         });
-        const result = await createIllustration(keyFor(incident), scene.description, deadline);
-        item = {
-          slug: incident.slug,
-          status: result.status,
-          url: result.url,
-          alt: result.alt,
-          model: result.model,
-          scene: scene.description,
-          costUsd: result.costUsd,
-          attempts: result.attempts,
-        };
+        if (crashCheck && !crashCheck.crash) {
+          console.log(`[generate-images] Not a road crash, no image: ${incident.slug} (${crashCheck.reason})`);
+          item = { slug: incident.slug, status: "NOT_A_CRASH", url: null, alt: null, model: NOT_A_CRASH_MARK, scene: "", costUsd: 0, attempts: [], reason: crashCheck.reason };
+        } else {
+          const scene = buildScene({
+            headline: incident.headline,
+            articleBody: incident.articleBody,
+            extractedFacts: incident.extractedFacts as AccidentFacts | null,
+            sourceText: texts.join(" "),
+          });
+          const result = await createIllustration(keyFor(incident), scene.description, deadline);
+          item = {
+            slug: incident.slug,
+            status: result.status,
+            url: result.url,
+            alt: result.alt,
+            model: result.model,
+            scene: scene.description,
+            costUsd: result.costUsd,
+            attempts: result.attempts,
+          };
+        }
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
         item = { slug: incident.slug, status: "FAILED", url: null, alt: null, model: IMAGE_MODEL, scene: "", costUsd: 0, attempts: [], error: message };
@@ -237,22 +252,25 @@ async function illustrateBatch(
 
 function summarise(results: ItemResult[], extra: Record<string, unknown>) {
   const ok = results.filter((r) => r.status === "OK").length;
+  const notACrash = results.filter((r) => r.status === "NOT_A_CRASH").length;
+  const drawn = results.length - notACrash;
   // First 12 hex characters of the key's SHA-256, so the stored value can be compared without revealing it.
   const keyFingerprint = process.env.OPENROUTER_API_KEY
     ? createHash("sha256").update(process.env.OPENROUTER_API_KEY).digest("hex").slice(0, 12)
     : null;
   const totalCostUsd = results.reduce((sum, r) => sum + r.costUsd, 0);
   const summary = {
-    ok: results.length === 0 || ok > 0,
+    ok: drawn === 0 || ok > 0,
     ...extra,
     keyFingerprint,
     processed: results.length,
     succeeded: ok,
-    failed: results.length - ok,
+    failed: drawn - ok,
+    notACrash,
     totalCostUsd: Number(totalCostUsd.toFixed(6)),
     results,
   };
 
   console.log("[generate-images] Completed:", JSON.stringify({ ...summary, results: undefined }));
-  return NextResponse.json(summary, { status: results.length > 0 && ok === 0 ? 500 : 200 });
+  return NextResponse.json(summary, { status: drawn > 0 && ok === 0 ? 500 : 200 });
 }

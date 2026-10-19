@@ -60,6 +60,26 @@ export async function claimIncidents(
   });
 }
 
+/** Marks the imageModel of incidents whose coverage is not about a road crash, so they can be found later. */
+export const NOT_A_CRASH_MARK = "not a road crash";
+
+/**
+ * Records that an incident's coverage is not about a road crash: it gets no image and, being FAILED with
+ * every attempt used, is never claimed again. imageGeneratedAt is cleared, so it does not count towards the
+ * daily limit.
+ */
+export async function markNotACrash(db: PrismaClient, id: string): Promise<void> {
+  await db.$executeRaw`
+    UPDATE "Incident"
+       SET "imageStatus" = 'FAILED'::"ImageStatus",
+           "imageUrl" = NULL,
+           "imageAlt" = NULL,
+           "imageModel" = ${NOT_A_CRASH_MARK},
+           "imageCostUsd" = 0,
+           "imageGeneratedAt" = NULL
+     WHERE id = ${id}`;
+}
+
 /** Stores a generation outcome, leaving updatedAt alone for the same reason as the claim. */
 export async function saveIllustration(db: PrismaClient, id: string, result: SavedIllustration): Promise<void> {
   await db.$executeRaw`
