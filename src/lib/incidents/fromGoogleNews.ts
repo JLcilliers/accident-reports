@@ -1,4 +1,6 @@
+import { PUBLISHER_FEEDS } from "../../config/publisherFeeds";
 import type { GoogleNewsItem } from "../googleNews";
+import { ONE_STATE_TOWNS } from "./towns";
 import type { IncidentCandidate } from "./types";
 
 /**
@@ -211,9 +213,116 @@ const MAJOR_CITIES: Record<string, string> = {
 };
 
 /**
+ * Other names for cities on the list.
+ */
+const CITY_ALIASES: Record<string, string> = {
+  "new york city": "new york",
+  nyc: "new york",
+};
+
+/**
+ * AP-style state abbreviations ("Arlington, Va.").
+ */
+const AP_STATES: Record<string, string> = {
+  "Ala.": "AL",
+  "Ariz.": "AZ",
+  "Ark.": "AR",
+  "Calif.": "CA",
+  "Colo.": "CO",
+  "Conn.": "CT",
+  "Del.": "DE",
+  "Fla.": "FL",
+  "Ga.": "GA",
+  "Ill.": "IL",
+  "Ind.": "IN",
+  "Kan.": "KS",
+  "Ky.": "KY",
+  "La.": "LA",
+  "Md.": "MD",
+  "Mass.": "MA",
+  "Mich.": "MI",
+  "Minn.": "MN",
+  "Miss.": "MS",
+  "Mo.": "MO",
+  "Mont.": "MT",
+  "Neb.": "NE",
+  "Nev.": "NV",
+  "N.H.": "NH",
+  "N.J.": "NJ",
+  "N.M.": "NM",
+  "N.Y.": "NY",
+  "N.C.": "NC",
+  "N.D.": "ND",
+  "Okla.": "OK",
+  "Ore.": "OR",
+  "Pa.": "PA",
+  "R.I.": "RI",
+  "S.C.": "SC",
+  "S.D.": "SD",
+  "Tenn.": "TN",
+  "Tex.": "TX",
+  "Va.": "VA",
+  "Vt.": "VT",
+  "Wash.": "WA",
+  "W.Va.": "WV",
+  "Wis.": "WI",
+  "Wyo.": "WY",
+};
+
+/**
+ * The states with a county of each name that is also a state's or a listed city's name (US Census 2020, space
+ * separated). "<Name> County" names the county, not the state or the city.
+ */
+const COUNTIES: Record<string, string> = {
+  arkansas: "AR",
+  arlington: "VA",
+  aurora: "SD",
+  austin: "TX",
+  baltimore: "MD",
+  boulder: "CO",
+  charlotte: "FL VA",
+  cleveland: "AR NC OK",
+  colorado: "TX",
+  columbus: "NC",
+  dallas: "AL AR IA MO TX",
+  delaware: "IN IA NY OH OK PA",
+  denver: "CO",
+  "el paso": "CO TX",
+  fresno: "CA",
+  hartford: "CT",
+  hawaii: "HI",
+  houston: "AL GA MN TN TX",
+  idaho: "ID",
+  indiana: "PA",
+  iowa: "IA WI",
+  "los angeles": "CA",
+  mesa: "CO",
+  miami: "IN KS OH",
+  milwaukee: "WI",
+  mississippi: "AR MO",
+  nevada: "AR CA",
+  "new york": "NY",
+  oakland: "MI",
+  ohio: "IN KY WV",
+  oklahoma: "OK",
+  oregon: "MO",
+  philadelphia: "PA",
+  providence: "RI",
+  raleigh: "WV",
+  richmond: "GA NY NC VA",
+  sacramento: "CA",
+  "san diego": "CA",
+  "san francisco": "CA",
+  texas: "MO OK",
+  utah: "UT",
+  washington: "AL AR CO FL GA ID IL IN IA KS KY ME MD MN MS MO NE NY NC OH OK OR PA RI TN TX UT VT VA WI",
+  wyoming: "NY PA WV",
+};
+
+/**
  * "Washington, D.C.", "Washington DC" or "D.C." mean the District, not Washington state.
  */
-const WASHINGTON_DC = /\bwashington,?\s+d\.?\s?c\b|\bd\.\s?c\./i;
+const WASHINGTON_DC = /\bwashington,?\s+d\.?\s?c\b|\bd\.\s?c\./gi;
 
 /**
  * Checks if a text contains any accident-related phrases.
@@ -260,16 +369,27 @@ function namePattern(name: string): RegExp {
   return new RegExp(`\\b${name.replace(/\./g, "\\.")}\\b`, "gi");
 }
 
-const CITY_PATTERNS = Object.entries(MAJOR_CITIES).map(([city, state]) => [namePattern(city), city, state] as const);
+const CITY_PATTERNS = [
+  ...Object.entries(MAJOR_CITIES).map(([city, state]) => [namePattern(city), city, state] as const),
+  ...Object.entries(CITY_ALIASES).map(([alias, city]) => [namePattern(alias), city, MAJOR_CITIES[city]] as const),
+];
 const STATE_PATTERNS = Object.entries(US_STATES).map(([name, abbrev]) => [namePattern(name), abbrev] as const);
 
 /**
  * Words that make a place's name part of a street or neighbourhood name ("Washington Heights", "Idaho Avenue"),
- * and for a state's name, a county's name ("Delaware County"), which can be in any state.
+ * and a county's name ("Delaware County", "Arlington County"), which is looked up in COUNTIES instead.
  */
-const STREET_WORDS = ["heights", "district", "street", "st", "avenue", "ave", "road", "rd", "boulevard", "blvd", "park", "bridge", "square"];
-const NOT_AFTER_CITY = new Set(STREET_WORDS);
+const STREET_TYPES = ["street", "st", "avenue", "ave", "road", "rd", "boulevard", "blvd"];
+const STREET_WORDS = [...STREET_TYPES, "heights", "district", "park", "bridge", "square"];
+const NOT_AFTER_CITY = new Set([...STREET_WORDS, "county"]);
 const NOT_AFTER_STATE = new Set([...STREET_WORDS, "county", "co"]);
+
+/**
+ * The capitalised word right after a match, in lower case ("heights" after "Washington Heights").
+ */
+function nextWord(text: string, match: RegExpExecArray): string | undefined {
+  return text.slice(match.index + match[0].length).match(/^\s+([A-Z][A-Za-z]*)/)?.[1].toLowerCase();
+}
 
 /**
  * Where a place's name stands for the place: not before a capitalised word in `notAfter`. A lower-case word
@@ -277,10 +397,17 @@ const NOT_AFTER_STATE = new Set([...STREET_WORDS, "county", "co"]);
  */
 function placeMatches(text: string, pattern: RegExp, notAfter: Set<string>): RegExpExecArray[] {
   return [...text.matchAll(pattern)].filter((match) => {
-    const next = text.slice(match.index + match[0].length).match(/^\s+([A-Z][A-Za-z]*)/)?.[1];
-    return !next || !notAfter.has(next.toLowerCase());
+    const next = nextWord(text, match);
+    return !next || !notAfter.has(next);
   });
 }
+
+/**
+ * Words after a place that make it where someone is from ("New Hampshire man", "Lexington, Ky., woman",
+ * "Iowa City teen"), not where the crash was.
+ */
+const HOME_NEXT =
+  /^(\s+city)?,?\s+(man|men|woman|women|driver|drivers|teen|teens|teenager|teenagers|boy|boys|girl|girls|resident|residents|motorcyclist|bicyclist|cyclist|couple|family|mother|father|mom|dad|native|student)\b/i;
 
 /**
  * A state code counts, except that one that is also a word ("ID released", an all-caps "CRASH IN", "South LA",
@@ -290,91 +417,306 @@ function isStateCode(code: string, comma?: string, apostrophe?: string): boolean
   return US_STATE_ABBREVIATIONS.has(code) && (!AMBIGUOUS_STATE_ABBREVIATIONS.has(code) || (!!comma && !apostrophe));
 }
 
+const AP_STATE = Object.keys(AP_STATES)
+  .map((abbreviation) => abbreviation.replace(/\./g, "\\."))
+  .join("|");
 const STATE_NAME_NEXT = new RegExp(`^,?\\s+(${Object.keys(US_STATES).join("|")})\\b`, "i");
+const AP_STATE_NEXT = new RegExp(`^,?\\s+(${AP_STATE})(?![A-Za-z])`);
 const STATE_CODE_NEXT = /^(,)\s*([A-Z]{2})\b(['’])?/;
+const STATE_CODE = new RegExp(`,\\s*(${AP_STATE})(?![A-Za-z])|(,\\s*)?\\b([A-Z]{2})\\b(['’])?`, "g");
 
 /**
- * The state written right after a city's name: "Arlington, Virginia", "Aurora Illinois" or "Arlington, VA". A
- * code counts only after a comma, so "Miami DE Rueben Bain" (a defensive end) is not Delaware.
+ * The state written right after a city's name: "Arlington, Virginia", "Aurora Illinois", "Arlington, Va." or
+ * "Arlington, VA", and how long that is. A code counts only after a comma, so "Miami DE Rueben Bain" (a defensive
+ * end) is not Delaware.
  */
-function stateAfter(rest: string): string | undefined {
-  const name = rest.match(STATE_NAME_NEXT)?.[1];
-  if (name) return US_STATES[name.toLowerCase().replace(/\s+/g, " ")];
-  const [, comma, code, apostrophe] = rest.match(STATE_CODE_NEXT) ?? [];
-  return code && isStateCode(code, comma, apostrophe) ? code : undefined;
+function stateAfter(rest: string): [state: string | undefined, length: number] {
+  const name = rest.match(STATE_NAME_NEXT);
+  if (name) return [US_STATES[name[1].toLowerCase().replace(/\s+/g, " ")], name[0].length];
+  const ap = rest.match(AP_STATE_NEXT);
+  if (ap) return [AP_STATES[ap[1]], ap[0].length];
+  const code = rest.match(STATE_CODE_NEXT);
+  return code && isStateCode(code[2], code[1], code[3]) ? [code[2], code[0].length] : [undefined, 0];
 }
+
+/**
+ * The first state code in the text ("in TX", "Boise, ID") or AP abbreviation after a comma ("Lexington, Ky."),
+ * where `counts` accepts the text after it.
+ */
+function stateCode(text: string, counts: (rest: string) => boolean = () => true): string | undefined {
+  for (const match of text.matchAll(STATE_CODE)) {
+    const [whole, ap, comma, code, apostrophe] = match;
+    const state = ap ? AP_STATES[ap] : isStateCode(code, comma, apostrophe) ? code : undefined;
+    if (state && counts(text.slice(match.index + whole.length))) return state;
+  }
+  return undefined;
+}
+
+/**
+ * The states that have the first county named with a capitalised "County" ("Utah County", "WASHINGTON COUNTY")
+ * that is in COUNTIES, or undefined when there is none.
+ */
+function countyStates(text: string): string[] | undefined {
+  for (const [, words] of text.matchAll(/\b((?:[A-Za-z]+\s+)?[A-Za-z]+)\s+(?:County|COUNTY)\b/g)) {
+    const name = words.toLowerCase().replace(/\s+/g, " ");
+    const states = COUNTIES[name] ?? COUNTIES[name.replace(/^\S+ /, "")];
+    if (states) return states.split(" ");
+  }
+  return undefined;
+}
+
+/**
+ * The state of a city a street is named after ("Las Vegas Boulevard"), which is not the city itself.
+ */
+function streetCityState(text: string): string | undefined {
+  const streetTypes = new Set(STREET_TYPES);
+  for (const [pattern, , state] of CITY_PATTERNS) {
+    if ([...text.matchAll(pattern)].some((match) => streetTypes.has(nextWord(text, match) ?? ""))) return state;
+  }
+  return undefined;
+}
+
+/**
+ * A capitalised word in a name, which is not a preposition or article ("Rhode Island" in "At Rhode Island Hospital").
+ */
+const NAME_WORD = String.raw`(?!(?:To|At|In|Near|Outside|From|On|After|By|For|With|And|Of|The)\b)[A-Z][A-Za-z'’.&-]*`;
+
+/**
+ * A hospital's name ("Rhode Island Hospital", "UC Davis Medical Center", "Children's Hospital of Philadelphia"),
+ * which says where someone was taken, not where the crash was.
+ */
+const HOSPITAL_NAME = new RegExp(
+  String.raw`\b(?:${NAME_WORD}\s+){1,6}(?:Hospital|Medical Cent(?:er|re)|Trauma Cent(?:er|re))\b(?:\s+[Oo]f\s+(?:[Tt]he\s+)?${NAME_WORD}(?:\s+${NAME_WORD}){0,3})*`,
+  "g"
+);
 
 /**
  * The text a story's place is read from: its headline and description, without the link and the publisher's
- * name that end a Google News description, so "ABC7 Chicago" or the Washington Times does not place a story.
+ * name that end a Google News description, so "ABC7 Chicago" or the Washington Times does not place a story, and
+ * without hospital names.
  */
 function storyText(item: GoogleNewsItem): string {
   const description = (item.description ?? "").replace(/<font[^>]*>[\s\S]*?<\/font>/gi, " ").replace(/<[^>]+>|&nbsp;/g, " ");
-  return item.title + " " + description;
+  return (item.title + " " + description).replace(HOSPITAL_NAME, " ");
+}
+
+const TOWN_STATES = new Map(
+  Object.entries(ONE_STATE_TOWNS).flatMap(([state, towns]) => towns.split("|").map((town) => [town, state] as const))
+);
+const BEFORE_CRASH = new RegExp(
+  String.raw`((?:${NAME_WORD}\s+){1,3})(?:[Cc]rash(?:es)?|[Cc]ollision|[Hh]it-[Aa]nd-[Rr]un|[Ww]reck|[Aa]ccident)\b`,
+  "g"
+);
+const AFTER_PLACE_WORD = new RegExp(String.raw`\b(?:[Ii]n|[Nn]ear|[Aa]t|[Oo]utside)\s+(${NAME_WORD}(?:\s+${NAME_WORD}){0,2})`, "g");
+
+/**
+ * The state of the town a crash was in, named right before the crash ("fatal Poolesville hit-and-run") or after
+ * "in", "near", "at" or "outside", when only one state has a town of that name and the story names no such town
+ * in another state. A street or county name ("Folsom Boulevard", "Marion County") is not a town.
+ */
+function crashTownState(text: string): string | undefined {
+  const states = new Set<string>();
+  const add = (names: string[]) => {
+    if (names[0].split(" ").some((word) => NOT_AFTER_STATE.has(word))) return;
+    const state = names.map((name) => TOWN_STATES.get(name)).find(Boolean);
+    if (state) states.add(state);
+  };
+  for (const [, words] of text.matchAll(BEFORE_CRASH)) {
+    const run = words.trim().toLowerCase().split(/\s+/);
+    add(run.map((_, i) => run.slice(i).join(" ")));
+  }
+  for (const [, words] of text.matchAll(AFTER_PLACE_WORD)) {
+    const run = words.toLowerCase().split(/\s+/);
+    add(run.map((_, i) => run.slice(0, run.length - i).join(" ")));
+  }
+  return states.size === 1 ? [...states][0] : undefined;
 }
 
 /**
- * Extracts city and state from text using known locations.
+ * Extracts city and state from text using known locations. A place someone is from ("Texas man") counts only
+ * with `withHome`.
  */
-function extractLocation(text: string): { city?: string; state?: string } {
+function extractLocation(text: string, withHome = false): { city?: string; state?: string } {
+  const counts = (rest: string) => withHome || !HOME_NEXT.test(rest);
+  const after = (match: RegExpExecArray) => text.slice(match.index + match[0].length);
+
   // Try to find a major city first
   for (const [pattern, city, state] of CITY_PATTERNS) {
-    const matches = placeMatches(text, pattern, NOT_AFTER_CITY);
-    if (matches.length > 0) {
+    const written = placeMatches(text, pattern, NOT_AFTER_CITY).flatMap((match) => {
+      const [named, length] = stateAfter(after(match));
+      return counts(after(match).slice(length)) ? [named] : [];
+    });
+    if (written.length > 0) {
       // Capitalize city name properly
       const capitalizedCity = city
         .split(" ")
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(" ");
       // A state written after the city wins: "Arlington, Virginia" is not Arlington, Texas.
-      const written = matches.map((match) => stateAfter(text.slice(match.index + match[0].length))).find(Boolean);
-      return { city: capitalizedCity, state: written ?? state };
+      return { city: capitalizedCity, state: written.find(Boolean) ?? state };
     }
   }
 
-  if (WASHINGTON_DC.test(text)) {
+  if ([...text.matchAll(WASHINGTON_DC)].some((match) => counts(after(match)))) {
     return { city: "Washington", state: "DC" };
   }
 
   // Try to find a state name
   for (const [pattern, abbrev] of STATE_PATTERNS) {
-    if (placeMatches(text, pattern, NOT_AFTER_STATE).length > 0) {
+    if (placeMatches(text, pattern, NOT_AFTER_STATE).some((match) => counts(after(match)))) {
       return { state: abbrev };
     }
   }
 
-  // Try to find a state abbreviation (e.g., "in TX" or "Boise, ID").
-  for (const [, comma, match, apostrophe] of text.matchAll(/(,\s*)?\b([A-Z]{2})\b(['’])?/g)) {
-    if (isStateCode(match, comma, apostrophe)) {
-      return { state: match };
-    }
-  }
-
-  return {};
+  // Try to find a state abbreviation (e.g., "in TX", "Boise, ID" or "Lexington, Ky.").
+  const code = stateCode(text, counts);
+  return code ? { state: code } : {};
 }
 
 /**
  * National outlets, whose names say nothing about where a story happened ("New York Post", "Yahoo News Canada").
  */
 const NATIONAL_OUTLET =
-  /^(the )?(new york post|new york times|nytimes(\.com)?|usa today|associated press( news)?|ap( news)?|reuters|fox news|cnn|nbc news|abc news|cbs news|yahoo\b.*|msn(\.com)?|daily mail( online)?|mail online|independent|newsweek)$/i;
+  /^(the )?(new york post|new york times|nytimes(\.com)?|usa today|associated press( news)?|ap( news)?|reuters|fox news|cnn|nbc news|abc news|cbs news|ms now|pa media|yahoo\b.*|msn(\.com)?|daily mail( online)?|mail online|independent|newsweek)$/i;
 
 /**
- * The state a publisher's name points to ("ABC7 Chicago", "Click2Houston", "NJ.com"), for a story that names no
- * place itself. A state written after a comma ("Portland, ME Patch") counts first. Brands run names together, so
- * names count inside words here. "Washington" does not count: the Washington Post, Times and Examiner are in the
- * District, not Washington state. National outlets give no state.
+ * Known home states of publishers whose names give no state, such as those named after their city ("The Portland
+ * Press Herald" is in Maine, the "Kansas City Star" in Missouri).
+ */
+const CITY_PUBLISHER_STATES: Record<string, string> = {
+  "baltimore sun": "MD",
+  "foxbaltimore.com": "MD",
+  "boston herald": "MA",
+  "the boston globe": "MA",
+  "cwb chicago": "IL",
+  "chicago sun-times": "IL",
+  "chicagotribune.com": "IL",
+  "nbcchicago.com": "IL",
+  "streetsblog chicago": "IL",
+  "city of los angeles (.gov)": "CA",
+  "fox 11 los angeles": "CA",
+  "los angeles daily news": "CA",
+  "los angeles times": "CA",
+  "the voice of black los angeles": "CA",
+  "long beach post": "CA",
+  "long beach watchdog": "CA",
+  "fox 5 san diego & kusi news": "CA",
+  "san diego union-tribune": "CA",
+  "san francisco chronicle": "CA",
+  "the oaklandside": "CA",
+  "sacramento bee": "CA",
+  "cleveland jewish news": "OH",
+  "news 5 cleveland wews": "OH",
+  "the columbus dispatch": "OH",
+  "cwcolumbus.com": "OH",
+  "myfox28columbus.com": "OH",
+  "dallas express": "TX",
+  "dallas news": "TX",
+  "dallasnews.com": "TX",
+  "el paso times": "TX",
+  "fort worth star-telegram": "TX",
+  "houston chronicle": "TX",
+  "kxan austin": "TX",
+  "san antonio express-news": "TX",
+  "deadline detroit": "MI",
+  "detroit free press": "MI",
+  "detroitnews.com": "MI",
+  "fox 2 detroit": "MI",
+  "denver gazette": "CO",
+  "the denver post": "CO",
+  "denverpost.com": "CO",
+  "fox 29 philadelphia": "PA",
+  "pittsburgh post-gazette": "PA",
+  "wtae pittsburgh": "PA",
+  "fox13 memphis": "TN",
+  "news channel 5 nashville": "TN",
+  "greater milwaukee today": "WI",
+  "milwaukee journal sentinel": "WI",
+  "hartford courant": "CT",
+  "kiro 7 news seattle": "WA",
+  "seattle.gov": "WA",
+  "seattlepi.com": "WA",
+  "west seattle blog...": "WA",
+  "mynorthwest.com": "WA",
+  "ktnv las vegas": "NV",
+  "kansas city star": "MO",
+  "miami herald": "FL",
+  "miamiherald.com": "FL",
+  "nbcmiami.com": "FL",
+  "orlando sentinel": "FL",
+  "orlandosentinel.com": "FL",
+  "tampa bay times": "FL",
+  "jacksonville.com": "FL",
+  "raleigh news & observer": "NC",
+  "wccb charlotte": "NC",
+  "richmond times-dispatch": "VA",
+  "foxrichmond.com": "VA",
+  "streetsblog new york city": "NY",
+  "the portland press herald": "ME",
+  "the providence journal": "RI",
+  "wjar": "RI",
+  "coastalabc.com": "RI",
+};
+
+/**
+ * Home states of the publishers read directly and of those named after their city, by the name Google News gives
+ * them.
+ */
+const KNOWN_PUBLISHERS = new Map<string, string | null>([
+  ...Object.entries(CITY_PUBLISHER_STATES),
+  ...PUBLISHER_FEEDS.map((feed) => [feed.name.toLowerCase(), feed.state] as const),
+]);
+
+const STATE_NAMED_CITY = new RegExp(`\\b(${Object.keys(US_STATES).join("|")})\\s+city\\b`, "gi");
+
+/**
+ * The state a publisher points to, for a story that names no place itself: its home state if it is known ("ABC7
+ * Chicago", "Baltimore Sun"), else a state its name gives ("Portland, ME Patch", "FOX21 News Colorado", "NJ.com").
+ * Brands run names together, so state names count inside words here. A city in the name gives no state ("The
+ * Portland Press Herald" is in Maine), nor does "Washington" (the Washington Post, Times and Examiner are in the
+ * District) or a city named after a state ("Kansas City Star"). National outlets give no state.
  */
 function publisherState(name: string): string | undefined {
+  const known = KNOWN_PUBLISHERS.get(name.trim().toLowerCase());
+  if (known !== undefined) return known ?? undefined;
   if (NATIONAL_OUTLET.test(name.trim())) return undefined;
   const written = name.match(/,\s*([A-Z]{2})\b/)?.[1];
   if (written && US_STATE_ABBREVIATIONS.has(written)) return written;
-  const brand = name.replace(/washington/gi, " ");
+  const brand = name.replace(/washington/gi, " ").replace(STATE_NAMED_CITY, " ");
   const lower = brand.toLowerCase();
-  for (const [place, state] of [...Object.entries(MAJOR_CITIES), ...Object.entries(US_STATES)]) {
+  for (const [place, state] of Object.entries(US_STATES)) {
     if (lower.includes(place)) return state;
   }
-  return extractLocation(brand).state;
+  return stateCode(brand);
+}
+
+/**
+ * Where a story happened: a place it names, else a county only one state has ("Utah County"), else, for a story
+ * that says where someone is from ("Maryland man"), the state of the crash's town if only one state has it
+ * ("Poolesville"), else the publisher's state (for a county several states have, only if that state has one), else
+ * where someone in it is from ("Texas man"), else the state of a city a street is named after ("Las Vegas
+ * Boulevard").
+ */
+function storyLocation(item: GoogleNewsItem, homeState?: string): { city?: string; state?: string } {
+  const text = storyText(item);
+  const found = extractLocation(text);
+  if (found.state) return found;
+
+  const county = countyStates(text);
+  if (county?.length === 1) return { state: county[0] };
+
+  const home = extractLocation(text, true);
+  const town = home.state && !county ? crashTownState(text) : undefined;
+  if (town) return town === home.state ? home : { state: town };
+
+  // A story that names no place is placed in its publisher's state ("ABC7 Chicago" in Illinois), not its city.
+  const publisher = homeState ?? (item.source ? publisherState(item.source) : undefined);
+  if (publisher && (!county || county.includes(publisher))) {
+    return home.state === publisher ? home : { state: publisher };
+  }
+
+  const street = !publisher && !county && !home.state ? streetCityState(text) : undefined;
+  return street ? { state: street } : home;
 }
 
 /**
@@ -405,9 +747,7 @@ export function toIncidentCandidates(
     }
 
     const occurredAt = new Date(item.pubDate);
-    // A story that names no place is placed in its publisher's state ("ABC7 Chicago" in Illinois), not its city.
-    const found = extractLocation(storyText(item));
-    const location = found.state ? found : { state: homeState ?? (item.source && publisherState(item.source)) };
+    const location = storyLocation(item, homeState);
 
     // Second filter: must have confirmed US location (city/state)
     if (!isUSLocation(location)) {
