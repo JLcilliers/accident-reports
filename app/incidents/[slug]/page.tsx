@@ -6,6 +6,7 @@ import type { AccidentFacts } from "@/lib/seo/extractAccidentFacts";
 import { parseArticleMeta, buildKeywordsString } from "@/lib/seo/parseArticleMeta";
 import { BRIEF_MARKER, isBrief } from "@/lib/seo/brief";
 import { getGuideByCode } from "@/lib/crashReportGuides";
+import { cityPagePath } from "@/lib/location/cityPages";
 import {
   ILLUSTRATION_HEIGHT,
   ILLUSTRATION_WIDTH,
@@ -163,6 +164,7 @@ export default async function IncidentPage({
   });
   const cleanedHeadline = stripHtmlAndPublisher(incident.headline) ?? incident.headline;
   const reportGuide = getGuideByCode(incident.state);
+  const cityPath = cityPagePath(incident.city, incident.state);
 
   // JSON-LD structured data
   const seoHeadline = incident.seoTitle || incident.headline;
@@ -447,9 +449,9 @@ export default async function IncidentPage({
                   Related Searches
                 </h3>
                 <div className="space-y-2.5">
-                  {incident.city && incident.state && (
+                  {cityPath && (
                     <Link
-                      href={`/accidents/${incident.state.toLowerCase()}/${incident.city.toLowerCase().replace(/\s+/g, "-")}`}
+                      href={cityPath}
                       className="flex items-center gap-2 text-sm text-[var(--primary)] hover:text-[var(--primary-hover)] transition"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
