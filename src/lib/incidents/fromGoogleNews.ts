@@ -257,11 +257,52 @@ function isUSLocation(location: { city?: string; state?: string }): boolean {
  * A place name as a whole word, so "Darlington" is not Arlington and "Lamesa" is not Mesa.
  */
 function namePattern(name: string): RegExp {
-  return new RegExp(`\\b${name.replace(/\./g, "\\.")}\\b`, "i");
+  return new RegExp(`\\b${name.replace(/\./g, "\\.")}\\b`, "gi");
 }
 
 const CITY_PATTERNS = Object.entries(MAJOR_CITIES).map(([city, state]) => [namePattern(city), city, state] as const);
 const STATE_PATTERNS = Object.entries(US_STATES).map(([name, abbrev]) => [namePattern(name), abbrev] as const);
+
+/**
+ * Words that make a place's name part of a street or neighbourhood name ("Washington Heights", "Idaho Avenue"),
+ * and for a state's name, a county's name ("Delaware County"), which can be in any state.
+ */
+const STREET_WORDS = ["heights", "district", "street", "st", "avenue", "ave", "road", "rd", "boulevard", "blvd", "park", "bridge", "square"];
+const NOT_AFTER_CITY = new Set(STREET_WORDS);
+const NOT_AFTER_STATE = new Set([...STREET_WORDS, "county", "co"]);
+
+/**
+ * Where a place's name stands for the place: not before a capitalised word in `notAfter`. A lower-case word
+ * doesn't count against it ("crash on Kansas road", "a rural Iowa county").
+ */
+function placeMatches(text: string, pattern: RegExp, notAfter: Set<string>): RegExpExecArray[] {
+  return [...text.matchAll(pattern)].filter((match) => {
+    const next = text.slice(match.index + match[0].length).match(/^\s+([A-Z][A-Za-z]*)/)?.[1];
+    return !next || !notAfter.has(next.toLowerCase());
+  });
+}
+
+/**
+ * A state code counts, except that one that is also a word ("ID released", an all-caps "CRASH IN", "South LA",
+ * "ID'd", "OK's") counts only after a comma and not before an apostrophe.
+ */
+function isStateCode(code: string, comma?: string, apostrophe?: string): boolean {
+  return US_STATE_ABBREVIATIONS.has(code) && (!AMBIGUOUS_STATE_ABBREVIATIONS.has(code) || (!!comma && !apostrophe));
+}
+
+const STATE_NAME_NEXT = new RegExp(`^,?\\s+(${Object.keys(US_STATES).join("|")})\\b`, "i");
+const STATE_CODE_NEXT = /^(,)\s*([A-Z]{2})\b(['’])?/;
+
+/**
+ * The state written right after a city's name: "Arlington, Virginia", "Aurora Illinois" or "Arlington, VA". A
+ * code counts only after a comma, so "Miami DE Rueben Bain" (a defensive end) is not Delaware.
+ */
+function stateAfter(rest: string): string | undefined {
+  const name = rest.match(STATE_NAME_NEXT)?.[1];
+  if (name) return US_STATES[name.toLowerCase().replace(/\s+/g, " ")];
+  const [, comma, code, apostrophe] = rest.match(STATE_CODE_NEXT) ?? [];
+  return code && isStateCode(code, comma, apostrophe) ? code : undefined;
+}
 
 /**
  * The text a story's place is read from: its headline and description, without the link and the publisher's
@@ -278,13 +319,16 @@ function storyText(item: GoogleNewsItem): string {
 function extractLocation(text: string): { city?: string; state?: string } {
   // Try to find a major city first
   for (const [pattern, city, state] of CITY_PATTERNS) {
-    if (pattern.test(text)) {
+    const matches = placeMatches(text, pattern, NOT_AFTER_CITY);
+    if (matches.length > 0) {
       // Capitalize city name properly
       const capitalizedCity = city
         .split(" ")
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(" ");
-      return { city: capitalizedCity, state };
+      // A state written after the city wins: "Arlington, Virginia" is not Arlington, Texas.
+      const written = matches.map((match) => stateAfter(text.slice(match.index + match[0].length))).find(Boolean);
+      return { city: capitalizedCity, state: written ?? state };
     }
   }
 
@@ -294,15 +338,14 @@ function extractLocation(text: string): { city?: string; state?: string } {
 
   // Try to find a state name
   for (const [pattern, abbrev] of STATE_PATTERNS) {
-    if (pattern.test(text)) {
+    if (placeMatches(text, pattern, NOT_AFTER_STATE).length > 0) {
       return { state: abbrev };
     }
   }
 
-  // Try to find a state abbreviation (e.g., "in TX" or "Boise, ID"). Abbreviations that are also words
-  // ("ID released", an all-caps "CRASH IN", "South LA") count only after a comma.
-  for (const [, comma, match] of text.matchAll(/(,\s*)?\b([A-Z]{2})\b/g)) {
-    if (US_STATE_ABBREVIATIONS.has(match) && (comma || !AMBIGUOUS_STATE_ABBREVIATIONS.has(match))) {
+  // Try to find a state abbreviation (e.g., "in TX" or "Boise, ID").
+  for (const [, comma, match, apostrophe] of text.matchAll(/(,\s*)?\b([A-Z]{2})\b(['’])?/g)) {
+    if (isStateCode(match, comma, apostrophe)) {
       return { state: match };
     }
   }
@@ -311,12 +354,19 @@ function extractLocation(text: string): { city?: string; state?: string } {
 }
 
 /**
+ * National outlets, whose names say nothing about where a story happened ("New York Post", "Yahoo News Canada").
+ */
+const NATIONAL_OUTLET =
+  /^(the )?(new york post|usa today|associated press( news)?|ap( news)?|reuters|fox news|cnn|nbc news|abc news|cbs news|yahoo\b.*|msn(\.com)?|daily mail( online)?|mail online|independent|newsweek)$/i;
+
+/**
  * The state a publisher's name points to ("ABC7 Chicago", "Click2Houston", "NJ.com"), for a story that names no
  * place itself. A state written after a comma ("Portland, ME Patch") counts first. Brands run names together, so
  * names count inside words here. "Washington" does not count: the Washington Post, Times and Examiner are in the
- * District, not Washington state.
+ * District, not Washington state. National outlets give no state.
  */
 function publisherState(name: string): string | undefined {
+  if (NATIONAL_OUTLET.test(name.trim())) return undefined;
   const written = name.match(/,\s*([A-Z]{2})\b/)?.[1];
   if (written && US_STATE_ABBREVIATIONS.has(written)) return written;
   const brand = name.replace(/washington/gi, " ");
