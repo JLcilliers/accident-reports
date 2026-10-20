@@ -162,6 +162,8 @@ const groups = {
     ["Man arrested nearly 8 months after deadly Pacific Beach hit-and-run", "FOX 5 San Diego & KUSI News", "CA"],
     ["Severna Park man dies in hit-and-run near strip mall on Ritchie Highway", "The Baltimore Banner", "MD"],
     ["Severna Park man killed in Ritchie Highway hit-and-run: Police detain suspect", "Yahoo", "none"],
+    ["Pedestrian killed in crash on North Druid Hills Road", "Yahoo", "none"],
+    ["Pedestrian killed in crash near Central Park", "Yahoo", "none"],
   ],
   "Towns that are also ordinary words": [
     ["Ohio man killed in crash at Main and 5th", "Yahoo", "OH"],

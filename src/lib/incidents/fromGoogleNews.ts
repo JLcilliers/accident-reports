@@ -527,8 +527,8 @@ const NOT_TOWN = new Set([
  */
 function crashTownState(text: string): string | undefined {
   const states = new Set<string>();
-  const add = (names: string[]) => {
-    if (names[0].split(" ").some((word) => NOT_TOWN.has(word))) return;
+  const add = (names: string[], next = "") => {
+    if ([...names[0].split(" "), next].some((word) => NOT_TOWN.has(word))) return;
     const state = names.map((name) => TOWN_STATES.get(name)).find(Boolean);
     if (state) states.add(state);
   };
@@ -536,9 +536,9 @@ function crashTownState(text: string): string | undefined {
     const run = words.trim().toLowerCase().split(/\s+/);
     add(run.map((_, i) => run.slice(i).join(" ")));
   }
-  for (const [, words] of text.matchAll(AFTER_PLACE_WORD)) {
-    const run = words.toLowerCase().split(/\s+/);
-    add(run.map((_, i) => run.slice(0, run.length - i).join(" ")));
+  for (const match of text.matchAll(AFTER_PLACE_WORD)) {
+    const run = match[1].toLowerCase().split(/\s+/);
+    add(run.map((_, i) => run.slice(0, run.length - i).join(" ")), nextWord(text, match));
   }
   return states.size === 1 ? [...states][0] : undefined;
 }
