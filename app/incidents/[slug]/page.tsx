@@ -192,7 +192,10 @@ export default async function IncidentPage({
   const illustration = pickIllustration(incident);
   const brief = isBrief(incident.articleBody);
   const articleText = brief ? incident.articleBody?.slice(BRIEF_MARKER.length) : incident.articleBody;
-  const briefSource = brief ? incident.sources[0] : undefined;
+  // The outlet the brief credits by name, as a second publisher's story may have joined the sources since.
+  const briefSource = brief
+    ? incident.sources.find((s) => !!s.publisher && !!articleText?.includes(s.publisher)) ?? incident.sources[0]
+    : undefined;
 
   const jsonLd = {
     "@context": "https://schema.org",
