@@ -63,6 +63,19 @@ const EXCLUDE_PHRASES = [
 const PHONE_NUMBER = /\(?\b\d{3}\)?[-.\s]\d{3}[-.\s]\d{4}\b/;
 
 /**
+ * Publisher names or domains of law firms, lawyers' blogs and legal-referral sites, whose crash posts are
+ * adverts built on other outlets' reporting. Police news, prosecutors and attorneys general are kept.
+ */
+const LAW_FIRM_PUBLISHER = /lawyer|attorney|injury|legal|lawfirm|\blaw\b|&\s*associates|\b(p\.?c|a\.?p\.?c|pllc|llp)\.?$/i;
+const NOT_A_LAW_FIRM = /law ?enforcement|district attorney|attorney general|law ?(&|and) ?crime/i;
+
+function isLawFirmPublisher(item: GoogleNewsItem): boolean {
+  return [item.source, item.sourceDomain].some(
+    (name) => !!name && LAW_FIRM_PUBLISHER.test(name.trim()) && !NOT_A_LAW_FIRM.test(name)
+  );
+}
+
+/**
  * US state abbreviations and their full names for location extraction.
  */
 const US_STATES: Record<string, string> = {
@@ -284,8 +297,14 @@ export function toIncidentCandidates(
 ): IncidentCandidate[] {
   const candidates: IncidentCandidate[] = [];
   let filteredNonUS = 0;
+  let filteredLawFirms = 0;
 
   for (const item of items) {
+    if (isLawFirmPublisher(item)) {
+      filteredLawFirms++;
+      continue;
+    }
+
     // First filter: must be about an accident
     if (!isLikelyAccident(item.title, item.description)) {
       continue;
@@ -315,6 +334,9 @@ export function toIncidentCandidates(
 
   if (filteredNonUS > 0) {
     console.log(`[US Filter] Filtered out ${filteredNonUS} non-US news items`);
+  }
+  if (filteredLawFirms > 0) {
+    console.log(`[Law firm filter] Filtered out ${filteredLawFirms} items from law-firm publishers`);
   }
 
   return candidates;

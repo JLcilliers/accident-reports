@@ -18,8 +18,8 @@ export interface ClaimedArticle {
 const CLAIM_LOCK = 7140022;
 
 /**
- * Claims one incident created on or after `start` that has no article, fewer than `maxAttempts` attempts and has
- * not been found to be something other than a road crash, keeping the attempts made in the current UTC day
+ * Claims one incident created on or after `start` that has no article and fewer than `maxAttempts` attempts (one
+ * found not to be a road crash has all of them used up), keeping the attempts made in the current UTC day
  * within `dailyLimit`. It must have coverage from at least two independent publishers, or from one whose site
  * is known and has not yet been searched for the story's text (see releaseForSecondPublisher).
  *
@@ -61,7 +61,6 @@ export async function claimArticle(
            AND COALESCE(i."articleAttempts", 0) < ${maxAttempts}
            AND (i."articleAttemptedAt" IS NULL OR i."articleAttemptedAt" < ${dayStart.toISOString()}::timestamp)
            AND i."createdAt" >= ${start.toISOString()}::timestamp
-           AND i."articleQualityStatus" IS DISTINCT FROM 'NOT_A_CRASH'
            AND (p.publishers >= 2 OR (p.publishers = 1 AND p."knownSite" AND i."articleTextTriedAt" IS NULL))
          ORDER BY i."createdAt" DESC
          LIMIT 1

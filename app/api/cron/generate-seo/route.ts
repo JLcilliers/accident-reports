@@ -17,6 +17,8 @@ const START_FORMAT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d{1,3})?)?(Z|[+-]
 // After this many attempts an incident is marked FAILED and never picked again automatically.
 const MAX_ATTEMPTS = 2;
 const MAX_PER_RUN = 10;
+// Starts the note on incidents the crash check rejected, so they can be told apart from other failures.
+const NOT_A_CRASH_NOTE = "not a road crash";
 // An incident (text lookup up to 25 s, then facts plus up to two article drafts) takes up to about 70 s, so a
 // new one starts only while 75 s remain.
 const RUN_BUDGET_MS = 270_000;
@@ -29,7 +31,8 @@ const MIN_ITEM_MS = 75_000;
  * IMAGE_START_DATE and have no article, so the older backlog is never billed. For each it looks for the story's
  * full text on a publisher's own site (see fetchPublisherText); an incident covered by only one publisher goes
  * ahead only when that text is found, and otherwise waits for a second publisher. It then checks that the
- * coverage is about a real road crash (anything else is marked NOT_A_CRASH and never claimed again), extracts
+ * coverage is about a real road crash (anything else is marked FAILED with a "not a road crash" note and never
+ * claimed again), extracts
  * structured facts and writes the article, all through OpenRouter. The publisher's text is model input only.
  * Each incident gets at most MAX_ATTEMPTS attempts, and attempts per UTC day stay within ARTICLE_DAILY_LIMIT
  * (default 100; 0 stops generation).
@@ -120,9 +123,14 @@ export async function GET(req: NextRequest) {
 
       const crashCheck = await checkRoadCrash(incident.headline, incidentSourceTexts(sources));
       if (!crashCheck.crash) {
+        // FAILED with every attempt used, like the image job's non-crashes, so it is never claimed again.
         await prisma.incident.update({
           where: { id: incident.id },
-          data: { articleQualityStatus: "NOT_A_CRASH", articleQualityNotes: crashCheck.reason || null },
+          data: {
+            articleQualityStatus: "FAILED",
+            articleQualityNotes: `${NOT_A_CRASH_NOTE}${crashCheck.reason ? `: ${crashCheck.reason}` : ""}`.slice(0, 1000),
+            articleAttempts: MAX_ATTEMPTS,
+          },
         });
         notACrash++;
         console.log(`[generate-seo] Not a road crash, skipped for good: ${incident.slug} (${crashCheck.reason})`);

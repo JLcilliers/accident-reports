@@ -15,7 +15,7 @@ enum ArticleQualityStatus {
   OK
   NEEDS_REVIEW
   FAILED
-  NOT_A_CRASH // The crash check found no road crash; never claimed for an article
+  NOT_A_CRASH // In the database since 20261019130000_add_not_a_crash but never written: non-crashes are FAILED with a note
 }
 
 enum ImageStatus {
