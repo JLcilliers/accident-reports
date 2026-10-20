@@ -578,6 +578,8 @@ const CITY_PUBLISHER_STATES: Record<string, string> = {
   "the denver post": "CO",
   "denverpost.com": "CO",
   "fox 29 philadelphia": "PA",
+  "pittsburgh post-gazette": "PA",
+  "wtae pittsburgh": "PA",
   "fox13 memphis": "TN",
   "news channel 5 nashville": "TN",
   "greater milwaukee today": "WI",
