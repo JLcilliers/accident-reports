@@ -1,10 +1,15 @@
 import type { AccidentFacts } from "@/lib/seo/extractAccidentFacts";
 
 /**
- * Builds a generic illustration scene from an incident. Only fixed vocabulary
- * reaches the image prompt: vehicle classes, road type, time of day and weather.
- * Names, places, brands and other identifying details from the article never do.
+ * Reads generic scene cues from an incident: vehicle classes, road type, time of day, weather and season.
+ * Only this fixed vocabulary reaches the image prompt. Names, places, brands and other identifying
+ * details from the article never do.
  */
+
+export type Time = "day" | "dawn" | "dusk" | "night";
+export type Weather = "clear" | "rain" | "snow" | "fog";
+export type Season = "winter" | "spring" | "summer" | "autumn";
+export type Road = "interstate" | "freeway" | "highway" | "intersection" | "rural" | "city";
 
 export interface SceneInput {
   headline: string;
@@ -12,10 +17,19 @@ export interface SceneInput {
   extractedFacts: AccidentFacts | null;
   // Summary and news-source titles and snippets, for incidents that have no article yet.
   sourceText?: string | null;
+  occurredAt: Date;
 }
 
-export interface Scene {
-  description: string;
+export interface SceneCues {
+  vehicles: string[];
+  road: Road;
+  crosswalk: boolean;
+  bridge: boolean;
+  tunnel: boolean;
+  /** Null when the article doesn't say, so the picture is free to vary. */
+  time: Time | null;
+  weather: Weather | null;
+  season: Season;
 }
 
 const VEHICLE_RULES: [RegExp, string][] = [
@@ -49,47 +63,48 @@ function vehicleClasses(text: string, facts: AccidentFacts | null): string[] {
   return found;
 }
 
-function vehiclePhrase(classes: string[]): string {
-  if (classes.length === 0) return "two cars";
-  if (classes.length === 1) return `${/^[aeiou]/i.test(classes[0]) ? "an" : "a"} ${classes[0]}`;
-  if (classes[0] === classes[1]) return `two ${classes[0]}s`;
-  return classes.map((c) => `${/^[aeiou]/i.test(c) ? "an" : "a"} ${c}`).join(" and ");
+function roadType(text: string): Road {
+  if (/\bi-\d+|\binterstate\b/.test(text)) return "interstate";
+  if (/freeway|expressway|turnpike|parkway|beltway/.test(text)) return "freeway";
+  if (/\bhighway\b|\bhwy\b|\bus[- ]?\d+|\bsr[- ]?\d+|state route|\broute \d+/.test(text)) return "highway";
+  if (/intersection/.test(text)) return "intersection";
+  if (/rural|county road|country road|farm/.test(text)) return "rural";
+  return "city";
 }
 
-function roadType(text: string, pedestrian: boolean): string {
-  if (pedestrian) return "city street with a crosswalk";
-  if (/\bi-\d+|\binterstate\b/.test(text)) return "multi-lane interstate highway";
-  if (/freeway|expressway|turnpike|parkway|beltway/.test(text)) return "multi-lane freeway";
-  if (/\bhighway\b|\bhwy\b|\bus[- ]?\d+|\bsr[- ]?\d+|state route|\broute \d+/.test(text)) return "two-lane highway";
-  if (/intersection/.test(text)) return "city intersection with traffic lights";
-  if (/rural|county road|country road|farm/.test(text)) return "rural two-lane road";
-  return "city street";
-}
-
-function timeOfDay(text: string): string {
-  const clock = text.match(/\b(\d{1,2})(?::\d{2})?\s*(a\.?m\.?|p\.?m\.?)/);
+function timeOfDay(text: string): Time | null {
+  const clock = text.match(/\b(\d{1,2})(?::\d{2})?\s*(a\.?m\.?|p\.?m\.?)(?![a-z])/);
   if (clock) {
     let hour = Number(clock[1]) % 12;
     if (clock[2].startsWith("p")) hour += 12;
-    if (hour < 5 || hour >= 21) return "at night";
-    if (hour < 7) return "at dawn";
-    if (hour < 17) return "in daylight";
-    return "at dusk";
+    if (hour < 5 || hour >= 21) return "night";
+    if (hour < 7) return "dawn";
+    if (hour < 17) return "day";
+    return "dusk";
   }
-  if (/overnight|midnight|late-night|late night|after dark|\bnight\b/.test(text)) return "at night";
-  if (/\bdawn\b|sunrise|early morning|early-morning/.test(text)) return "at dawn";
-  if (/\bdusk\b|sunset|\bevening\b/.test(text)) return "at dusk";
-  return "in daylight";
-}
-
-function weather(text: string): string | null {
-  if (/\bsnow|\bicy\b|black ice|\bsleet|blizzard|winter storm/.test(text)) return "snowy";
-  if (/\brain|wet road|wet pavement|downpour|hydroplan|thunderstorm/.test(text)) return "rainy";
-  if (/\bfog/.test(text)) return "foggy";
+  if (/overnight|midnight|late-night|late night|after dark|\bnight\b/.test(text)) return "night";
+  if (/\bdawn\b|sunrise|early morning|early-morning/.test(text)) return "dawn";
+  if (/\bdusk\b|sunset|\bevening\b/.test(text)) return "dusk";
   return null;
 }
 
-export function buildScene({ headline, articleBody, extractedFacts, sourceText }: SceneInput): Scene {
+function weather(text: string): Weather | null {
+  if (/\bsnow(?:s|y|ing|ed|fall|storms?|plows?)?\b|\bicy\b|black ice|\bsleet(?:y|ing)?\b|blizzard|winter storm/.test(text)) return "snow";
+  if (/\brain(?:s|y|ing|ed|fall|storms?)?\b|wet road|wet pavement|downpour|hydroplan|thunderstorm/.test(text)) return "rain";
+  if (/\bfog(?:gy)?\b/.test(text)) return "fog";
+  return null;
+}
+
+// Seasons as they fall in the United States.
+function season(date: Date): Season {
+  const month = date.getUTCMonth();
+  if (month === 11 || month <= 1) return "winter";
+  if (month <= 4) return "spring";
+  if (month <= 7) return "summer";
+  return "autumn";
+}
+
+export function sceneCues({ headline, articleBody, extractedFacts, sourceText, occurredAt }: SceneInput): SceneCues {
   const text = [
     headline,
     sourceText?.slice(0, 3000),
@@ -103,14 +118,20 @@ export function buildScene({ headline, articleBody, extractedFacts, sourceText }
     .filter(Boolean)
     .join(" ")
     .toLowerCase();
+  // Time and weather leave out the place and road names, so a town like Snowflake is not read as snow.
+  const conditions = [headline, extractedFacts?.timeOfCrashApprox, extractedFacts?.causeOrAllegations, articleBody?.slice(0, 3000)]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
 
-  const pedestrian = /pedestrian|crosswalk/.test(text);
-  const classes = vehicleClasses(text, extractedFacts);
-  const vehicles = vehiclePhrase(pedestrian && classes.length === 0 ? ["car"] : classes);
-  const road = roadType(text, pedestrian);
-  const time = timeOfDay(text);
-  const sky = weather(text);
-  const roadWithWeather = sky ? `${sky} ${road}` : road;
-
-  return { description: `${vehicles} stopped on a ${roadWithWeather} ${time}` };
+  return {
+    vehicles: vehicleClasses(text, extractedFacts),
+    road: roadType(text),
+    crosswalk: /pedestrian|crosswalk/.test(text),
+    bridge: /\bbridge\b|overpass|viaduct/.test(text),
+    tunnel: /\btunnel\b/.test(text),
+    time: timeOfDay(conditions),
+    weather: weather(conditions),
+    season: season(occurredAt),
+  };
 }

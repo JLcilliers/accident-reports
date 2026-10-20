@@ -1,60 +1,84 @@
-/**
- * Generic road scenes for the crash-report guide heroes, keyed by guide slug.
- * Terrain and climate only: no landmarks, seals, flags, badges or agency logos.
- */
-export const GUIDE_INDEX_SCENE =
-  "a highway interchange where several empty roads cross open countryside under a wide sky, with a single car in the distance";
+import type { Season } from "@/lib/images/scene";
 
-export const GUIDE_SCENES: Record<string, string> = {
-  alabama: "a two-lane highway through tall pine forest, with a single car in the distance",
-  alaska: "a mountain highway with snow-capped peaks and spruce trees, with a single car in the distance",
-  arizona: "a straight desert highway with tall cacti and red rock mesas far away, with a single car in the distance",
-  arkansas: "a winding road through forested rolling hills, with a single car in the distance",
-  california: "a coastal highway curving along cliffs above the ocean, with a single car in the distance",
-  colorado: "a mountain highway through pine trees below snowy peaks, with a single car in the distance",
-  connecticut: "a tree-lined two-lane road with autumn leaves and low stone walls, with a single car in the distance",
-  delaware: "a flat coastal highway past green marshland, with a single car in the distance",
-  "district-of-columbia": "a city street lined with brick rowhouses and a crosswalk, with a single car in the distance",
-  florida: "a highway lined with palm trees near the coast at sunset, with a single car in the distance",
-  georgia: "a highway through pine trees with red clay along the roadside, with a single car in the distance",
-  hawaii: "a coastal road with tropical plants and green volcanic hills, with a single car in the distance",
-  idaho: "a highway along a river canyon beside farmland, with a single car in the distance",
-  illinois: "a straight highway through flat cornfields, with a single car in the distance",
-  indiana: "a rural road between farm fields with a red barn, with a single car in the distance",
-  iowa: "a straight two-lane road through rolling cornfields, with a single car in the distance",
-  kansas: "a long straight road across golden wheat fields under a big sky, with a single car in the distance",
-  kentucky: "a winding road past wooden horse-farm fences and green hills, with a single car in the distance",
-  louisiana: "a highway bridge over bayou wetlands with cypress trees, with a single car in the distance",
-  maine: "a coastal road with pine trees beside a rocky shoreline, with a single car in the distance",
-  maryland: "a highway along a calm bay shoreline, with a single car in the distance",
-  massachusetts: "a town street with brick buildings and autumn trees, with a single car in the distance",
-  michigan: "a lakeside highway with birch trees beside a large lake, with a single car in the distance",
-  minnesota: "a snowy rural road in winter with evergreen trees, with a single car in the distance",
-  mississippi: "a two-lane road through cotton fields and spreading oak trees, with a single car in the distance",
-  missouri: "a highway bridge over a wide river with wooded bluffs, with a single car in the distance",
-  montana: "an open highway across prairie toward distant mountains, with a single car in the distance",
-  nebraska: "a straight road across prairie past grain silos, with a single car in the distance",
-  nevada: "a desert highway through sagebrush toward bare mountains, with a single car in the distance",
-  "new-hampshire": "a winding mountain road with bright fall foliage, with a single car in the distance",
-  "new-jersey": "a busy multi-lane highway passing suburban towns, with a single car in the distance",
-  "new-mexico": "a desert highway between mesas and adobe-colored hills, with a single car in the distance",
-  "new-york": "a busy city avenue between tall buildings with a crosswalk, with a single car in the distance",
-  "north-carolina": "a mountain road along forested ridges at dawn, with a single car in the distance",
-  "north-dakota": "a long prairie road past wheat fields and wind turbines, with a single car in the distance",
-  ohio: "an interstate highway through farmland and small towns, with a single car in the distance",
-  oklahoma: "a highway across red-earth plains with wind turbines, with a single car in the distance",
-  oregon: "a highway through tall evergreen forest in light mist, with a single car in the distance",
-  pennsylvania: "a highway through rolling forested hills and farmland, with a single car in the distance",
-  "rhode-island": "a coastal road beside a small harbor with sailboats, with a single car in the distance",
-  "south-carolina": "a highway lined with palmetto trees near marshland, with a single car in the distance",
-  "south-dakota": "a highway across grassland toward rocky hills, with a single car in the distance",
-  tennessee: "a winding road through green mountains and valleys, with a single car in the distance",
-  texas: "a wide highway across open plains under a big sky, with a single car in the distance",
-  utah: "a highway through red rock canyon country, with a single car in the distance",
-  vermont: "a snowy country road past farmhouses and maple trees, with a single car in the distance",
-  virginia: "a two-lane road through rolling hills toward blue mountains, with a single car in the distance",
-  washington: "a rainy highway through evergreen forest with mountains far away, with a single car in the distance",
-  "west-virginia": "a winding mountain road through dense forest, with a single car in the distance",
-  wisconsin: "a rural road past dairy farms and red barns, with a single car in the distance",
-  wyoming: "an open highway across high plains toward distant mountains, with a single car in the distance",
+/**
+ * Generic scenery for the crash-report guide heroes, keyed by guide slug. Terrain and climate only:
+ * no landmarks, seals, flags, badges or agency logos. The framing comes from the composition list.
+ */
+export interface GuidePlace {
+  place: string;
+  /** City scenery gets city compositions. */
+  urban?: boolean;
+  /** Set where the scenery itself implies a season; otherwise summer. */
+  season?: Season;
+}
+
+export const GUIDE_INDEX_PLACE: GuidePlace = { place: "open countryside under a wide sky" };
+
+export const GUIDE_PLACES: Record<string, GuidePlace> = {
+  alabama: { place: "tall pine forest" },
+  alaska: { place: "snow-capped peaks and spruce trees", season: "winter" },
+  arizona: { place: "desert with tall cacti and red rock mesas far away" },
+  arkansas: { place: "forested rolling hills" },
+  california: { place: "coastal cliffs above the ocean" },
+  colorado: { place: "pine trees below snowy peaks" },
+  connecticut: { place: "woods and low stone walls", season: "autumn" },
+  delaware: { place: "flat coastal marshland" },
+  "district-of-columbia": { place: "brick rowhouses", urban: true },
+  florida: { place: "palm trees near the coast" },
+  georgia: { place: "pine trees and red clay" },
+  hawaii: { place: "tropical plants and green volcanic hills" },
+  idaho: { place: "a river canyon beside farmland" },
+  illinois: { place: "flat cornfields" },
+  indiana: { place: "farm fields and a red barn" },
+  iowa: { place: "rolling cornfields" },
+  kansas: { place: "golden wheat fields under a big sky" },
+  kentucky: { place: "wooden horse-farm fences and green hills" },
+  louisiana: { place: "bayou wetlands with cypress trees" },
+  maine: { place: "pine trees and a rocky shoreline" },
+  maryland: { place: "a calm bay shoreline" },
+  massachusetts: { place: "brick buildings and old trees", urban: true, season: "autumn" },
+  michigan: { place: "birch trees beside a large lake" },
+  minnesota: { place: "evergreen trees and frozen fields", season: "winter" },
+  mississippi: { place: "cotton fields and spreading oak trees" },
+  missouri: { place: "a wide river with wooded bluffs" },
+  montana: { place: "open prairie and distant mountains" },
+  nebraska: { place: "prairie and grain silos" },
+  nevada: { place: "sagebrush desert and bare mountains" },
+  "new-hampshire": { place: "wooded mountains", season: "autumn" },
+  "new-jersey": { place: "suburban towns", urban: true },
+  "new-mexico": { place: "mesas and adobe-colored hills" },
+  "new-york": { place: "tall city buildings", urban: true },
+  "north-carolina": { place: "forested ridges" },
+  "north-dakota": { place: "wheat fields and wind turbines" },
+  ohio: { place: "farmland and small towns" },
+  oklahoma: { place: "red-earth plains and wind turbines" },
+  oregon: { place: "tall evergreen forest" },
+  pennsylvania: { place: "rolling forested hills and farmland" },
+  "rhode-island": { place: "a small harbor with sailboats" },
+  "south-carolina": { place: "palmetto trees and marshland" },
+  "south-dakota": { place: "grassland and rocky hills" },
+  tennessee: { place: "green mountains and valleys" },
+  texas: { place: "open plains under a big sky" },
+  utah: { place: "red rock canyons" },
+  vermont: { place: "farmhouses and maple trees", season: "winter" },
+  virginia: { place: "rolling hills and blue mountains" },
+  washington: { place: "evergreen forest and distant mountains" },
+  "west-virginia": { place: "dense forest on steep mountains" },
+  wisconsin: { place: "dairy farms and red barns" },
+  wyoming: { place: "high plains and distant mountains" },
 };
+
+/** Compositions that suit a guide hero; the emergency, closed-lane and snow scenes don't. */
+export const GUIDE_COMPOSITIONS = [
+  "aerial-road",
+  "wide-landscape",
+  "interchange",
+  "empty-curve",
+  "rear-three-quarter",
+  "empty-bridge",
+  "rural-two-lane",
+  "on-ramp",
+  "dusk-highway",
+  "tunnel-mouth",
+];
+export const GUIDE_URBAN_COMPOSITIONS = ["aerial-intersection", "intersection-corner", "rain-street", "empty-bridge"];

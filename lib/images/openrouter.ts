@@ -119,7 +119,7 @@ const CHECK_SCHEMA = {
   },
 };
 
-const ALT_BANNED_START = /^(an?\s+)?(image|picture|photo|illustration|drawing)\s+(of|showing)\s+/i;
+const ALT_BANNED_START = /^(an?\s+)?([a-z-]+,?\s+){0,3}(image|picture|photo|illustration|drawing)\s+(of|showing)\s+/i;
 
 /** Tidies vision-model alt text: no "image of" opener, no digit runs, at most 124 characters. */
 export function cleanAlt(raw: string): string {
