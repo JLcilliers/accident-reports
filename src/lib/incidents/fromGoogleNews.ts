@@ -78,7 +78,7 @@ function isLawFirmPublisher(item: GoogleNewsItem): boolean {
 /**
  * US state abbreviations and their full names for location extraction.
  */
-const US_STATES: Record<string, string> = {
+export const US_STATES: Record<string, string> = {
   alabama: "AL",
   alaska: "AK",
   arizona: "AZ",
