@@ -125,9 +125,10 @@ export const US_STATES: Record<string, string> = {
   texas: "TX",
   utah: "UT",
   vermont: "VT",
+  // Before "virginia", which it contains.
+  "west virginia": "WV",
   virginia: "VA",
   washington: "WA",
-  "west virginia": "WV",
   wisconsin: "WI",
   wyoming: "WY",
 };
@@ -253,14 +254,31 @@ function isUSLocation(location: { city?: string; state?: string }): boolean {
 }
 
 /**
+ * A place name as a whole word, so "Darlington" is not Arlington and "Lamesa" is not Mesa.
+ */
+function namePattern(name: string): RegExp {
+  return new RegExp(`\\b${name.replace(/\./g, "\\.")}\\b`, "i");
+}
+
+const CITY_PATTERNS = Object.entries(MAJOR_CITIES).map(([city, state]) => [namePattern(city), city, state] as const);
+const STATE_PATTERNS = Object.entries(US_STATES).map(([name, abbrev]) => [namePattern(name), abbrev] as const);
+
+/**
+ * The text a story's place is read from: its headline and description, without the link and the publisher's
+ * name that end a Google News description, so "ABC7 Chicago" or the Washington Times does not place a story.
+ */
+function storyText(item: GoogleNewsItem): string {
+  const description = (item.description ?? "").replace(/<font[^>]*>[\s\S]*?<\/font>/gi, " ").replace(/<[^>]+>|&nbsp;/g, " ");
+  return item.title + " " + description;
+}
+
+/**
  * Extracts city and state from text using known locations.
  */
 function extractLocation(text: string): { city?: string; state?: string } {
-  const lower = text.toLowerCase();
-
   // Try to find a major city first
-  for (const [city, state] of Object.entries(MAJOR_CITIES)) {
-    if (lower.includes(city)) {
+  for (const [pattern, city, state] of CITY_PATTERNS) {
+    if (pattern.test(text)) {
       // Capitalize city name properly
       const capitalizedCity = city
         .split(" ")
@@ -275,8 +293,8 @@ function extractLocation(text: string): { city?: string; state?: string } {
   }
 
   // Try to find a state name
-  for (const [stateName, abbrev] of Object.entries(US_STATES)) {
-    if (lower.includes(stateName)) {
+  for (const [pattern, abbrev] of STATE_PATTERNS) {
+    if (pattern.test(text)) {
       return { state: abbrev };
     }
   }
@@ -290,6 +308,20 @@ function extractLocation(text: string): { city?: string; state?: string } {
   }
 
   return {};
+}
+
+/**
+ * The state a publisher's name points to ("ABC7 Chicago", "Click2Houston", "NJ.com"), for a story that names no
+ * place itself. Brands run names together, so names count inside words here. "Washington" does not count: the
+ * Washington Post, Times and Examiner are in the District, not Washington state.
+ */
+function publisherState(name: string): string | undefined {
+  const brand = name.replace(/washington/gi, " ");
+  const lower = brand.toLowerCase();
+  for (const [place, state] of [...Object.entries(MAJOR_CITIES), ...Object.entries(US_STATES)]) {
+    if (lower.includes(place)) return state;
+  }
+  return extractLocation(brand).state;
 }
 
 /**
@@ -320,9 +352,9 @@ export function toIncidentCandidates(
     }
 
     const occurredAt = new Date(item.pubDate);
-    const fullText = item.title + " " + (item.description ?? "");
-    const found = extractLocation(fullText);
-    const location = !found.state && homeState ? { state: homeState } : found;
+    // A story that names no place is placed in its publisher's state ("ABC7 Chicago" in Illinois), not its city.
+    const found = extractLocation(storyText(item));
+    const location = found.state ? found : { state: homeState ?? (item.source && publisherState(item.source)) };
 
     // Second filter: must have confirmed US location (city/state)
     if (!isUSLocation(location)) {
