@@ -1,7 +1,9 @@
 import prisma from "@/lib/prisma";
 import { buildIncidentSlug } from "./slug";
-import { makeIncidentKey } from "./dedupe";
+import { isSameCrash, makeIncidentKey } from "./dedupe";
 import type { IncidentCandidate } from "./types";
+
+const MATCH_WINDOW_MS = 48 * 60 * 60 * 1000;
 
 /**
  * Result of an upsert operation.
@@ -31,6 +33,16 @@ export async function upsertIncidentFromCandidate(
   candidate: IncidentCandidate
 ): Promise<UpsertResult> {
   const dedupeKey = makeIncidentKey(candidate);
+
+  // A story already stored on any incident stays there, even once that incident is older than the window
+  // or the story's headline now gives the key of another incident.
+  const known = await prisma.incidentSource.findFirst({
+    where: { url: candidate.link },
+    select: { incident: { select: { id: true, slug: true } } },
+  });
+  if (known) {
+    return { incidentId: known.incident.id, slug: known.incident.slug, isNew: false, sourceAdded: false };
+  }
 
   // Check if this incident already exists
   const existing = await prisma.incident.findUnique({
@@ -73,6 +85,54 @@ export async function upsertIncidentFromCandidate(
       isNew: false,
       sourceAdded: false,
     };
+  }
+
+  const since = new Date(Date.now() - MATCH_WINDOW_MS);
+
+  // The same story from the same publisher, stored again under another date or place.
+  if (candidate.publisher) {
+    const repeat = await prisma.incidentSource.findFirst({
+      where: { title: candidate.headline, publisher: candidate.publisher, incident: { createdAt: { gte: since } } },
+      select: { incident: { select: { id: true, slug: true } } },
+    });
+    if (repeat) {
+      return { incidentId: repeat.incident.id, slug: repeat.incident.slug, isNew: false, sourceAdded: false };
+    }
+  }
+
+  // Another report of a crash already in the database: the same state, an incident from the last 48 hours,
+  // and a headline that matches it. It becomes a source of that incident instead of a second incident.
+  if (candidate.state) {
+    const recent = await prisma.incident.findMany({
+      where: { state: candidate.state, createdAt: { gte: since } },
+      select: { id: true, slug: true, headline: true, city: true, sources: { select: { title: true, url: true } } },
+      orderBy: { createdAt: "desc" },
+    });
+    const match = recent.find(
+      (incident) =>
+        (!candidate.city || !incident.city || incident.city === candidate.city) &&
+        isSameCrash(candidate.headline, [incident.headline, ...incident.sources.map((s) => s.title)])
+    );
+    if (match) {
+      if (match.sources.some((s) => s.url === candidate.link)) {
+        return { incidentId: match.id, slug: match.slug, isNew: false, sourceAdded: false };
+      }
+      // ":matched" marks a source joined by headline, so a wrong match can be found and split off again.
+      await prisma.incidentSource.create({
+        data: {
+          incidentId: match.id,
+          sourceType: "google_news:matched",
+          url: candidate.link,
+          title: candidate.headline,
+          publisher: candidate.publisher,
+          publisherDomain: candidate.publisherDomain,
+          snippet: candidate.snippet,
+          publishedAt: candidate.occurredAt,
+        },
+      });
+      console.log(`[Incident] "${candidate.headline}" matches ${match.slug}: added as a source`);
+      return { incidentId: match.id, slug: match.slug, isNew: false, sourceAdded: true };
+    }
   }
 
   // Create new incident
