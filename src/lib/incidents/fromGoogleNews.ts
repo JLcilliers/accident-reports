@@ -66,7 +66,7 @@ const PHONE_NUMBER = /\(?\b\d{3}\)?[-.\s]\d{3}[-.\s]\d{4}\b/;
  * Publisher names or domains of law firms, lawyers' blogs and legal-referral sites, whose crash posts are
  * adverts built on other outlets' reporting. Police news, prosecutors and attorneys general are kept.
  */
-const LAW_FIRM_PUBLISHER = /lawyer|attorney|injury|legal|lawfirm|\blaw\b|&\s*associates|\b(p\.?c|a\.?p\.?c|pllc|llp)\.?$/i;
+const LAW_FIRM_PUBLISHER = /lawyer|attorney|injury|legal|lawfirm|lawfuel|florida-justice\.com|\blaw\b|&\s*associates|\b(p\.?c|a\.?p\.?c|pllc|llp)\.?$/i;
 const NOT_A_LAW_FIRM = /law ?enforcement|district attorney|attorney general|law ?(&|and) ?crime/i;
 
 function isLawFirmPublisher(item: GoogleNewsItem): boolean {
@@ -87,6 +87,7 @@ const US_STATES: Record<string, string> = {
   colorado: "CO",
   connecticut: "CT",
   delaware: "DE",
+  "district of columbia": "DC",
   florida: "FL",
   georgia: "GA",
   hawaii: "HI",
@@ -209,6 +210,11 @@ const MAJOR_CITIES: Record<string, string> = {
 };
 
 /**
+ * "Washington, D.C.", "Washington DC" or "D.C." mean the District, not Washington state.
+ */
+const WASHINGTON_DC = /\bwashington,?\s+d\.?\s?c\b|\bd\.\s?c\./i;
+
+/**
  * Checks if a text contains any accident-related phrases.
  */
 function isLikelyAccident(title: string, description?: string): boolean {
@@ -261,6 +267,10 @@ function extractLocation(text: string): { city?: string; state?: string } {
         .join(" ");
       return { city: capitalizedCity, state };
     }
+  }
+
+  if (WASHINGTON_DC.test(text)) {
+    return { city: "Washington", state: "DC" };
   }
 
   // Try to find a state name
