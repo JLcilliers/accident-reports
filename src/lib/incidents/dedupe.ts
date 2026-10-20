@@ -82,7 +82,9 @@ const CRASH_WORDS = new Set([
     "involved county city state highway freeway interstate road street avenue ave drive boulevard lane lanes route " +
     "closes closed closure shuts down reopens north south east west northbound southbound eastbound westbound side one " +
     "two three year years old teen student family officers officer sheriffs deputies troopers trooper new while over " +
-    "before leaves taken help say report live watch patrol chp fhp dps thp").split(" "),
+    "before leaves taken help say report live watch patrol chp fhp dps thp " +
+    "monday tuesday wednesday thursday friday saturday sunday weekend today tonight yesterday morning afternoon " +
+    "evening night overnight early late").split(" "),
 ]);
 const DIRECTION = /\b(?:(north|south|east|west)bound|([nsew])b)\b/g;
 const ROAD_NUMBER =
