@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
+import { getGuideByCode } from "@/lib/crashReportGuides";
 
 export const revalidate = 600; // Re-generate every 10 minutes
 
@@ -103,6 +104,8 @@ export default async function StateAccidentsPage({
     notFound();
   }
 
+  const reportGuide = getGuideByCode(state);
+
   // JSON-LD FAQPage structured data
   const faqJsonLd = {
     "@context": "https://schema.org",
@@ -129,7 +132,9 @@ export default async function StateAccidentsPage({
         name: "Can this website give me the official report?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "No. We help you understand which agency likely has your report and how to request it. Official copies are only available from government agencies such as the state patrol, local police departments, sheriff's offices, or the state DMV.",
+          text: reportGuide
+            ? `No. Official copies come from government agencies. Our ${reportGuide.name} crash report guide explains who keeps crash reports ${reportGuide.inName} and how to request a copy.`
+            : "No. Official copies come from government agencies such as the state patrol, local police departments, and sheriff's offices.",
         },
       },
     ],
@@ -286,44 +291,30 @@ export default async function StateAccidentsPage({
                 <h2 className="text-xl font-medium text-neutral-900 mb-4">
                   How to Get an Official {stateData.stateName} Crash Report
                 </h2>
-                <div className="prose prose-neutral max-w-none text-neutral-600 space-y-4">
-                  <p className="leading-relaxed">
-                    If you were involved in a crash in {stateData.stateName}, your official crash report is
-                    typically kept by either the state highway patrol, the local police department or
-                    sheriff&apos;s office that responded, or the state&apos;s Department of Motor Vehicles.
-                  </p>
-
-                  <h3 className="text-lg font-medium text-neutral-800 mt-6 mb-2">
-                    1. Crashes on Highways and State Roads
-                  </h3>
-                  <p className="leading-relaxed">
-                    For crashes handled on highways and state roads, you can usually request a basic crash
-                    report through the state patrol&apos;s central records unit. You&apos;ll need the driver name,
-                    crash date, case number, and crash location. Requests may take several business days to process.
-                  </p>
-
-                  <h3 className="text-lg font-medium text-neutral-800 mt-6 mb-2">
-                    2. Crashes Inside Cities and Counties
-                  </h3>
-                  <p className="leading-relaxed">
-                    If your crash happened inside city or county limits, the local police department or
-                    sheriff&apos;s office is usually the custodian of the report. Most agencies allow you
-                    to request reports online, in person, or by mail, and they charge a small fee.
-                  </p>
-
-                  <h3 className="text-lg font-medium text-neutral-800 mt-6 mb-2">
-                    3. State DMV Records
-                  </h3>
-                  <p className="leading-relaxed">
-                    The state Department of Motor Vehicles or equivalent agency maintains statewide crash
-                    records for driver-history purposes. Processing can take several weeks as reports
-                    are entered into the state system.
-                  </p>
-
-                  <p className="text-sm text-neutral-500 mt-6 leading-relaxed">
+                <div className="text-neutral-600 space-y-4">
+                  {reportGuide?.summary ? (
+                    <p className="leading-relaxed">{reportGuide.summary.text}</p>
+                  ) : (
+                    <p className="leading-relaxed">
+                      The official report is written by the law-enforcement agency that handled the
+                      crash.
+                    </p>
+                  )}
+                  {reportGuide && (
+                    <Link
+                      href={`/crash-reports/${reportGuide.slug}`}
+                      className="inline-flex items-center gap-2 text-[#2A7D6E] hover:text-[#236859] font-medium"
+                    >
+                      Read the full {reportGuide.name} crash report guide
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                      </svg>
+                    </Link>
+                  )}
+                  <p className="text-sm text-neutral-500 leading-relaxed">
                     This site is not affiliated with any state patrol, department of motor vehicles, or
-                    local law-enforcement agency. We provide general guidance and summaries only. Always
-                    use the official state or local portals to request certified copies of crash reports.
+                    local law-enforcement agency. Always use the official state or local portals to
+                    request copies of crash reports.
                   </p>
                 </div>
               </div>
@@ -361,9 +352,20 @@ export default async function StateAccidentsPage({
                       Can this website give me the official report?
                     </h3>
                     <p className="text-neutral-600 leading-relaxed">
-                      No. We help you understand which agency likely has your report and how to request
-                      it. Official copies are only available from government agencies such as the state
-                      patrol, local police departments, sheriff&apos;s offices, or the state DMV.
+                      {reportGuide ? (
+                        <>
+                          No. Official copies come from government agencies. Our{" "}
+                          <Link href={`/crash-reports/${reportGuide.slug}`} className="text-[#2A7D6E] hover:underline">
+                            {reportGuide.name} crash report guide
+                          </Link>{" "}
+                          explains who keeps crash reports {reportGuide.inName} and how to request a copy.
+                        </>
+                      ) : (
+                        <>
+                          No. Official copies come from government agencies such as the state patrol,
+                          local police departments, and sheriff&apos;s offices.
+                        </>
+                      )}
                     </p>
                   </div>
                 </div>
@@ -402,6 +404,21 @@ export default async function StateAccidentsPage({
                 Search {stateData.stateName} Accidents
               </Link>
             </div>
+
+            {reportGuide && (
+              <div className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-5 mb-6">
+                <h3 className="text-sm font-medium text-neutral-900 mb-3 uppercase tracking-wide">Need a Crash Report?</h3>
+                <p className="text-neutral-600 text-sm mb-4">
+                  Who keeps crash reports {reportGuide.inName} and how to request a copy.
+                </p>
+                <Link
+                  href={`/crash-reports/${reportGuide.slug}`}
+                  className="block w-full bg-[#2A7D6E] text-white px-4 py-3 rounded-xl hover:bg-[#236859] transition font-medium text-center text-sm"
+                >
+                  {reportGuide.name} Crash Report Guide
+                </Link>
+              </div>
+            )}
 
             {/* Disclaimer */}
             <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4">

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import LogoMark from "@/components/LogoMark";
 
 export default function Footer() {
   return (
@@ -8,9 +9,10 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 mb-16">
           {/* Brand Column */}
           <div className="lg:col-span-4">
-            <Link href="/" className="inline-block mb-6">
-              <span className="text-xl font-medium tracking-tight text-neutral-900">
-                CarCrashReport
+            <Link href="/" className="inline-flex items-center gap-2.5 mb-6" aria-label="CarCrashReport.com home">
+              <LogoMark className="h-8 w-8" />
+              <span className="text-xl font-semibold tracking-tight text-neutral-900">
+                CarCrashReport<span className="text-[#2A7D6E]">.com</span>
               </span>
             </Link>
             <p className="text-neutral-500 leading-relaxed text-sm max-w-sm">
@@ -32,6 +34,11 @@ export default function Footer() {
               <li>
                 <Link href="/accidents" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">
                   News
+                </Link>
+              </li>
+              <li>
+                <Link href="/crash-reports" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">
+                  Crash Report Guides
                 </Link>
               </li>
               <li>
