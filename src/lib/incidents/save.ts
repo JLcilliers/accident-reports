@@ -108,7 +108,13 @@ export async function upsertIncidentFromCandidate(
   if (candidate.state) {
     const recent = await prisma.incident.findMany({
       where: { state: candidate.state, createdAt: { gte: since } },
-      select: { id: true, slug: true, headline: true, city: true, sources: { select: { title: true, url: true } } },
+      select: {
+        id: true,
+        slug: true,
+        headline: true,
+        city: true,
+        sources: { select: { title: true, url: true, publisher: true, publisherDomain: true } },
+      },
       orderBy: { createdAt: "desc" },
     });
     const match = recent.find(
@@ -117,14 +123,21 @@ export async function upsertIncidentFromCandidate(
         isSameCrash(candidate.headline, [incident.headline, ...incident.sources.map((s) => s.title)])
     );
     if (match) {
-      if (match.sources.some((s) => s.url === candidate.link)) {
+      if (
+        match.sources.some(
+          (s) =>
+            s.url === candidate.link ||
+            (!!candidate.publisher && s.publisher === candidate.publisher) ||
+            (!!candidate.publisherDomain && s.publisherDomain === candidate.publisherDomain)
+        )
+      ) {
         return { incidentId: match.id, slug: match.slug, isNew: false, sourceAdded: false };
       }
       // ":matched" marks a source joined by headline, so a wrong match can be found and split off again.
       await prisma.incidentSource.create({
         data: {
           incidentId: match.id,
-          sourceType: "google_news:matched",
+          sourceType: `${candidate.sourceType ?? "google_news"}:matched`,
           url: candidate.link,
           title: candidate.headline,
           publisher: candidate.publisher,
