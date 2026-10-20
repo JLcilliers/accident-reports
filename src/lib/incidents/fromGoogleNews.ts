@@ -357,7 +357,7 @@ function extractLocation(text: string): { city?: string; state?: string } {
  * National outlets, whose names say nothing about where a story happened ("New York Post", "Yahoo News Canada").
  */
 const NATIONAL_OUTLET =
-  /^(the )?(new york post|usa today|associated press( news)?|ap( news)?|reuters|fox news|cnn|nbc news|abc news|cbs news|yahoo\b.*|msn(\.com)?|daily mail( online)?|mail online|independent|newsweek)$/i;
+  /^(the )?(new york post|new york times|nytimes(\.com)?|usa today|associated press( news)?|ap( news)?|reuters|fox news|cnn|nbc news|abc news|cbs news|yahoo\b.*|msn(\.com)?|daily mail( online)?|mail online|independent|newsweek)$/i;
 
 /**
  * The state a publisher's name points to ("ABC7 Chicago", "Click2Houston", "NJ.com"), for a story that names no
