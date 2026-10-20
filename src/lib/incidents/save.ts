@@ -34,6 +34,16 @@ export async function upsertIncidentFromCandidate(
 ): Promise<UpsertResult> {
   const dedupeKey = makeIncidentKey(candidate);
 
+  // A story already stored on any incident stays there, even once that incident is older than the window
+  // or the story's headline now gives the key of another incident.
+  const known = await prisma.incidentSource.findFirst({
+    where: { url: candidate.link },
+    select: { incident: { select: { id: true, slug: true } } },
+  });
+  if (known) {
+    return { incidentId: known.incident.id, slug: known.incident.slug, isNew: false, sourceAdded: false };
+  }
+
   // Check if this incident already exists
   const existing = await prisma.incident.findUnique({
     where: { dedupeKey },
@@ -78,15 +88,6 @@ export async function upsertIncidentFromCandidate(
   }
 
   const since = new Date(Date.now() - MATCH_WINDOW_MS);
-
-  // A story already stored on any incident stays there, even once that incident is older than the window.
-  const known = await prisma.incidentSource.findFirst({
-    where: { url: candidate.link },
-    select: { incident: { select: { id: true, slug: true } } },
-  });
-  if (known) {
-    return { incidentId: known.incident.id, slug: known.incident.slug, isNew: false, sourceAdded: false };
-  }
 
   // The same story from the same publisher, stored again under another date or place.
   if (candidate.publisher) {
