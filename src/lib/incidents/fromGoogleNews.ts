@@ -238,6 +238,7 @@ function isLikelyAccident(title: string, description?: string): boolean {
  * Set of valid US state abbreviations for quick lookup.
  */
 const US_STATE_ABBREVIATIONS = new Set(Object.values(US_STATES));
+const AMBIGUOUS_STATE_ABBREVIATIONS = new Set(["ID", "IN", "OR", "ME", "OK", "HI", "LA"]);
 
 /**
  * Checks if extracted location data indicates a US-based incident.
@@ -280,15 +281,11 @@ function extractLocation(text: string): { city?: string; state?: string } {
     }
   }
 
-  // Try to find a state abbreviation (e.g., "in TX" or "Texas")
-  const stateAbbrevPattern = /\b([A-Z]{2})\b/g;
-  const matches = text.match(stateAbbrevPattern);
-  if (matches) {
-    const stateAbbrevs = Object.values(US_STATES);
-    for (const match of matches) {
-      if (stateAbbrevs.includes(match)) {
-        return { state: match };
-      }
+  // Try to find a state abbreviation (e.g., "in TX" or "Boise, ID"). Abbreviations that are also words
+  // ("ID released", an all-caps "CRASH IN", "South LA") count only after a comma.
+  for (const [, comma, match] of text.matchAll(/(,\s*)?\b([A-Z]{2})\b/g)) {
+    if (US_STATE_ABBREVIATIONS.has(match) && (comma || !AMBIGUOUS_STATE_ABBREVIATIONS.has(match))) {
+      return { state: match };
     }
   }
 
