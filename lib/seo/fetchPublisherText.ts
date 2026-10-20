@@ -5,7 +5,7 @@ import robotsParser from "robots-parser";
 
 // Publishers see who is asking, and their robots.txt rules for this name (or for every crawler) are followed.
 const USER_AGENT = "CarCrashReportBot/1.0 (+https://www.carcrashreport.com)";
-const BOT_NAME = "CarCrashReportBot";
+export const BOT_NAME = "CarCrashReportBot";
 
 const LOOKUP_BUDGET_MS = 25_000;
 const FETCH_TIMEOUT_MS = 8_000;
@@ -33,7 +33,7 @@ interface Fetched {
  * GET with this site's User-Agent, following redirects only to addresses `mayFetch` accepts, and giving up
  * after FETCH_TIMEOUT_MS or once the body passes maxBytes (null).
  */
-async function get(
+export async function get(
   url: string,
   budget: AbortSignal,
   maxBytes: number,

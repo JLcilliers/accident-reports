@@ -6,6 +6,10 @@
       "schedule": "*/20 * * * *"
     },
     {
+      "path": "/api/cron/ingest-publishers",
+      "schedule": "5,35 * * * *"
+    },
+    {
       "path": "/api/cron/generate-seo?limit=10",
       "schedule": "*/10 * * * *"
     },
