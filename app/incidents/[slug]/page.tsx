@@ -1,3 +1,4 @@
+import { cache } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
@@ -27,12 +28,12 @@ import {
 
 export const revalidate = 600; // Re-generate every 10 minutes
 
-async function getIncident(slug: string) {
+const getIncident = cache(async (slug: string) => {
   return prisma.incident.findUnique({
     where: { slug },
     include: { sources: true },
   });
-}
+});
 
 export async function generateStaticParams() {
   try {
