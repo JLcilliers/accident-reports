@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import prisma from "@/lib/prisma";
 import { CRASH_REPORT_GUIDES } from "@/lib/crashReportGuides";
+import { BRIEF_MARKER } from "@/lib/seo/brief";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.carcrashreport.com";
@@ -54,8 +55,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.7,
       }));
 
-    // Individual incident pages
+    // Individual incident pages, leaving out briefs (noindex until a second publisher's coverage brings the article)
     const incidents = await prisma.incident.findMany({
+      where: { OR: [{ articleBody: null }, { NOT: { articleBody: { startsWith: BRIEF_MARKER } } }] },
       select: { slug: true, updatedAt: true },
       orderBy: { updatedAt: "desc" },
     });

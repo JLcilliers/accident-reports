@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { BRIEF_MARKER } from "@/lib/seo/brief";
 import {
   submitUrlForIndexing,
   submitUrlsForIndexing,
@@ -81,6 +82,7 @@ export async function POST(request: NextRequest) {
       const incidents = await prisma.incident.findMany({
         where: {
           articleBody: { not: null }, // Only submit incidents with generated content
+          NOT: { articleBody: { startsWith: BRIEF_MARKER } }, // Briefs are noindex
         },
         select: { slug: true },
         orderBy: { createdAt: "desc" },

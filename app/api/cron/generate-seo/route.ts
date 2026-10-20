@@ -6,6 +6,7 @@ import { generateIncidentArticle, incidentSourceTexts } from "@/lib/seo/generate
 import { claimArticle, releaseForSecondPublisher } from "@/lib/seo/claim";
 import { checkRoadCrash } from "@/lib/seo/checkRoadCrash";
 import { fetchPublisherText } from "@/lib/seo/fetchPublisherText";
+import { generateIncidentBrief } from "@/lib/seo/brief";
 import type { AccidentFacts } from "@/lib/seo/extractAccidentFacts";
 
 export const runtime = "nodejs";
@@ -30,7 +31,8 @@ const MIN_ITEM_MS = 75_000;
  * This endpoint claims incidents one at a time (see claimArticle) that were created on or after
  * IMAGE_START_DATE and have no article, so the older backlog is never billed. For each it looks for the story's
  * full text on a publisher's own site (see fetchPublisherText); an incident covered by only one publisher goes
- * ahead only when that text is found, and otherwise waits for a second publisher. It then checks that the
+ * ahead only when that text is found, and otherwise gets a short brief (see generateIncidentBrief) and waits for
+ * a second publisher, when it is claimed again for the full article. It then checks that the
  * coverage is about a real road crash (anything else is marked FAILED with a "not a road crash" note and never
  * claimed again), extracts
  * structured facts and writes the article, all through OpenRouter. The publisher's text is model input only.
@@ -95,6 +97,7 @@ export async function GET(req: NextRequest) {
   let notACrash = 0;
   let withPublisherText = 0;
   let waitingForSecondPublisher = 0;
+  let briefsWritten = 0;
   let failed = 0;
   let usedTodayBefore: number | null = null;
   const errors: string[] = [];
@@ -115,9 +118,30 @@ export async function GET(req: NextRequest) {
       const publisherText = await fetchPublisherText(sources);
       if (publisherText) withPublisherText++;
       if (!publisherText && incident.publishers < 2) {
-        await releaseForSecondPublisher(prisma, incident.id);
-        waitingForSecondPublisher++;
-        console.log(`[generate-seo] One publisher and no text from its site, waiting for a second: ${incident.slug}`);
+        // Only one publisher's headline to go on: a short brief, kept out of search until a second publisher
+        // reports the crash and the full article replaces it. A headline judged not to be a crash, or a brief
+        // that fails, just waits for a second publisher, so a verdict on one headline never fails it for good.
+        let brief: string | null = null;
+        try {
+          const crashCheck = await checkRoadCrash(incident.headline, incidentSourceTexts(sources));
+          if (crashCheck.crash) brief = await generateIncidentBrief({ ...incident, sources });
+          else console.log(`[generate-seo] No brief, headline may not be a road crash: ${incident.slug} (${crashCheck.reason})`);
+        } catch (error) {
+          console.warn(`[generate-seo] No brief for ${incident.slug}:`, error instanceof Error ? error.message : error);
+        }
+        if (!brief) {
+          await releaseForSecondPublisher(prisma, incident.id);
+          waitingForSecondPublisher++;
+          console.log(`[generate-seo] One publisher and no text from its site, waiting for a second: ${incident.slug}`);
+          continue;
+        }
+        // Attempts start again at 0, so the full article gets all of its own once a second publisher appears.
+        await prisma.incident.update({
+          where: { id: incident.id },
+          data: { articleBody: brief, articleAttempts: 0, articleQualityStatus: "OK", articleQualityNotes: null },
+        });
+        briefsWritten++;
+        console.log(`[generate-seo] Wrote a brief: ${incident.slug}`);
         continue;
       }
 
@@ -127,6 +151,7 @@ export async function GET(req: NextRequest) {
         await prisma.incident.update({
           where: { id: incident.id },
           data: {
+            articleBody: null, // Removes a brief written from the first headline, if there is one.
             articleQualityStatus: "FAILED",
             articleQualityNotes: `${NOT_A_CRASH_NOTE}${crashCheck.reason ? `: ${crashCheck.reason}` : ""}`.slice(0, 1000),
             articleAttempts: MAX_ATTEMPTS,
@@ -206,6 +231,7 @@ export async function GET(req: NextRequest) {
     notACrash,
     withPublisherText,
     waitingForSecondPublisher,
+    briefsWritten,
     failed,
     errors: errors.slice(0, 10), // Limit errors in response
   };

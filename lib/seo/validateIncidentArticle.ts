@@ -192,6 +192,33 @@ export function validateIncidentArticle(
   };
 }
 
+const BRIEF_MIN_WORDS = 100;
+const BRIEF_MAX_WORDS = 180;
+
+/**
+ * Validate a single-source news brief: 100 to 180 words of plain paragraphs, with no headings or links and
+ * none of the phrases or content an article may not carry.
+ */
+export function validateIncidentBrief(text: string): ArticleValidationResult {
+  const errors: string[] = [];
+
+  const words = text.split(/\s+/).filter(Boolean).length;
+  if (words < BRIEF_MIN_WORDS || words > BRIEF_MAX_WORDS) {
+    errors.push(`Brief is ${words} words (allowed: ${BRIEF_MIN_WORDS} to ${BRIEF_MAX_WORDS})`);
+  }
+  if (/^\s*#/m.test(text)) errors.push("Brief has a heading");
+  if (/\]\(/.test(text)) errors.push("Brief has a link");
+
+  const lower = text.toLowerCase();
+  const found = [
+    ...DISALLOWED_PHRASES.filter((phrase) => lower.includes(phrase)),
+    ...DISALLOWED_CONTENT.filter(({ pattern }) => pattern.test(text)).map(({ label }) => label),
+  ];
+  if (found.length > 0) errors.push(`Contains disallowed content: ${found.join(", ")}`);
+
+  return { ok: errors.length === 0, errors, warnings: [] };
+}
+
 function wordsOf(text: string): string[] {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim().split(" ").filter(Boolean);
 }
