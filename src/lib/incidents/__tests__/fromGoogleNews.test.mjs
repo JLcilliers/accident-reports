@@ -14,6 +14,7 @@ registerHooks({
   },
 });
 const { toIncidentCandidates } = await import("../fromGoogleNews.ts");
+const { COMMON_WORD_TOWNS } = await import("../towns.ts");
 
 // Where a headline from this publisher is stored: "City/ST" ("-" for no city) when `expected` names a city,
 // else the state alone, or "none" when it is skipped.
@@ -152,6 +153,23 @@ const groups = {
     ["Charlotte woman, man killed after car crashes into motorcycle in Tega Cay", "NewsBreak: Local News & Alerts", "-/SC"],
     ["Tampa Man, 64, Killed in Marion County Truck Crash", "Hoodline", "Tampa/FL"],
   ],
+  "A crash's town alone": [
+    ["Driver Arrested in Fatal Poolesville Hit-and-Run", "FOX 5 DC", "MD"],
+    ["Pedestrian killed in crash in Poolesville", "Yahoo", "MD"],
+    ["Pedestrian killed in crash in Poolesville", "ABC7 Chicago", "IL"],
+    ["3 hurt in multi-vehicle crash on Route 73 in Evesham Township", "NBC10 Philadelphia", "NJ"],
+    ["Fatal hit and run in Lamesa, search for driver ongoing", "everythinglubbock.com", "TX"],
+    ["Man arrested nearly 8 months after deadly Pacific Beach hit-and-run", "FOX 5 San Diego & KUSI News", "CA"],
+    ["Severna Park man dies in hit-and-run near strip mall on Ritchie Highway", "The Baltimore Banner", "MD"],
+    ["Severna Park man killed in Ritchie Highway hit-and-run: Police detain suspect", "Yahoo", "none"],
+  ],
+  "Towns that are also ordinary words": [
+    ["Ohio man killed in crash at Main and 5th", "Yahoo", "OH"],
+    ["Ohio man killed in crash near Main and 5th", "Yahoo", "OH"],
+    ["Kentucky Man Hit-And-Run Victim Identified", "Yahoo", "KY"],
+    ["Ohio man killed in crash near Beach", "Yahoo", "OH"],
+    ["Two hurt in crash near Beach", "Yahoo", "none"],
+  ],
   "Publisher names": [
     ["Suspect in fatal Wells hit-and-run facing charges", "The Portland Press Herald", "ME"],
     ...["AuroraToday.ca", "Oklahoma City Free Press"].map(
@@ -167,10 +185,10 @@ const groups = {
     ["72-year-old man charged in New York City hit-and-run crash that killed former Nickelodeon star", "ABC7 Chicago", "New York/NY"],
   ],
   "Idaho Avenue, ID'd, ID's": [
-    ["Las Cruces Hit-And-Run Injures Pedestrian on Idaho Avenue, Driver Still At Large", "Hoodline", "none"],
+    ["Las Cruces Hit-And-Run Injures Pedestrian on Idaho Avenue, Driver Still At Large", "Hoodline", "NM"],
     ["Man, 80, ID’d in fatal crash was longtime Seaman’s worker who loved doo-wop, friends say", "NJ.com", "NJ"],
     ["Jayden Magdaleno, 15, ID'd as teen boy killed after car crashed into tree near 92nd Street", "ABC7 Chicago", "IL"],
-    ["Victim, 21, ID'd in fatal DUI hit-and-run in Newport Beach", "MSN", "none"],
+    ["Victim, 21, ID'd in fatal DUI hit-and-run in Newport Beach", "MSN", "CA"],
     ["Coroner ID's driver killed in fatal crash", "KGET 17", "none"],
     ["Coroner ID’s driver killed in fatal crash", "KGET 17", "none"],
     ["Wrong-way driver killed in crash, coroner ID’s victim", "WJBF", "none"],
@@ -195,3 +213,7 @@ for (const [group, cases] of Object.entries(groups)) {
     }
   });
 }
+
+test("Main, Hurt, Man and Beach are ordinary words, not towns", () => {
+  for (const word of ["main", "hurt", "man", "beach"]) assert.ok(COMMON_WORD_TOWNS.has(word), word);
+});
