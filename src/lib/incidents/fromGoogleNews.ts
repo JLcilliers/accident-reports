@@ -297,10 +297,12 @@ function extractLocation(text: string): { city?: string; state?: string } {
  * Filters for likely accidents, extracts location data, and ensures US-only items.
  *
  * @param items - Raw Google News items
+ * @param homeState - The publisher's home state, for an item that names no place (one publisher's own feed)
  * @returns Filtered and normalized incident candidates (US-only)
  */
 export function toIncidentCandidates(
-  items: GoogleNewsItem[]
+  items: GoogleNewsItem[],
+  homeState?: string
 ): IncidentCandidate[] {
   const candidates: IncidentCandidate[] = [];
   let filteredNonUS = 0;
@@ -319,7 +321,8 @@ export function toIncidentCandidates(
 
     const occurredAt = new Date(item.pubDate);
     const fullText = item.title + " " + (item.description ?? "");
-    const location = extractLocation(fullText);
+    const found = extractLocation(fullText);
+    const location = !found.state && homeState ? { state: homeState } : found;
 
     // Second filter: must have confirmed US location (city/state)
     if (!isUSLocation(location)) {

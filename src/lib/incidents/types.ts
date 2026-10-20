@@ -6,7 +6,7 @@
  * A source article attached to an incident.
  */
 export interface IncidentSource {
-  sourceType: "google_news";
+  sourceType: "google_news" | "publisher_feed";
   url: string;
   title: string;
   publisher?: string;
@@ -28,6 +28,8 @@ export interface IncidentCandidate {
   city?: string;
   state?: string;
   country?: string;
+  /** Where the story was found; Google News when not given. */
+  sourceType?: IncidentSource["sourceType"];
 }
 
 /**

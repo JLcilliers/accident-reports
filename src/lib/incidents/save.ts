@@ -51,9 +51,12 @@ export async function upsertIncidentFromCandidate(
   });
 
   if (existing) {
-    // Check if we already have this source URL
+    // Check if we already have this source URL, or this publisher's copy of the story from the other news source
     const alreadyHasSource = existing.sources.some(
-      (s) => s.url === candidate.link
+      (s) =>
+        s.url === candidate.link ||
+        (!!candidate.publisher && s.publisher === candidate.publisher) ||
+        (!!candidate.publisherDomain && s.publisherDomain === candidate.publisherDomain)
     );
 
     if (!alreadyHasSource) {
@@ -61,7 +64,7 @@ export async function upsertIncidentFromCandidate(
       await prisma.incidentSource.create({
         data: {
           incidentId: existing.id,
-          sourceType: "google_news",
+          sourceType: candidate.sourceType ?? "google_news",
           url: candidate.link,
           title: candidate.headline,
           publisher: candidate.publisher,
@@ -105,7 +108,13 @@ export async function upsertIncidentFromCandidate(
   if (candidate.state) {
     const recent = await prisma.incident.findMany({
       where: { state: candidate.state, createdAt: { gte: since } },
-      select: { id: true, slug: true, headline: true, city: true, sources: { select: { title: true, url: true } } },
+      select: {
+        id: true,
+        slug: true,
+        headline: true,
+        city: true,
+        sources: { select: { title: true, url: true, publisher: true, publisherDomain: true } },
+      },
       orderBy: { createdAt: "desc" },
     });
     const match = recent.find(
@@ -114,14 +123,21 @@ export async function upsertIncidentFromCandidate(
         isSameCrash(candidate.headline, [incident.headline, ...incident.sources.map((s) => s.title)])
     );
     if (match) {
-      if (match.sources.some((s) => s.url === candidate.link)) {
+      if (
+        match.sources.some(
+          (s) =>
+            s.url === candidate.link ||
+            (!!candidate.publisher && s.publisher === candidate.publisher) ||
+            (!!candidate.publisherDomain && s.publisherDomain === candidate.publisherDomain)
+        )
+      ) {
         return { incidentId: match.id, slug: match.slug, isNew: false, sourceAdded: false };
       }
       // ":matched" marks a source joined by headline, so a wrong match can be found and split off again.
       await prisma.incidentSource.create({
         data: {
           incidentId: match.id,
-          sourceType: "google_news:matched",
+          sourceType: `${candidate.sourceType ?? "google_news"}:matched`,
           url: candidate.link,
           title: candidate.headline,
           publisher: candidate.publisher,
@@ -162,7 +178,7 @@ export async function upsertIncidentFromCandidate(
       dedupeKey,
       sources: {
         create: {
-          sourceType: "google_news",
+          sourceType: candidate.sourceType ?? "google_news",
           url: candidate.link,
           title: candidate.headline,
           publisher: candidate.publisher,
