@@ -1,5 +1,6 @@
 import { PUBLISHER_FEEDS } from "../../config/publisherFeeds";
 import type { GoogleNewsItem } from "../googleNews";
+import { ONE_STATE_TOWNS } from "./towns";
 import type { IncidentCandidate } from "./types";
 
 /**
@@ -476,12 +477,59 @@ function streetCityState(text: string): string | undefined {
 }
 
 /**
+ * A capitalised word in a name, which is not a preposition or article ("Rhode Island" in "At Rhode Island Hospital").
+ */
+const NAME_WORD = String.raw`(?!(?:To|At|In|Near|Outside|From|On|After|By|For|With|And|Of|The)\b)[A-Z][A-Za-z'’.&-]*`;
+
+/**
+ * A hospital's name ("Rhode Island Hospital", "UC Davis Medical Center", "Children's Hospital of Philadelphia"),
+ * which says where someone was taken, not where the crash was.
+ */
+const HOSPITAL_NAME = new RegExp(
+  String.raw`\b(?:${NAME_WORD}\s+){1,6}(?:Hospital|Medical Cent(?:er|re)|Trauma Cent(?:er|re))\b(?:\s+[Oo]f\s+(?:[Tt]he\s+)?${NAME_WORD}(?:\s+${NAME_WORD}){0,3})*`,
+  "g"
+);
+
+/**
  * The text a story's place is read from: its headline and description, without the link and the publisher's
- * name that end a Google News description, so "ABC7 Chicago" or the Washington Times does not place a story.
+ * name that end a Google News description, so "ABC7 Chicago" or the Washington Times does not place a story, and
+ * without hospital names.
  */
 function storyText(item: GoogleNewsItem): string {
   const description = (item.description ?? "").replace(/<font[^>]*>[\s\S]*?<\/font>/gi, " ").replace(/<[^>]+>|&nbsp;/g, " ");
-  return item.title + " " + description;
+  return (item.title + " " + description).replace(HOSPITAL_NAME, " ");
+}
+
+const TOWN_STATES = new Map(
+  Object.entries(ONE_STATE_TOWNS).flatMap(([state, towns]) => towns.split("|").map((town) => [town, state] as const))
+);
+const BEFORE_CRASH = new RegExp(
+  String.raw`((?:${NAME_WORD}\s+){1,3})(?:[Cc]rash(?:es)?|[Cc]ollision|[Hh]it-[Aa]nd-[Rr]un|[Ww]reck|[Aa]ccident)\b`,
+  "g"
+);
+const AFTER_PLACE_WORD = new RegExp(String.raw`\b(?:[Ii]n|[Nn]ear|[Aa]t|[Oo]utside)\s+(${NAME_WORD}(?:\s+${NAME_WORD}){0,2})`, "g");
+
+/**
+ * The state of the town a crash was in, named right before the crash ("fatal Poolesville hit-and-run") or after
+ * "in", "near", "at" or "outside", when only one state has a town of that name and the story names no such town
+ * in another state. A street or county name ("Folsom Boulevard", "Marion County") is not a town.
+ */
+function crashTownState(text: string): string | undefined {
+  const states = new Set<string>();
+  const add = (names: string[]) => {
+    if (names[0].split(" ").some((word) => NOT_AFTER_STATE.has(word))) return;
+    const state = names.map((name) => TOWN_STATES.get(name)).find(Boolean);
+    if (state) states.add(state);
+  };
+  for (const [, words] of text.matchAll(BEFORE_CRASH)) {
+    const run = words.trim().toLowerCase().split(/\s+/);
+    add(run.map((_, i) => run.slice(i).join(" ")));
+  }
+  for (const [, words] of text.matchAll(AFTER_PLACE_WORD)) {
+    const run = words.toLowerCase().split(/\s+/);
+    add(run.map((_, i) => run.slice(0, run.length - i).join(" ")));
+  }
+  return states.size === 1 ? [...states][0] : undefined;
 }
 
 /**
@@ -529,11 +577,11 @@ function extractLocation(text: string, withHome = false): { city?: string; state
  * National outlets, whose names say nothing about where a story happened ("New York Post", "Yahoo News Canada").
  */
 const NATIONAL_OUTLET =
-  /^(the )?(new york post|new york times|nytimes(\.com)?|usa today|associated press( news)?|ap( news)?|reuters|fox news|cnn|nbc news|abc news|cbs news|yahoo\b.*|msn(\.com)?|daily mail( online)?|mail online|independent|newsweek)$/i;
+  /^(the )?(new york post|new york times|nytimes(\.com)?|usa today|associated press( news)?|ap( news)?|reuters|fox news|cnn|nbc news|abc news|cbs news|ms now|pa media|yahoo\b.*|msn(\.com)?|daily mail( online)?|mail online|independent|newsweek)$/i;
 
 /**
- * Home states of publishers named after their city, whose names give no state ("The Portland Press Herald" is in
- * Maine, the "Kansas City Star" in Missouri).
+ * Known home states of publishers whose names give no state, such as those named after their city ("The Portland
+ * Press Herald" is in Maine, the "Kansas City Star" in Missouri).
  */
 const CITY_PUBLISHER_STATES: Record<string, string> = {
   "baltimore sun": "MD",
@@ -589,6 +637,7 @@ const CITY_PUBLISHER_STATES: Record<string, string> = {
   "seattle.gov": "WA",
   "seattlepi.com": "WA",
   "west seattle blog...": "WA",
+  "mynorthwest.com": "WA",
   "ktnv las vegas": "NV",
   "kansas city star": "MO",
   "miami herald": "FL",
@@ -605,6 +654,8 @@ const CITY_PUBLISHER_STATES: Record<string, string> = {
   "streetsblog new york city": "NY",
   "the portland press herald": "ME",
   "the providence journal": "RI",
+  "wjar": "RI",
+  "coastalabc.com": "RI",
 };
 
 /**
@@ -640,9 +691,11 @@ function publisherState(name: string): string | undefined {
 }
 
 /**
- * Where a story happened: a place it names, else a county only one state has ("Utah County"), else the
- * publisher's state (for a county several states have, only if that state has one), else the state of a city a
- * street is named after ("Las Vegas Boulevard"), else where someone in it is from ("Texas man").
+ * Where a story happened: a place it names, else a county only one state has ("Utah County"), else, for a story
+ * that says where someone is from ("Maryland man"), the state of the crash's town if only one state has it
+ * ("Poolesville"), else the publisher's state (for a county several states have, only if that state has one), else
+ * where someone in it is from ("Texas man"), else the state of a city a street is named after ("Las Vegas
+ * Boulevard").
  */
 function storyLocation(item: GoogleNewsItem, homeState?: string): { city?: string; state?: string } {
   const text = storyText(item);
@@ -652,14 +705,17 @@ function storyLocation(item: GoogleNewsItem, homeState?: string): { city?: strin
   const county = countyStates(text);
   if (county?.length === 1) return { state: county[0] };
 
+  const home = extractLocation(text, true);
+  const town = home.state && !county ? crashTownState(text) : undefined;
+  if (town) return town === home.state ? home : { state: town };
+
   // A story that names no place is placed in its publisher's state ("ABC7 Chicago" in Illinois), not its city.
   const publisher = homeState ?? (item.source ? publisherState(item.source) : undefined);
-  const home = extractLocation(text, true);
   if (publisher && (!county || county.includes(publisher))) {
     return home.state === publisher ? home : { state: publisher };
   }
 
-  const street = streetCityState(text);
+  const street = !publisher && !county && !home.state ? streetCityState(text) : undefined;
   return street ? { state: street } : home;
 }
 

@@ -32,7 +32,7 @@ function placeFor(title, source, expected) {
 }
 
 const streetWords = ["Heights", "District", "Street", "St", "Avenue", "Ave", "Road", "Rd", "Boulevard", "Blvd", "Park", "Bridge", "Square"];
-const nationalOutlets = ["New York Post", "The New York Times", "nytimes.com", "USA Today", "Associated Press", "AP News", "The Associated Press", "Reuters", "Fox News", "CNN", "NBC News", "ABC News", "CBS News", "Yahoo", "Yahoo News Canada", "yahoo.com", "MSN", "msn.com", "Daily Mail", "The Independent", "Newsweek"];
+const nationalOutlets = ["New York Post", "The New York Times", "nytimes.com", "USA Today", "Associated Press", "AP News", "The Associated Press", "Reuters", "Fox News", "CNN", "NBC News", "ABC News", "CBS News", "MS NOW", "PA Media", "Yahoo", "Yahoo News Canada", "yahoo.com", "MSN", "msn.com", "Daily Mail", "The Independent", "Newsweek"];
 
 // [headline, publisher, expected place]
 const groups = {
@@ -60,6 +60,21 @@ const groups = {
     ["Hit-and-run on Fresno Street leaves pedestrian dead", "Hoodline", "-/CA"],
     ["Fatal crash on Las Vegas Boulevard", "ABC7 Chicago", "-/IL"],
     ["Charges filed in Richmond Heights wrong-way crash", "Hoodline", "none"],
+    ["Multi-car crash blocks Aurora Avenue early Wednesday morning", "MyNorthwest.com", "-/WA"],
+    ["Multi-car crash blocks Aurora Avenue early Wednesday morning", "Yahoo", "-/CO"],
+    ["Fatal crash on Aurora Avenue in Seattle", "Yahoo", "Seattle/WA"],
+    ["Ohio man killed in crash on Las Vegas Boulevard", "Yahoo", "-/OH"],
+    ["CHP identifies Sacramento man killed in fatal Folsom Boulevard hit-and-run", "Yahoo", "Sacramento/CA"],
+  ],
+  "Hospital names": [
+    ["Massachusetts teen ejected, pronounced dead at Rhode Island Hospital, after car crash", "Fall River Reporter", "MA"],
+    ["Massachusetts teen ejected, pronounced dead at Rhode Island Hospital, after car crash", "Yahoo", "MA"],
+    ["Massachusetts Teen Ejected, Pronounced Dead At Rhode Island Hospital, After Car Crash", "Yahoo", "MA"],
+    ["Pedestrian struck in Bristol, taken to Rhode Island Hospital", "WJAR", "RI"],
+    ["Pedestrian struck in Bristol, taken to Rhode Island Hospital", "coastalabc.com", "RI"],
+    ["Driver flown to Denver Health Medical Center after crash", "Yahoo", "none"],
+    ["Child taken to Children's Hospital of Philadelphia after crash", "Yahoo", "none"],
+    ["Two killed in crash in Tampa, third flown to Orlando Regional Medical Center", "Yahoo", "Tampa/FL"],
   ],
   "<State> County": [
     ["1 dead after motorcycle crash in Delaware County", "Fox 59", "none"],
@@ -130,6 +145,12 @@ const groups = {
     ["New York City man killed in crash in New Jersey", "MSN", "NJ"],
     ["D.C. man killed in fatal crash in Maryland", "MSN", "MD"],
     ["Houston woman killed in crash, police say", "Yahoo", "Houston/TX"],
+    ["Maryland man arrested for fatal Poolesville hit-and-run", "FOX 5 DC", "MD"],
+    ["Maryland Man Arrested For Fatal Poolesville Hit-And-Run", "FOX 5 DC", "MD"],
+    ["Maryland man killed in crash in Poolesville", "FOX 5 DC", "MD"],
+    ["Maryland man killed in crash in Wells", "FOX 5 DC", "DC"],
+    ["Charlotte woman, man killed after car crashes into motorcycle in Tega Cay", "NewsBreak: Local News & Alerts", "-/SC"],
+    ["Tampa Man, 64, Killed in Marion County Truck Crash", "Hoodline", "Tampa/FL"],
   ],
   "Publisher names": [
     ["Suspect in fatal Wells hit-and-run facing charges", "The Portland Press Herald", "ME"],
