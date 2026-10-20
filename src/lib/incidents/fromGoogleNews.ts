@@ -312,10 +312,13 @@ function extractLocation(text: string): { city?: string; state?: string } {
 
 /**
  * The state a publisher's name points to ("ABC7 Chicago", "Click2Houston", "NJ.com"), for a story that names no
- * place itself. Brands run names together, so names count inside words here. "Washington" does not count: the
- * Washington Post, Times and Examiner are in the District, not Washington state.
+ * place itself. A state written after a comma ("Portland, ME Patch") counts first. Brands run names together, so
+ * names count inside words here. "Washington" does not count: the Washington Post, Times and Examiner are in the
+ * District, not Washington state.
  */
 function publisherState(name: string): string | undefined {
+  const written = name.match(/,\s*([A-Z]{2})\b/)?.[1];
+  if (written && US_STATE_ABBREVIATIONS.has(written)) return written;
   const brand = name.replace(/washington/gi, " ");
   const lower = brand.toLowerCase();
   for (const [place, state] of [...Object.entries(MAJOR_CITIES), ...Object.entries(US_STATES)]) {
