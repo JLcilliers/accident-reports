@@ -1,4 +1,5 @@
 import type { Prisma, PrismaClient } from "@prisma/client";
+import { BRIEF_MARKER } from "./brief";
 
 export interface ClaimedArticle {
   id: string;
@@ -18,10 +19,11 @@ export interface ClaimedArticle {
 const CLAIM_LOCK = 7140022;
 
 /**
- * Claims one incident created on or after `start` that has no article and fewer than `maxAttempts` attempts (one
- * found not to be a road crash has all of them used up), keeping the attempts made in the current UTC day
- * within `dailyLimit`. It must have coverage from at least two independent publishers, or from one whose site
- * is known and has not yet been searched for the story's text (see releaseForSecondPublisher).
+ * Claims one incident created on or after `start` that has no article, or only a brief (see generateIncidentBrief)
+ * and now coverage from two publishers, and fewer than `maxAttempts` attempts (one found not to be a road crash has
+ * all of them used up), keeping the attempts made in the current UTC day within `dailyLimit`. It must have
+ * coverage from at least two independent publishers, or from one whose site is known and has not yet been
+ * searched for the story's text (see releaseForSecondPublisher).
  *
  * Syndicated copies count as one publisher: sources carrying the same headline (ignoring case and punctuation)
  * are one story however many stations ran it. Google News snippets only repeat the headline and the publisher's
@@ -57,7 +59,7 @@ export async function claimArticle(
              FROM "IncidentSource" s
             WHERE s."incidentId" = i.id AND trim(s.publisher) <> ''
          ) p
-         WHERE i."articleBody" IS NULL
+         WHERE (i."articleBody" IS NULL OR (i."articleBody" LIKE ${`${BRIEF_MARKER}%`} AND p.publishers >= 2))
            AND COALESCE(i."articleAttempts", 0) < ${maxAttempts}
            AND (i."articleAttemptedAt" IS NULL OR i."articleAttemptedAt" < ${dayStart.toISOString()}::timestamp)
            AND i."createdAt" >= ${start.toISOString()}::timestamp

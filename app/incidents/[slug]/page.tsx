@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { stripHtmlAndPublisher } from "@/lib/text";
 import type { AccidentFacts } from "@/lib/seo/extractAccidentFacts";
 import { parseArticleMeta, buildKeywordsString } from "@/lib/seo/parseArticleMeta";
+import { BRIEF_MARKER, isBrief } from "@/lib/seo/brief";
 import { getGuideByCode } from "@/lib/crashReportGuides";
 import {
   ILLUSTRATION_HEIGHT,
@@ -109,6 +110,8 @@ export async function generateMetadata({
     alternates: {
       canonical: `/incidents/${slug}`,
     },
+    // A brief rests on one publisher's headline, so it stays out of search until the full article replaces it.
+    ...(isBrief(incident.articleBody) && { robots: { index: false, follow: true } }),
     openGraph: {
       title,
       description,
@@ -187,6 +190,12 @@ export default async function IncidentPage({
   }
 
   const illustration = pickIllustration(incident);
+  const brief = isBrief(incident.articleBody);
+  const articleText = brief ? incident.articleBody?.slice(BRIEF_MARKER.length) : incident.articleBody;
+  // The outlet the brief credits by name, as a second publisher's story may have joined the sources since.
+  const briefSource = brief
+    ? incident.sources.find((s) => !!s.publisher && !!articleText?.includes(s.publisher)) ?? incident.sources[0]
+    : undefined;
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -194,7 +203,7 @@ export default async function IncidentPage({
     headline: seoHeadline,
     description: seoDescription,
     image: [absoluteImageUrl(illustration.src)],
-    articleBody: incident.articleBody || undefined,
+    articleBody: articleText || undefined,
     datePublished: incident.occurredAt.toISOString(),
     dateModified: (incident.updatedAt ?? incident.occurredAt).toISOString(),
     author: {
@@ -314,15 +323,31 @@ export default async function IncidentPage({
               </div>
 
               {/* Full Article Content */}
-              {incident.articleBody && (
+              {articleText && (
                 <section className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 mb-6">
                   <h2 className="flex items-center gap-2.5 text-lg sm:text-xl font-semibold text-slate-900 mb-5">
                     <svg className="w-5 h-5 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
                     </svg>
-                    Full Incident Report
+                    {brief ? "News brief: based on one report" : "Full Incident Report"}
                   </h2>
-                  <ArticleContent content={incident.articleBody} />
+                  <ArticleContent content={articleText} />
+                  {briefSource && (
+                    <p className="mt-4 text-sm text-slate-500">
+                      Read the original story from{" "}
+                      <a
+                        href={briefSource.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[var(--primary)] hover:text-[var(--primary-hover)] underline"
+                      >
+                        {briefSource.publisher}
+                      </a>
+                      {briefSource.publishedAt &&
+                        `, published ${briefSource.publishedAt.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}`}
+                      .
+                    </p>
+                  )}
                 </section>
               )}
 
