@@ -15,6 +15,7 @@ enum ArticleQualityStatus {
   OK
   NEEDS_REVIEW
   FAILED
+  NOT_A_CRASH // In the database since 20261019130000_add_not_a_crash but never written: non-crashes are FAILED with a note
 }
 
 enum ImageStatus {
@@ -44,6 +45,9 @@ model Incident {
   // Article quality tracking
   articleQualityStatus ArticleQualityStatus? @default(OK)
   articleQualityNotes  String?               // Validation warnings or error details
+  articleAttempts      Int?                  @default(0) // Generation attempts; the cron gives up after 2
+  articleAttemptedAt   DateTime?             // Last attempt, counted against ARTICLE_DAILY_LIMIT
+  articleTextTriedAt   DateTime?             // The publisher's article text could not be fetched; wait for a second publisher
 
   // Structured facts extracted from news sources (JSON)
   extractedFacts Json?    // Companies, vehicles, people, agencies, etc.
@@ -74,6 +78,7 @@ model IncidentSource {
   url         String
   title       String
   publisher   String?
+  publisherDomain String? // Host of the publisher's site, from the feed's <source url>
   snippet     String?
   publishedAt DateTime
 

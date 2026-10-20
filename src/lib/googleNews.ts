@@ -9,12 +9,23 @@ export interface GoogleNewsItem {
   pubDate: string;
   description?: string;
   source?: string;
+  /** Host of the publisher's site, from <source url="...">. */
+  sourceDomain?: string;
 }
 
 const parser = new XMLParser({
   ignoreAttributes: false,
   attributeNamePrefix: "@_",
 });
+
+function hostOf(url: unknown): string | undefined {
+  if (typeof url !== "string") return undefined;
+  try {
+    return new URL(url).hostname.toLowerCase() || undefined;
+  } catch {
+    return undefined;
+  }
+}
 
 /**
  * Fetches and parses a Google News RSS feed.
@@ -28,8 +39,7 @@ export async function fetchGoogleNewsFeed(
 ): Promise<GoogleNewsItem[]> {
   const res = await fetch(url, {
     headers: {
-      "User-Agent":
-        "Mozilla/5.0 (compatible; AccidentReportsBot/1.0; +https://accidentreports.com)",
+      "User-Agent": "CarCrashReportBot/1.0 (+https://www.carcrashreport.com)",
     },
     next: { revalidate: 0 }, // Don't cache on the server
   });
@@ -62,6 +72,7 @@ export async function fetchGoogleNewsFeed(
       pubDate: (item.pubDate as string) || "",
       description: item.description as string | undefined,
       source,
+      sourceDomain: hostOf((item.source as { "@_url"?: unknown } | undefined)?.["@_url"]),
     };
   });
 }

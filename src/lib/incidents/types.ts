@@ -22,6 +22,7 @@ export interface IncidentCandidate {
   headline: string;
   link: string;
   publisher?: string;
+  publisherDomain?: string;
   occurredAt: Date;
   snippet?: string;
   city?: string;

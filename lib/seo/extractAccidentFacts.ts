@@ -6,7 +6,8 @@ let openaiClient: OpenAI | null = null;
 function getOpenAI(): OpenAI {
   if (!openaiClient) {
     openaiClient = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
+      apiKey: process.env.OPENROUTER_API_KEY,
+      baseURL: "https://openrouter.ai/api/v1",
     });
   }
   return openaiClient;
@@ -54,8 +55,8 @@ export async function extractAccidentFacts(
   headline: string,
   combinedText: string
 ): Promise<AccidentFacts | null> {
-  if (!process.env.OPENAI_API_KEY) {
-    console.log("[FactExtraction] OpenAI API key not configured, skipping");
+  if (!process.env.OPENROUTER_API_KEY) {
+    console.log("[FactExtraction] OpenRouter API key not configured, skipping");
     return null;
   }
 
@@ -97,7 +98,7 @@ Respond with valid JSON only matching this structure:
 
   try {
     const response = await getOpenAI().chat.completions.create({
-      model: "gpt-4o-mini",
+      model: process.env.FACTS_MODEL || "openai/gpt-4o-mini",
       messages: [
         {
           role: "system",
@@ -119,7 +120,8 @@ Respond with valid JSON only matching this structure:
       return null;
     }
 
-    const parsed = JSON.parse(content) as AccidentFacts;
+    // Claude models may wrap the JSON in a ```json fence even when asked for a JSON object
+    const parsed = JSON.parse(content.replace(/^\s*```(?:json)?\s*|\s*```\s*$/g, "")) as AccidentFacts;
 
     // Validate and ensure arrays are initialized
     return {

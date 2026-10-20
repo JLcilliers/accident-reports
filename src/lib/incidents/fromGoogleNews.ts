@@ -63,6 +63,19 @@ const EXCLUDE_PHRASES = [
 const PHONE_NUMBER = /\(?\b\d{3}\)?[-.\s]\d{3}[-.\s]\d{4}\b/;
 
 /**
+ * Publisher names or domains of law firms, lawyers' blogs and legal-referral sites, whose crash posts are
+ * adverts built on other outlets' reporting. Police news, prosecutors and attorneys general are kept.
+ */
+const LAW_FIRM_PUBLISHER = /lawyer|attorney|injury|legal|lawfirm|lawfuel|florida-justice\.com|\blaw\b|&\s*associates|\b(p\.?c|a\.?p\.?c|pllc|llp)\.?$/i;
+const NOT_A_LAW_FIRM = /law ?enforcement|district attorney|attorney general|law ?(&|and) ?crime/i;
+
+function isLawFirmPublisher(item: GoogleNewsItem): boolean {
+  return [item.source, item.sourceDomain].some(
+    (name) => !!name && LAW_FIRM_PUBLISHER.test(name.trim()) && !NOT_A_LAW_FIRM.test(name)
+  );
+}
+
+/**
  * US state abbreviations and their full names for location extraction.
  */
 const US_STATES: Record<string, string> = {
@@ -74,6 +87,7 @@ const US_STATES: Record<string, string> = {
   colorado: "CO",
   connecticut: "CT",
   delaware: "DE",
+  "district of columbia": "DC",
   florida: "FL",
   georgia: "GA",
   hawaii: "HI",
@@ -196,6 +210,11 @@ const MAJOR_CITIES: Record<string, string> = {
 };
 
 /**
+ * "Washington, D.C.", "Washington DC" or "D.C." mean the District, not Washington state.
+ */
+const WASHINGTON_DC = /\bwashington,?\s+d\.?\s?c\b|\bd\.\s?c\./i;
+
+/**
  * Checks if a text contains any accident-related phrases.
  */
 function isLikelyAccident(title: string, description?: string): boolean {
@@ -219,6 +238,7 @@ function isLikelyAccident(title: string, description?: string): boolean {
  * Set of valid US state abbreviations for quick lookup.
  */
 const US_STATE_ABBREVIATIONS = new Set(Object.values(US_STATES));
+const AMBIGUOUS_STATE_ABBREVIATIONS = new Set(["ID", "IN", "OR", "ME", "OK", "HI", "LA"]);
 
 /**
  * Checks if extracted location data indicates a US-based incident.
@@ -250,6 +270,10 @@ function extractLocation(text: string): { city?: string; state?: string } {
     }
   }
 
+  if (WASHINGTON_DC.test(text)) {
+    return { city: "Washington", state: "DC" };
+  }
+
   // Try to find a state name
   for (const [stateName, abbrev] of Object.entries(US_STATES)) {
     if (lower.includes(stateName)) {
@@ -257,15 +281,11 @@ function extractLocation(text: string): { city?: string; state?: string } {
     }
   }
 
-  // Try to find a state abbreviation (e.g., "in TX" or "Texas")
-  const stateAbbrevPattern = /\b([A-Z]{2})\b/g;
-  const matches = text.match(stateAbbrevPattern);
-  if (matches) {
-    const stateAbbrevs = Object.values(US_STATES);
-    for (const match of matches) {
-      if (stateAbbrevs.includes(match)) {
-        return { state: match };
-      }
+  // Try to find a state abbreviation (e.g., "in TX" or "Boise, ID"). Abbreviations that are also words
+  // ("ID released", an all-caps "CRASH IN", "South LA") count only after a comma.
+  for (const [, comma, match] of text.matchAll(/(,\s*)?\b([A-Z]{2})\b/g)) {
+    if (US_STATE_ABBREVIATIONS.has(match) && (comma || !AMBIGUOUS_STATE_ABBREVIATIONS.has(match))) {
+      return { state: match };
     }
   }
 
@@ -284,8 +304,14 @@ export function toIncidentCandidates(
 ): IncidentCandidate[] {
   const candidates: IncidentCandidate[] = [];
   let filteredNonUS = 0;
+  let filteredLawFirms = 0;
 
   for (const item of items) {
+    if (isLawFirmPublisher(item)) {
+      filteredLawFirms++;
+      continue;
+    }
+
     // First filter: must be about an accident
     if (!isLikelyAccident(item.title, item.description)) {
       continue;
@@ -305,6 +331,7 @@ export function toIncidentCandidates(
       headline: item.title.trim(),
       link: item.link,
       publisher: item.source,
+      publisherDomain: item.sourceDomain,
       occurredAt,
       snippet: item.description,
       ...location,
@@ -314,6 +341,9 @@ export function toIncidentCandidates(
 
   if (filteredNonUS > 0) {
     console.log(`[US Filter] Filtered out ${filteredNonUS} non-US news items`);
+  }
+  if (filteredLawFirms > 0) {
+    console.log(`[Law firm filter] Filtered out ${filteredLawFirms} items from law-firm publishers`);
   }
 
   return candidates;
