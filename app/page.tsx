@@ -17,6 +17,7 @@ const organizationJsonLd = {
   "@type": "Organization",
   name: "CarCrashReport.com",
   url: BASE_URL,
+  logo: `${BASE_URL}/apple-icon.png`,
   description:
     "Up-to-date traffic accident news from across the United States, organized by state, with plain-language summaries and links to the original reports.",
   sameAs: [],
