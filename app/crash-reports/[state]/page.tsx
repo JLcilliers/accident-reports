@@ -5,6 +5,7 @@ import PageContainer from "@/components/PageContainer";
 import IllustrationFigure from "@/components/IllustrationFigure";
 import prisma from "@/lib/prisma";
 import { GUIDE_HEROES } from "@/data/guide-heroes";
+import { ILLUSTRATION_HEIGHT, ILLUSTRATION_WIDTH } from "@/lib/images/display";
 import {
   CRASH_REPORT_GUIDES,
   SECTION_TITLES,
@@ -36,10 +37,21 @@ export async function generateMetadata({
     ? guide.summary.text.slice(0, 160)
     : `Who keeps crash reports ${guide.inName}, how to request a copy, and links to the official request pages.`;
 
+  const hero = GUIDE_HEROES[guide.slug];
   return {
     title: `How to Get a Crash Report ${guide.inName}`,
     description,
     alternates: { canonical: `/crash-reports/${guide.slug}` },
+    // A page's openGraph and twitter replace the layout's, so the site-wide fields are repeated here.
+    ...(hero && {
+      openGraph: {
+        siteName: "CarCrashReport.com",
+        type: "website",
+        locale: "en_US",
+        images: [{ url: hero.src, width: ILLUSTRATION_WIDTH, height: ILLUSTRATION_HEIGHT, alt: hero.alt }],
+      },
+      twitter: { card: "summary_large_image", images: [{ url: hero.src, alt: hero.alt }] },
+    }),
   };
 }
 

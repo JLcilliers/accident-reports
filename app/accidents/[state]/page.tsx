@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { getGuideByCode } from "@/lib/crashReportGuides";
-import { cityPagePath } from "@/lib/location/cityPages";
+import { cityPagePath, citySlug, getCityPage } from "@/lib/location/cityPages";
 
 export const revalidate = 600; // Re-generate every 10 minutes
 
@@ -204,7 +204,9 @@ export default async function StateAccidentsPage({
             <h2 className="text-xl font-medium text-neutral-900 mb-6">Browse by City</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               {stateData.cityData.map((city) => {
-                const cityPath = cityPagePath(city.city, state);
+                // A city page counts only incidents stored under its exact name, so only that spelling's tile links to it.
+                const cityPath =
+                  getCityPage(state, citySlug(city.city))?.name === city.city ? cityPagePath(city.city, state) : null;
                 const tile = (
                   <>
                     <h3 className="font-medium text-neutral-900 mb-1">{city.city}</h3>
