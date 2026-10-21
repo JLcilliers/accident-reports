@@ -27,12 +27,30 @@ import {
   ArticleContent,
 } from "@/components/incident";
 
-export const revalidate = 600; // Re-generate every 10 minutes
+export const revalidate = 3600; // Re-generate every hour
 
 const getIncident = cache(async (slug: string) => {
   return prisma.incident.findUnique({
     where: { slug },
-    include: { sources: true },
+    select: {
+      slug: true,
+      headline: true,
+      summary: true,
+      city: true,
+      state: true,
+      occurredAt: true,
+      updatedAt: true,
+      articleBody: true,
+      seoTitle: true,
+      seoDescription: true,
+      articleQualityStatus: true,
+      articleQualityNotes: true,
+      extractedFacts: true,
+      imageUrl: true,
+      imageAlt: true,
+      imageStatus: true,
+      sources: { select: { id: true, url: true, title: true, publisher: true, publishedAt: true } },
+    },
   });
 });
 

@@ -2,7 +2,7 @@ import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { buildLocationInfo, type ExtractedFactsInput } from "@/lib/location";
 
-export const revalidate = 600; // Re-generate every 10 minutes
+export const revalidate = 3600; // Re-generate every hour
 
 // Fetch real statistics from the database
 async function getAccidentStats() {

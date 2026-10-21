@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { getGuideByCode } from "@/lib/crashReportGuides";
 import { cityPagePath, citySlug, getCityPage } from "@/lib/location/cityPages";
 
-export const revalidate = 600; // Re-generate every 10 minutes
+export const revalidate = 3600; // Re-generate every hour
 
 // Without this the route renders on every request and ignores revalidate.
 export async function generateStaticParams() {
