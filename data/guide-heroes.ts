@@ -150,7 +150,7 @@ export const GUIDE_HEROES: Record<string, GuideHero> = {
   },
   maine: {
     src: "https://4sppmmdgjguscgeh.public.blob.vercel-storage.com/illustrations/guides/maine-d0iUSZi4sOu4wMDMvTOEOIzH05C8QX.webp",
-    alt: "A highway leading into a tunnel, surrounded by hills with pine trees and a body of water under a pale sky with a sun and",
+    alt: "A highway leading into a tunnel, surrounded by hills with pine trees and a body of water under a pale sky",
     composition: "tunnel-mouth",
     costUsd: 0.0040045,
     attempts: 1,
@@ -262,7 +262,7 @@ export const GUIDE_HEROES: Record<string, GuideHero> = {
   },
   ohio: {
     src: "https://4sppmmdgjguscgeh.public.blob.vercel-storage.com/illustrations/guides/ohio-rtVET9sMSghFhReX7e6PRFfTsmDFvX.webp",
-    alt: "An orange car and a light blue car on a complex highway interchange with multiple overpasses, surrounded by green hills and",
+    alt: "An orange car and a light blue car on a complex highway interchange with multiple overpasses, surrounded by green hills",
     composition: "interchange",
     costUsd: 0.0040420000000000005,
     attempts: 1,
@@ -325,7 +325,7 @@ export const GUIDE_HEROES: Record<string, GuideHero> = {
   },
   utah: {
     src: "https://4sppmmdgjguscgeh.public.blob.vercel-storage.com/illustrations/guides/utah-qHBkaox5FFU5OcdkoGJ3JEfWm7xOpl.webp",
-    alt: "A car drives on a winding road through a desert landscape with red rock formations and green trees under a blue sky with a",
+    alt: "A car drives on a winding road through a desert landscape with red rock formations and green trees under a blue sky",
     composition: "wide-landscape",
     costUsd: 0.004002,
     attempts: 1,
