@@ -39,7 +39,7 @@ const nextConfig: NextConfig = {
       { source: "/states/:state/accident-reports", destination: "/crash-reports/:state", permanent: true },
       { source: "/cities/:city/accident-reports", destination: "/crash-reports", permanent: false },
       { source: "/accidents/:state/:city/:slug", destination: "/accidents/:state", permanent: false },
-      { source: "/accidents/:state/:city", destination: "/accidents/:state", permanent: false },
+      { source: "/accidents/:state/:city/page/1", destination: "/accidents/:state/:city", permanent: true },
     ];
   },
 };
