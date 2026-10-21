@@ -5,16 +5,6 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'i.ibb.co',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
         hostname: '*.public.blob.vercel-storage.com',
         pathname: '/**',
       },
@@ -39,7 +29,7 @@ const nextConfig: NextConfig = {
       { source: "/states/:state/accident-reports", destination: "/crash-reports/:state", permanent: true },
       { source: "/cities/:city/accident-reports", destination: "/crash-reports", permanent: false },
       { source: "/accidents/:state/:city/:slug", destination: "/accidents/:state", permanent: false },
-      { source: "/accidents/:state/:city", destination: "/accidents/:state", permanent: false },
+      { source: "/accidents/:state/:city/page/1", destination: "/accidents/:state/:city", permanent: true },
     ];
   },
 };

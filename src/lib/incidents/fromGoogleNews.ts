@@ -1,6 +1,6 @@
 import { PUBLISHER_FEEDS } from "../../config/publisherFeeds";
 import type { GoogleNewsItem } from "../googleNews";
-import { ONE_STATE_TOWNS } from "./towns";
+import { COMMON_WORD_TOWNS, ONE_STATE_TOWNS } from "./towns";
 import type { IncidentCandidate } from "./types";
 
 /**
@@ -501,23 +501,34 @@ function storyText(item: GoogleNewsItem): string {
 }
 
 const TOWN_STATES = new Map(
-  Object.entries(ONE_STATE_TOWNS).flatMap(([state, towns]) => towns.split("|").map((town) => [town, state] as const))
+  Object.entries(ONE_STATE_TOWNS).flatMap(([state, towns]) =>
+    towns
+      .split("|")
+      .filter((town) => !COMMON_WORD_TOWNS.has(town))
+      .map((town) => [town, state] as const)
+  )
 );
 const BEFORE_CRASH = new RegExp(
   String.raw`((?:${NAME_WORD}\s+){1,3})(?:[Cc]rash(?:es)?|[Cc]ollision|[Hh]it-[Aa]nd-[Rr]un|[Ww]reck|[Aa]ccident)\b`,
   "g"
 );
-const AFTER_PLACE_WORD = new RegExp(String.raw`\b(?:[Ii]n|[Nn]ear|[Aa]t|[Oo]utside)\s+(${NAME_WORD}(?:\s+${NAME_WORD}){0,2})`, "g");
+const AFTER_PLACE_WORD = new RegExp(String.raw`\b(?:[Ii]n|[Nn]ear|[Oo]n|[Oo]utside)\s+(${NAME_WORD}(?:\s+${NAME_WORD}){0,2})`, "g");
+const NOT_TOWN = new Set([
+  ...NOT_AFTER_STATE,
+  ...["highway", "hwy", "pike", "parkway", "pkwy", "drive", "dr", "lane", "ln", "way", "trail", "turnpike"],
+  ...["expressway", "freeway", "route", "court", "ct", "place", "pl", "circle", "terrace"],
+]);
 
 /**
  * The state of the town a crash was in, named right before the crash ("fatal Poolesville hit-and-run") or after
- * "in", "near", "at" or "outside", when only one state has a town of that name and the story names no such town
- * in another state. A street or county name ("Folsom Boulevard", "Marion County") is not a town.
+ * "in", "near", "on" or "outside", when only one state has a town of that name and the story names no such town
+ * in another state. A road or county name ("Folsom Boulevard", "Ritchie Highway", "Marion County") is not a town,
+ * nor is a town whose name is also an ordinary word ("Main", "Beach").
  */
 function crashTownState(text: string): string | undefined {
   const states = new Set<string>();
-  const add = (names: string[]) => {
-    if (names[0].split(" ").some((word) => NOT_AFTER_STATE.has(word))) return;
+  const add = (names: string[], next = "") => {
+    if ([...names[0].split(" "), next].some((word) => NOT_TOWN.has(word))) return;
     const state = names.map((name) => TOWN_STATES.get(name)).find(Boolean);
     if (state) states.add(state);
   };
@@ -525,9 +536,9 @@ function crashTownState(text: string): string | undefined {
     const run = words.trim().toLowerCase().split(/\s+/);
     add(run.map((_, i) => run.slice(i).join(" ")));
   }
-  for (const [, words] of text.matchAll(AFTER_PLACE_WORD)) {
-    const run = words.toLowerCase().split(/\s+/);
-    add(run.map((_, i) => run.slice(0, run.length - i).join(" ")));
+  for (const match of text.matchAll(AFTER_PLACE_WORD)) {
+    const run = match[1].toLowerCase().split(/\s+/);
+    add(run.map((_, i) => run.slice(0, run.length - i).join(" ")), nextWord(text, match));
   }
   return states.size === 1 ? [...states][0] : undefined;
 }
@@ -691,11 +702,32 @@ function publisherState(name: string): string | undefined {
 }
 
 /**
+ * The states that share a land border with each state (and the District).
+ */
+const NEIGHBOURING_STATES: Record<string, string[]> = {
+  AL: ["FL", "GA", "MS", "TN"], AK: [], AZ: ["CA", "NM", "NV", "UT"], AR: ["LA", "MO", "MS", "OK", "TN", "TX"],
+  CA: ["AZ", "NV", "OR"], CO: ["KS", "NE", "NM", "OK", "UT", "WY"], CT: ["MA", "NY", "RI"], DE: ["MD", "NJ", "PA"],
+  DC: ["MD", "VA"], FL: ["AL", "GA"], GA: ["AL", "FL", "NC", "SC", "TN"], HI: [], ID: ["MT", "NV", "OR", "UT", "WA", "WY"],
+  IL: ["IA", "IN", "KY", "MO", "WI"], IN: ["IL", "KY", "MI", "OH"], IA: ["IL", "MN", "MO", "NE", "SD", "WI"],
+  KS: ["CO", "MO", "NE", "OK"], KY: ["IL", "IN", "MO", "OH", "TN", "VA", "WV"], LA: ["AR", "MS", "TX"], ME: ["NH"],
+  MD: ["DC", "DE", "PA", "VA", "WV"], MA: ["CT", "NH", "NY", "RI", "VT"], MI: ["IN", "OH", "WI"], MN: ["IA", "ND", "SD", "WI"],
+  MS: ["AL", "AR", "LA", "TN"], MO: ["AR", "IA", "IL", "KS", "KY", "NE", "OK", "TN"], MT: ["ID", "ND", "SD", "WY"],
+  NE: ["CO", "IA", "KS", "MO", "SD", "WY"], NV: ["AZ", "CA", "ID", "OR", "UT"], NH: ["MA", "ME", "VT"], NJ: ["DE", "NY", "PA"],
+  NM: ["AZ", "CO", "OK", "TX"], NY: ["CT", "MA", "NJ", "PA", "VT"], NC: ["GA", "SC", "TN", "VA"], ND: ["MN", "MT", "SD"],
+  OH: ["IN", "KY", "MI", "PA", "WV"], OK: ["AR", "CO", "KS", "MO", "NM", "TX"], OR: ["CA", "ID", "NV", "WA"],
+  PA: ["DE", "MD", "NJ", "NY", "OH", "WV"], RI: ["CT", "MA"], SC: ["GA", "NC"], SD: ["IA", "MN", "MT", "ND", "NE", "WY"],
+  TN: ["AL", "AR", "GA", "KY", "MO", "MS", "NC", "VA"], TX: ["AR", "LA", "NM", "OK"], UT: ["AZ", "CO", "ID", "NV", "WY"],
+  VT: ["MA", "NH", "NY"], VA: ["DC", "KY", "MD", "NC", "TN", "WV"], WA: ["ID", "OR"], WV: ["KY", "MD", "OH", "PA", "VA"],
+  WI: ["IA", "IL", "MI", "MN"], WY: ["CO", "ID", "MT", "NE", "SD", "UT"],
+};
+
+/**
  * Where a story happened: a place it names, else a county only one state has ("Utah County"), else, for a story
- * that says where someone is from ("Maryland man"), the state of the crash's town if only one state has it
- * ("Poolesville"), else the publisher's state (for a county several states have, only if that state has one), else
- * where someone in it is from ("Texas man"), else the state of a city a street is named after ("Las Vegas
- * Boulevard").
+ * that names no county, the state of the crash's town if only one state has it ("Poolesville") and the story says
+ * where someone is from ("Maryland man") or the publisher has no state, that state or a neighbouring one (a San
+ * Diego station's "Pacific Beach" is not the one in Washington), else the publisher's state (for a county several
+ * states have, only if that state has one), else where someone in it is from ("Texas man"), else the state of a
+ * city a street is named after ("Las Vegas Boulevard").
  */
 function storyLocation(item: GoogleNewsItem, homeState?: string): { city?: string; state?: string } {
   const text = storyText(item);
@@ -706,11 +738,13 @@ function storyLocation(item: GoogleNewsItem, homeState?: string): { city?: strin
   if (county?.length === 1) return { state: county[0] };
 
   const home = extractLocation(text, true);
-  const town = home.state && !county ? crashTownState(text) : undefined;
-  if (town) return town === home.state ? home : { state: town };
+  const publisher = homeState ?? (item.source ? publisherState(item.source) : undefined);
+  const town = !county ? crashTownState(text) : undefined;
+  if (town && (home.state || !publisher || publisher === town || NEIGHBOURING_STATES[publisher]?.includes(town))) {
+    return town === home.state ? home : { state: town };
+  }
 
   // A story that names no place is placed in its publisher's state ("ABC7 Chicago" in Illinois), not its city.
-  const publisher = homeState ?? (item.source ? publisherState(item.source) : undefined);
   if (publisher && (!county || county.includes(publisher))) {
     return home.state === publisher ? home : { state: publisher };
   }

@@ -1,171 +1,94 @@
-# AccidentReports.com
+# CarCrashReport
 
-A multi-page Next.js web application that provides free accident and police reports as a lead funnel for personal injury law firms.
+https://www.carcrashreport.com is a demo site that tracks road crashes across the United States from local news. It collects stories every few minutes, groups reports of the same crash into one incident, writes an article for each incident and links back to every source. It also has a guide for each state on how to get a police crash report. The site takes no leads and has no contact forms.
 
-## 🚀 Features
+## Stack
 
-- **Free Accident Report Lookup**: Users can search and obtain accident reports at no cost
-- **Multi-Step Funnel**: Guided 3-step process for report requests
-- **Legal Lead Generation**: Built-in legal help conversion paths
-- **SEO-Optimized Landing Pages**: State and city-specific pages for local SEO
-- **Modern Tech Stack**: Built with Next.js 14+, TypeScript, and Tailwind CSS
+- Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4
+- Prisma 5 on Supabase Postgres
+- Vercel hosting, Vercel Cron and Vercel Blob (incident images)
+- OpenRouter for articles, fact extraction, crash checks and images
+- Node 22
 
-## 📋 Pages Structure
+## Pages
 
-### Main Funnel
-- `/` - Home page
-- `/get-report/step-1` - Accident details collection
-- `/get-report/step-2` - Contact information
-- `/get-report/step-3` - Report status and delivery
-- `/reports/[reportId]` - Individual report view
+| Path | What it shows |
+|---|---|
+| `/` | Home page |
+| `/incidents` | The 50 newest incidents |
+| `/incidents/[slug]` | One incident: article, facts, image and sources |
+| `/accidents`, `/accidents/[state]` | Incidents by state |
+| `/crash-reports`, `/crash-reports/[state]` | How to get a crash report in each state |
+| `/search` | Search incidents |
+| `/blog` | Articles, such as US vehicle accident statistics |
+| `/about`, `/faq`, `/how-it-works`, `/privacy`, `/terms` | Information pages |
+| `/sitemap.xml`, `/robots.txt` | Built from the database |
 
-### Marketing & Conversion
-- `/legal-help` - Legal consultation request form
-- `/states/[stateSlug]/accident-reports` - State-specific landing pages
-- `/cities/[citySlug]/accident-reports` - City-specific landing pages
+Old funnel and city URLs redirect in `next.config.ts`.
 
-### Information Pages
-- `/faq` - Frequently asked questions
-- `/about` - About the service
-- `/for-lawyers` - Partner program information
-- `/terms` - Terms of service
-- `/privacy` - Privacy policy
+## Scheduled jobs
 
-## 🛠️ Tech Stack
+Set in `vercel.json`. Each one needs `Authorization: Bearer <CRON_SECRET>`, which Vercel Cron sends.
 
-- **Framework**: Next.js 14+ with App Router
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Deployment**: Vercel (recommended)
+| Route | Schedule (UTC) | Job |
+|---|---|---|
+| `/api/cron/ingest-news` | every 20 min | Reads Google News and stores new incidents |
+| `/api/cron/ingest-publishers` | :05 and :35 | Reads publisher RSS feeds |
+| `/api/cron/generate-seo?limit=10` | every 10 min | Extracts facts and writes articles |
+| `/api/cron/generate-images` | :20 and :50 | Draws an image for new articles |
 
-## 📦 Getting Started
+On-request routes with the same header:
 
-### Prerequisites
-- Node.js 18+
-- npm or yarn
+- `/api/admin/generate-guide-heroes?slugs=…` draws hero images for the state guides.
+- `/api/indexing/submit` sends URLs to the Google Indexing API when it is turned on.
 
-### Installation
+## Environment variables
 
-1. Clone the repository:
+Names only. Values live in Vercel and in `.env.local`, which is never committed.
+
+| Name | Use |
+|---|---|
+| `DATABASE_URL`, `DIRECT_URL` | Postgres (pooled and direct) for Prisma |
+| `CRON_SECRET` | Protects the cron and admin routes |
+| `OPENROUTER_API_KEY` | OpenRouter calls |
+| `NEXT_PUBLIC_SITE_URL` | Optional; defaults to `https://www.carcrashreport.com` |
+| `ARTICLE_MODEL`, `FACTS_MODEL`, `CRASH_CHECK_MODEL` | Optional model overrides for text |
+| `IMAGE_MODEL`, `IMAGE_QUALITY`, `IMAGE_CHECK_MODEL` | Optional model overrides for images |
+| `IMAGE_START_DATE` | Only incidents created after this date get images |
+| `ARTICLE_DAILY_LIMIT`, `IMAGE_DAILY_LIMIT` | Daily caps |
+| `GOOGLE_INDEXING_ENABLED`, `GOOGLE_INDEXING_CREDENTIALS` | Google Indexing API |
+| `BLOB_READ_WRITE_TOKEN` | Vercel Blob uploads (set by Vercel) |
+
+## Local setup
+
 ```bash
-git clone <repository-url>
-cd accident-reports
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Create environment file (optional):
-```bash
-cp .env.local.example .env.local
-```
-
-4. Run the development server:
-```bash
+npm ci
 npm run dev
+npm test
+npm run lint
 ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser
+`npm ci` runs `prisma generate`. `npm run dev` and `npm run build` read the database named by `DATABASE_URL`. `npm test` runs the `node --test` suites in `src/**/__tests__` and needs no database.
 
-### Build for Production
-
-```bash
-npm run build
-npm start
-```
-
-## 🗂️ Project Structure
+## Folders
 
 ```
-accident-reports/
-├── app/
-│   ├── (funnel)/          # Report request funnel pages
-│   │   ├── get-report/    # 3-step report request
-│   │   └── reports/       # Individual report pages
-│   ├── (marketing)/       # Marketing and SEO pages
-│   │   ├── states/        # State landing pages
-│   │   ├── cities/        # City landing pages
-│   │   ├── legal-help/    # Legal conversion page
-│   │   └── ...            # Other marketing pages
-│   ├── api/               # API routes
-│   │   ├── report-requests/
-│   │   ├── reports/
-│   │   └── legal-leads/
-│   ├── layout.tsx         # Root layout
-│   └── page.tsx           # Home page
-├── components/            # Reusable React components
-│   ├── Header.tsx
-│   ├── Footer.tsx
-│   ├── PageContainer.tsx
-│   ├── StepIndicator.tsx
-│   └── CTABox.tsx
-├── lib/                   # Utilities and data
-│   ├── types.ts           # TypeScript interfaces
-│   └── mockData.ts        # Mock data for MVP
-└── public/                # Static assets
+app/            pages, API routes, sitemap and robots
+components/     header, footer, hero, incident and blog parts
+lib/            Prisma client, state guides, images, SEO and article generation, Google indexing, text helpers
+src/lib/        news and publisher feed readers; incidents: parsing, place names, dedupe, saving
+prisma/         schema and migrations
+scripts/        one-off maintenance scripts (see below)
 ```
 
-## 🔌 API Routes
+## Scripts
 
-### POST /api/report-requests
-Create a new report request
-- **Body**: `{ accidentDetails, contact }`
-- **Returns**: `{ requestId, matchedReportId }`
+`scripts/check-image-alt.mjs` runs after every build and fails it when a prerendered `<img>` has no alt text.
 
-### GET /api/reports/search
-Search for reports
-- **Query Params**: `state`, `city`, `date`
-- **Returns**: Array of matching reports
+The other scripts write to or delete from the database named by `DATABASE_URL`: `backfillArticles.ts`, `regenerate-articles.ts`, `clear-articles.ts` and `clear-all-incidents.ts`. Don't run them without the owner's OK.
 
-### GET /api/reports/[reportId]
-Get a specific report by ID
-- **Returns**: Report object
+## Making changes
 
-### POST /api/legal-leads
-Create a legal consultation request
-- **Body**: `{ name, email, phone, state, description, reportId }`
-- **Returns**: `{ leadId, success }`
-
-## 🎨 Customization
-
-### Styling
-All styling is done with Tailwind CSS. Modify `tailwind.config.ts` for theme customization.
-
-### Data
-Currently uses mock data in `lib/mockData.ts`. Replace with real database connections as needed.
-
-### SEO
-Update metadata in individual page files and `app/layout.tsx` for SEO optimization.
-
-## 🚢 Deployment on Vercel
-
-1. Push code to GitHub repository
-2. Connect repository to Vercel
-3. Configure project settings (use default Next.js settings)
-4. Deploy!
-
-Vercel will automatically:
-- Build the project
-- Generate static pages
-- Set up serverless functions for API routes
-- Provide a production URL
-
-## 📝 Future Enhancements
-
-- [ ] Connect to real accident report databases
-- [ ] Implement user authentication
-- [ ] Add email notifications for report delivery
-- [ ] Integrate payment processing (if adding premium features)
-- [ ] Add analytics tracking (Google Analytics, etc.)
-- [ ] Implement CRM integration for lead management
-- [ ] Add automated testing
-
-## 📄 License
-
-This project is for demonstration purposes.
-
-## 🤝 Contributing
-
-This is a closed-source project for a specific business use case.
+1. Branch from `main` and open a pull request.
+2. Vercel builds a preview for the branch. Previews use the production database, so test with obviously fake data and remove it afterwards.
+3. Merge to `main` to deploy production.
