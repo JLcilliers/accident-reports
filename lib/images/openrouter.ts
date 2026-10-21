@@ -120,12 +120,16 @@ const CHECK_SCHEMA = {
 };
 
 const ALT_BANNED_START = /^(an?\s+)?([a-z-]+,?\s+){0,3}(image|picture|photo|illustration|drawing)\s+(of|showing)\s+/i;
+// Punctuation, or a word that leaves the phrase hanging: "with trees in the", "hills and", "trees,".
+const ALT_DANGLING_END =
+  /(?:[\s,;:.–—-]+|\s+(?:and|or|with|plus|a|an|the|of|in|on|at|to|by|for|from|into|onto|near|under|over|through|along|across|between|beside|behind|its|their))$/i;
 
-/** Tidies vision-model alt text: no "image of" opener, no digit runs, at most 124 characters. */
+/** Tidies vision-model alt text: no "image of" opener, no digit runs, at most 124 characters, ending on a whole word that finishes the phrase. */
 export function cleanAlt(raw: string): string {
   let alt = raw.replace(/\s+/g, " ").trim().replace(ALT_BANNED_START, "");
   alt = alt.replace(/\b\d{2,}\b/g, "").replace(/\s{2,}/g, " ").trim().replace(/[.\s]+$/, "");
-  if (alt.length > 124) alt = alt.slice(0, 124).replace(/\s+\S*$/, "");
+  if (alt.length > 124) alt = alt.slice(0, 125).replace(/\s+\S*$/, "").slice(0, 124);
+  while (ALT_DANGLING_END.test(alt)) alt = alt.replace(ALT_DANGLING_END, "");
   return alt.charAt(0).toUpperCase() + alt.slice(1);
 }
 

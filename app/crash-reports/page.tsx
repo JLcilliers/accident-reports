@@ -4,12 +4,23 @@ import PageContainer from "@/components/PageContainer";
 import IllustrationFigure from "@/components/IllustrationFigure";
 import { CRASH_REPORT_GUIDES, formatCheckedOn } from "@/lib/crashReportGuides";
 import { GUIDE_HEROES } from "@/data/guide-heroes";
+import { ILLUSTRATION_HEIGHT, ILLUSTRATION_WIDTH } from "@/lib/images/display";
+
+const HERO = GUIDE_HEROES.index;
 
 export const metadata: Metadata = {
   title: "How to Get a Crash Report in Every State",
   description:
     "State-by-state guides to getting a copy of a police crash report: who keeps the reports, how to request one, and links to the official request pages.",
   alternates: { canonical: "/crash-reports" },
+  // A page's openGraph and twitter replace the layout's, so the site-wide fields are repeated here.
+  openGraph: {
+    siteName: "CarCrashReport.com",
+    type: "website",
+    locale: "en_US",
+    images: [{ url: HERO.src, width: ILLUSTRATION_WIDTH, height: ILLUSTRATION_HEIGHT, alt: HERO.alt }],
+  },
+  twitter: { card: "summary_large_image", images: [{ url: HERO.src, alt: HERO.alt }] },
 };
 
 export default function CrashReportGuidesPage() {

@@ -1,4 +1,6 @@
+import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
+import { citySlug, getCityPage } from "@/lib/location/cityPages";
 import { buildIncidentSlug } from "./slug";
 import { isSameCrash, makeIncidentKey } from "./dedupe";
 import type { IncidentCandidate } from "./types";
@@ -225,6 +227,7 @@ export async function batchUpsertIncidents(
   let updatedIncidents = 0;
   let skipped = 0;
   const errors: string[] = [];
+  const stalePaths = new Set<string>();
 
   for (const candidate of candidates) {
     try {
@@ -232,6 +235,12 @@ export async function batchUpsertIncidents(
 
       if (result.isNew) {
         newIncidents++;
+        // Counted the way a city page counts: stored under the page's exact name, with the name in the headline.
+        const page = candidate.city && candidate.state ? getCityPage(candidate.state, citySlug(candidate.city)) : undefined;
+        if (page && page.name === candidate.city && candidate.headline.toLowerCase().includes(page.name.toLowerCase())) {
+          stalePaths.add(`/accidents/${page.state.toLowerCase()}/${page.slug}`);
+          stalePaths.add(`/accidents/${page.state.toLowerCase()}`);
+        }
       } else if (result.sourceAdded) {
         updatedIncidents++;
       } else {
@@ -243,6 +252,10 @@ export async function batchUpsertIncidents(
       errors.push(`Failed to save "${candidate.headline}": ${message}`);
     }
   }
+
+  // A city page is otherwise rebuilt only every 6 hours; rebuilding it and its state page on their next visit
+  // keeps the page's count and the state page's tile for the city the same.
+  for (const path of stalePaths) revalidatePath(path);
 
   return { newIncidents, updatedIncidents, skipped, errors };
 }
