@@ -35,7 +35,7 @@ export async function getCityListing(city: CityPage, page: number) {
     prisma.incident.count({ where: { ...where, occurredAt: { gte: thirtyDaysAgo } } }),
     prisma.incident.findMany({
       where,
-      orderBy: { occurredAt: "desc" },
+      orderBy: [{ occurredAt: "desc" }, { id: "desc" }],
       skip: (page - 1) * PAGE_SIZE,
       take: PAGE_SIZE,
       select: { id: true, slug: true, headline: true, occurredAt: true, _count: { select: { sources: true } } },
