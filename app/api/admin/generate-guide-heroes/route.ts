@@ -16,12 +16,15 @@ const ALL = ["index", ...Object.keys(GUIDE_PLACES)];
 
 /**
  * The composition for a guide hero and its fallback. Guides take turns through the list in alphabetical
- * order, so neighbouring states never share a composition and all of them get used.
+ * order, so states next to each other in the alphabet never share a composition and all of them get used;
+ * a place's own composition takes precedence.
  */
 function compositionsFor(slug: string): [Composition, Composition] {
   const place = slug === "index" ? GUIDE_INDEX_PLACE : GUIDE_PLACES[slug];
   const pool = place.urban ? GUIDE_URBAN_COMPOSITIONS : GUIDE_COMPOSITIONS;
-  const position = ALL.filter((s) => (s === "index" ? GUIDE_INDEX_PLACE : GUIDE_PLACES[s]).urban === place.urban).indexOf(slug);
+  const position = place.composition
+    ? pool.indexOf(place.composition)
+    : ALL.filter((s) => (s === "index" ? GUIDE_INDEX_PLACE : GUIDE_PLACES[s]).urban === place.urban).indexOf(slug);
   const first = compositionByName(pool[position % pool.length]) as Composition;
   const second = compositionByName(pool[(position + 1) % pool.length]) as Composition;
   return [first, second];

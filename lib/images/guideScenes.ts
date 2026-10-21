@@ -10,13 +10,15 @@ export interface GuidePlace {
   urban?: boolean;
   /** Set where the scenery itself implies a season; otherwise summer. */
   season?: Season;
+  /** Replaces the rotated composition where it would make a bordering state look alike. */
+  composition?: string;
 }
 
 export const GUIDE_INDEX_PLACE: GuidePlace = { place: "open countryside under a wide sky" };
 
 export const GUIDE_PLACES: Record<string, GuidePlace> = {
   alabama: { place: "tall pine forest" },
-  alaska: { place: "snow-capped peaks and spruce trees", season: "winter" },
+  alaska: { place: "snow-capped peaks and spruce trees", season: "winter", composition: "empty-curve" },
   arizona: { place: "desert with tall cacti and red rock mesas far away" },
   arkansas: { place: "forested rolling hills" },
   california: { place: "coastal cliffs above the ocean" },
@@ -31,7 +33,7 @@ export const GUIDE_PLACES: Record<string, GuidePlace> = {
   illinois: { place: "flat cornfields" },
   indiana: { place: "farm fields and a red barn" },
   iowa: { place: "rolling cornfields" },
-  kansas: { place: "golden wheat fields under a big sky" },
+  kansas: { place: "golden wheat fields under a big sky", composition: "wide-landscape" },
   kentucky: { place: "wooden horse-farm fences and green hills" },
   louisiana: { place: "bayou wetlands with cypress trees" },
   maine: { place: "pine trees and a rocky shoreline" },
@@ -42,7 +44,7 @@ export const GUIDE_PLACES: Record<string, GuidePlace> = {
   mississippi: { place: "cotton fields and spreading oak trees" },
   missouri: { place: "a wide river with wooded bluffs" },
   montana: { place: "open prairie and distant mountains" },
-  nebraska: { place: "prairie and grain silos" },
+  nebraska: { place: "prairie and grain silos", composition: "aerial-road" },
   nevada: { place: "sagebrush desert and bare mountains" },
   "new-hampshire": { place: "wooded mountains", season: "autumn" },
   "new-jersey": { place: "suburban towns", urban: true },
@@ -62,7 +64,7 @@ export const GUIDE_PLACES: Record<string, GuidePlace> = {
   utah: { place: "red rock canyons" },
   vermont: { place: "farmhouses and maple trees", season: "winter" },
   virginia: { place: "rolling hills and blue mountains" },
-  washington: { place: "evergreen forest and distant mountains" },
+  washington: { place: "evergreen forest and distant mountains", composition: "wide-landscape" },
   "west-virginia": { place: "dense forest on steep mountains" },
   wisconsin: { place: "dairy farms and red barns" },
   wyoming: { place: "high plains and distant mountains" },
