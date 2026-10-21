@@ -23,10 +23,10 @@ export const GUIDE_HEROES: Record<string, GuideHero> = {
     attempts: 1,
   },
   alaska: {
-    src: "https://4sppmmdgjguscgeh.public.blob.vercel-storage.com/illustrations/guides/alaska-sAIHYxYhxXh3KWsrtO2L4ubQSrz13q.webp",
-    alt: "A red car on a highway interchange with mountains and a red sun in the background, in teal and peach tones",
-    composition: "interchange",
-    costUsd: 0.004017,
+    src: "https://4sppmmdgjguscgeh.public.blob.vercel-storage.com/illustrations/guides/alaska-zYxPlK4kHX0IjYJoiJCwUUCO8yRm25.webp",
+    alt: "A winding road through a snowy landscape with mountains and pine trees under a pale sky",
+    composition: "empty-curve",
+    costUsd: 0.003967,
     attempts: 1,
   },
   arizona: {
@@ -128,10 +128,10 @@ export const GUIDE_HEROES: Record<string, GuideHero> = {
     attempts: 1,
   },
   kansas: {
-    src: "https://4sppmmdgjguscgeh.public.blob.vercel-storage.com/illustrations/guides/kansas-oNRNYDMDWjJVUB9jDRt8Ndh5mRkpp9.webp",
-    alt: "A car drives down a long, straight road through a field with trees and mountains in the distance under a sunset sky",
-    composition: "rural-two-lane",
-    costUsd: 0.0040145,
+    src: "https://4sppmmdgjguscgeh.public.blob.vercel-storage.com/illustrations/guides/kansas-om8lnPMKXSXqBfWc2W7OWtd4Kfzvhm.webp",
+    alt: "A car drives on a straight road through fields of wheat under a sunset sky with scattered clouds",
+    composition: "wide-landscape",
+    costUsd: 0.0040045,
     attempts: 1,
   },
   kentucky: {
@@ -205,10 +205,10 @@ export const GUIDE_HEROES: Record<string, GuideHero> = {
     attempts: 1,
   },
   nebraska: {
-    src: "https://4sppmmdgjguscgeh.public.blob.vercel-storage.com/illustrations/guides/nebraska-1PmRQhvhjWZ7z4EYqCcd3GCZ0MECnx.webp",
-    alt: "A car drives down a long, straight road towards a farm with two silos under a peach-colored sky",
-    composition: "rural-two-lane",
-    costUsd: 0.0040045,
+    src: "https://4sppmmdgjguscgeh.public.blob.vercel-storage.com/illustrations/guides/nebraska-QkkjBRjXS0EerbZiEDm1VTePG0FJB6.webp",
+    alt: "A white van drives on a straight road through a rural landscape with silos and trees under a sunset sky",
+    composition: "aerial-road",
+    costUsd: 0.0040095,
     attempts: 1,
   },
   nevada: {
@@ -345,10 +345,10 @@ export const GUIDE_HEROES: Record<string, GuideHero> = {
     attempts: 1,
   },
   washington: {
-    src: "https://4sppmmdgjguscgeh.public.blob.vercel-storage.com/illustrations/guides/washington-UBzSm4255I4dyW4tA9rQQkgYgd5VnC.webp",
-    alt: "A teal car drives away on a two-lane road through a forest with mountains in the background under a pale yellow cloud",
-    composition: "rear-three-quarter",
-    costUsd: 0.0040245,
+    src: "https://4sppmmdgjguscgeh.public.blob.vercel-storage.com/illustrations/guides/washington-dvEx25qFPN7my3OuRXHYQV35avhvGl.webp",
+    alt: "A green car drives on a two-lane road through a forest with mountains in the background under a pale sky with a yellow sun",
+    composition: "wide-landscape",
+    costUsd: 0.0039995,
     attempts: 1,
   },
   "west-virginia": {
