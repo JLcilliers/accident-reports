@@ -461,5 +461,6 @@ export async function generateMetadata({
   return {
     title: `${stateName} Traffic Accidents Today`,
     description: `View recent traffic accidents in ${stateName}. Search accident reports by city, find crash locations, and learn how to get your official police report.`,
+    alternates: { canonical: `/accidents/${state.toLowerCase()}` },
   };
 }
