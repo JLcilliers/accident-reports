@@ -12,6 +12,12 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      {
+        source: "/:path((?!api/|_next/).*)",
+        has: [{ type: "host", value: "accident-reports.vercel.app" }],
+        destination: "https://www.carcrashreport.com/:path",
+        permanent: true,
+      },
       { source: "/get-report", destination: "/crash-reports", permanent: true },
       { source: "/get-report/:path*", destination: "/crash-reports", permanent: true },
       { source: "/reports/:path*", destination: "/crash-reports", permanent: true },
@@ -23,7 +29,7 @@ const nextConfig: NextConfig = {
       { source: "/states/:state/accident-reports", destination: "/crash-reports/:state", permanent: true },
       { source: "/cities/:city/accident-reports", destination: "/crash-reports", permanent: false },
       { source: "/accidents/:state/:city/:slug", destination: "/accidents/:state", permanent: false },
-      { source: "/accidents/:state/:city", destination: "/accidents/:state", permanent: false },
+      { source: "/accidents/:state/:city/page/1", destination: "/accidents/:state/:city", permanent: true },
     ];
   },
 };

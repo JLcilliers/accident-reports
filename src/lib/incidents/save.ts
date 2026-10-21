@@ -47,7 +47,11 @@ export async function upsertIncidentFromCandidate(
   // Check if this incident already exists
   const existing = await prisma.incident.findUnique({
     where: { dedupeKey },
-    include: { sources: true },
+    select: {
+      id: true,
+      slug: true,
+      sources: { select: { url: true, publisher: true, publisherDomain: true } },
+    },
   });
 
   if (existing) {
