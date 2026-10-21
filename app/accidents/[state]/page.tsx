@@ -2,8 +2,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { getGuideByCode } from "@/lib/crashReportGuides";
+import { cityPagePath } from "@/lib/location/cityPages";
 
 export const revalidate = 600; // Re-generate every 10 minutes
+
+// Without this the route renders on every request and ignores revalidate.
+export async function generateStaticParams() {
+  return [];
+}
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.carcrashreport.com";
@@ -47,24 +53,29 @@ async function getStateData(stateCode: string) {
       },
     });
 
-    // Get city breakdown
-    const cityData = await prisma.incident.groupBy({
-      by: ["city"],
-      _count: { id: true },
-      where: {
-        state: stateUpper,
-        city: { not: null },
-      },
-      orderBy: { _count: { id: "desc" } },
-      take: 12,
-    });
+    // Get city breakdown, counting the incidents whose headline names the city, as a city's page does
+    const cityData = await prisma.$queryRaw<{ city: string; count: number }[]>`
+      SELECT city, COUNT(*)::int AS count
+        FROM "Incident"
+       WHERE state = ${stateUpper} AND city IS NOT NULL AND strpos(lower(headline), lower(city)) > 0
+       GROUP BY city
+       ORDER BY count DESC
+       LIMIT 12`;
 
     // Get recent incidents
     const recentIncidents = await prisma.incident.findMany({
       where: { state: stateUpper },
       orderBy: { occurredAt: "desc" },
       take: 10,
-      include: { sources: true },
+      select: {
+        id: true,
+        slug: true,
+        headline: true,
+        city: true,
+        state: true,
+        occurredAt: true,
+        _count: { select: { sources: true } },
+      },
     });
 
     return {
@@ -192,16 +203,31 @@ export default async function StateAccidentsPage({
           <div className="mb-12">
             <h2 className="text-xl font-medium text-neutral-900 mb-6">Browse by City</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-              {stateData.cityData.map((city) => (
-                <Link
-                  key={city.city}
-                  href={`/accidents/${state}/${city.city?.toLowerCase().replace(/\s+/g, "-")}`}
-                  className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-4 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] hover:border-[#2A7D6E]/30 transition-all duration-300 text-center"
-                >
-                  <h3 className="font-medium text-neutral-900 mb-1">{city.city}</h3>
-                  <p className="text-sm text-neutral-600">{city._count.id} accidents</p>
-                </Link>
-              ))}
+              {stateData.cityData.map((city) => {
+                const cityPath = cityPagePath(city.city, state);
+                const tile = (
+                  <>
+                    <h3 className="font-medium text-neutral-900 mb-1">{city.city}</h3>
+                    <p className="text-sm text-neutral-600">{city.count} accidents</p>
+                  </>
+                );
+                return cityPath ? (
+                  <Link
+                    key={city.city}
+                    href={cityPath}
+                    className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-4 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] hover:border-[#2A7D6E]/30 transition-all duration-300 text-center"
+                  >
+                    {tile}
+                  </Link>
+                ) : (
+                  <div
+                    key={city.city}
+                    className="bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-4 text-center"
+                  >
+                    {tile}
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
@@ -226,9 +252,9 @@ export default async function StateAccidentsPage({
                         {formatTimeAgo(incident.occurredAt)}
                       </span>
                     </div>
-                    {incident.sources.length > 1 && (
+                    {incident._count.sources > 1 && (
                       <span className="bg-neutral-100 text-neutral-700 text-xs font-medium px-2.5 py-1 rounded-full">
-                        {incident.sources.length} sources
+                        {incident._count.sources} sources
                       </span>
                     )}
                   </div>
@@ -448,5 +474,6 @@ export async function generateMetadata({
   return {
     title: `${stateName} Traffic Accidents Today`,
     description: `View recent traffic accidents in ${stateName}. Search accident reports by city, find crash locations, and learn how to get your official police report.`,
+    alternates: { canonical: `/accidents/${state.toLowerCase()}` },
   };
 }
