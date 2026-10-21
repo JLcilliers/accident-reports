@@ -18,11 +18,7 @@ type IncidentWithSources = {
   summary: string | null;
   city: string | null;
   state: string | null;
-  country: string | null;
   occurredAt: Date;
-  createdAt: Date;
-  updatedAt: Date;
-  dedupeKey: string;
   sources: { id: string }[];
 };
 
@@ -31,9 +27,17 @@ async function getRecentIncidents(): Promise<IncidentWithSources[]> {
     return await prisma.incident.findMany({
       orderBy: { occurredAt: "desc" },
       take: 50,
-      include: {
+      select: {
+        id: true,
+        slug: true,
+        headline: true,
+        summary: true,
+        city: true,
+        state: true,
+        occurredAt: true,
         sources: {
           take: 1,
+          select: { id: true },
         },
       },
     });

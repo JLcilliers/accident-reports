@@ -7,6 +7,8 @@ import { BRIEF_MARKER } from "@/lib/seo/brief";
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.carcrashreport.com";
 
+export const revalidate = 21600; // Rebuild every 6 hours
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 

@@ -22,6 +22,12 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      {
+        source: "/:path((?!api/|_next/).*)",
+        has: [{ type: "host", value: "accident-reports.vercel.app" }],
+        destination: "https://www.carcrashreport.com/:path",
+        permanent: true,
+      },
       { source: "/get-report", destination: "/crash-reports", permanent: true },
       { source: "/get-report/:path*", destination: "/crash-reports", permanent: true },
       { source: "/reports/:path*", destination: "/crash-reports", permanent: true },
