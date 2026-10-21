@@ -2,7 +2,7 @@ import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { stripHtmlAndPublisher, cleanRssSnippet } from "@/lib/text";
 
-export const revalidate = 300; // Re-generate every 5 minutes
+export const revalidate = 3600; // Re-generate every hour
 
 export const metadata = {
   title: "Recent Traffic Incidents",

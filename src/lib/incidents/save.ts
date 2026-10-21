@@ -235,6 +235,9 @@ export async function batchUpsertIncidents(
 
       if (result.isNew) {
         newIncidents++;
+        stalePaths.add("/incidents");
+        stalePaths.add("/accidents");
+        if (candidate.state) stalePaths.add(`/accidents/${candidate.state.toLowerCase()}`);
         // Counted the way a city page counts: stored under the page's exact name, with the name in the headline.
         const page = candidate.city && candidate.state ? getCityPage(candidate.state, citySlug(candidate.city)) : undefined;
         if (page && page.name === candidate.city && candidate.headline.toLowerCase().includes(page.name.toLowerCase())) {
@@ -253,8 +256,8 @@ export async function batchUpsertIncidents(
     }
   }
 
-  // A city page is otherwise rebuilt only every 6 hours; rebuilding it and its state page on their next visit
-  // keeps the page's count and the state page's tile for the city the same.
+  // Listing, state and city pages are otherwise rebuilt only every hour or day; rebuilding them on their next visit
+  // shows a new incident right away and keeps a city page's count and its state page's tile for the city the same.
   for (const path of stalePaths) revalidatePath(path);
 
   return { newIncidents, updatedIncidents, skipped, errors };

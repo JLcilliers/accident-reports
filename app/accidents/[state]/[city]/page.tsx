@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { getCityPage } from "@/lib/location/cityPages";
 import CityAccidents, { cityMetadata, getCityListing } from "./CityAccidents";
 
-export const revalidate = 21600; // Rebuild every 6 hours
+export const revalidate = 86400; // Rebuild daily
 
 // Without this the route renders on every request and ignores revalidate.
 export function generateStaticParams() {
