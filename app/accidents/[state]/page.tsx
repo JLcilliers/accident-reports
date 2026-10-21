@@ -5,6 +5,11 @@ import { getGuideByCode } from "@/lib/crashReportGuides";
 
 export const revalidate = 600; // Re-generate every 10 minutes
 
+// Without this the route renders on every request and ignores revalidate.
+export async function generateStaticParams() {
+  return [];
+}
+
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.carcrashreport.com";
 
@@ -64,7 +69,15 @@ async function getStateData(stateCode: string) {
       where: { state: stateUpper },
       orderBy: { occurredAt: "desc" },
       take: 10,
-      include: { sources: true },
+      select: {
+        id: true,
+        slug: true,
+        headline: true,
+        city: true,
+        state: true,
+        occurredAt: true,
+        _count: { select: { sources: true } },
+      },
     });
 
     return {
@@ -226,9 +239,9 @@ export default async function StateAccidentsPage({
                         {formatTimeAgo(incident.occurredAt)}
                       </span>
                     </div>
-                    {incident.sources.length > 1 && (
+                    {incident._count.sources > 1 && (
                       <span className="bg-neutral-100 text-neutral-700 text-xs font-medium px-2.5 py-1 rounded-full">
-                        {incident.sources.length} sources
+                        {incident._count.sources} sources
                       </span>
                     )}
                   </div>
