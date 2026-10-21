@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PageContainer from "@/components/PageContainer";
+import IllustrationFigure from "@/components/IllustrationFigure";
 import { CRASH_REPORT_GUIDES, formatCheckedOn } from "@/lib/crashReportGuides";
+import { GUIDE_HEROES } from "@/data/guide-heroes";
 
 export const metadata: Metadata = {
   title: "How to Get a Crash Report in Every State",
@@ -13,6 +15,7 @@ export const metadata: Metadata = {
 export default function CrashReportGuidesPage() {
   const guides = [...CRASH_REPORT_GUIDES].sort((a, b) => a.name.localeCompare(b.name));
   const latestCheck = guides.reduce((latest, g) => (g.checkedOn > latest ? g.checkedOn : latest), "");
+  const hero = GUIDE_HEROES.index;
 
   return (
     <PageContainer>
@@ -20,6 +23,14 @@ export default function CrashReportGuidesPage() {
         <h1 className="text-4xl md:text-5xl font-medium text-neutral-900 mb-4 tracking-tight">
           Crash Report Guides by State
         </h1>
+        {hero && (
+          <IllustrationFigure
+            illustration={{ src: hero.src, alt: hero.alt, isDefault: false }}
+            preload
+            sizes="(min-width: 768px) 768px, 100vw"
+            className="mb-6"
+          />
+        )}
         <p className="text-lg text-neutral-600 leading-relaxed">
           Find out who keeps crash reports in your state, how to request a copy, and where the
           official request pages are. Each guide is built from official state sources, and anything

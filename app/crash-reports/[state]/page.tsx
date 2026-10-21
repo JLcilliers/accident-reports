@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PageContainer from "@/components/PageContainer";
+import IllustrationFigure from "@/components/IllustrationFigure";
 import prisma from "@/lib/prisma";
+import { GUIDE_HEROES } from "@/data/guide-heroes";
 import {
   CRASH_REPORT_GUIDES,
   SECTION_TITLES,
@@ -104,6 +106,7 @@ export default async function CrashReportGuidePage({
   const checkedOn = formatCheckedOn(guide.checkedOn);
   const incidentCount = await countIncidents(guide.code);
   const sections = SECTION_TITLES.filter(({ key }) => guide.sections[key].length > 0);
+  const hero = GUIDE_HEROES[guide.slug];
 
   const pageUrl = `${BASE_URL}/crash-reports/${guide.slug}`;
   const jsonLd = {
@@ -149,6 +152,14 @@ export default async function CrashReportGuidePage({
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium text-neutral-900 mb-4 tracking-tight">
           How to Get a Crash Report {guide.inName}
         </h1>
+        {hero && (
+          <IllustrationFigure
+            illustration={{ src: hero.src, alt: hero.alt, isDefault: false }}
+            preload
+            sizes="(min-width: 768px) 768px, 100vw"
+            className="mb-6"
+          />
+        )}
         {guide.summary && (
           <p className="text-lg text-neutral-600 leading-relaxed">
             {guide.summary.text}
