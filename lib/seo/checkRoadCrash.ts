@@ -52,12 +52,23 @@ export async function checkRoadCrash(headline: string, sourceTexts: string[]): P
     temperature: 0,
   }, { timeout: 20_000, maxRetries: 1 }); // A short answer: a slow call fails fast instead of eating the cron run's time.
 
-  const content = response.choices[0]?.message?.content ?? "";
+  return parseCrashCheck(response.choices[0]?.message?.content ?? "");
+}
+
+/**
+ * Reads the first JSON object in the model's answer, so a code fence around it or a stray "}" after it
+ * (gemini-2.5-flash-lite sometimes adds one) still gives the answer. Throws when there is no clear true or false.
+ */
+export function parseCrashCheck(content: string): RoadCrashCheck {
   let parsed: Partial<RoadCrashCheck> = {};
-  try {
-    parsed = JSON.parse(content.replace(/^\s*```(?:json)?\s*|\s*```\s*$/g, ""));
-  } catch {
-    // Falls through to the error below.
+  const start = content.indexOf("{");
+  for (let end = content.indexOf("}", start); start >= 0 && end >= 0; end = content.indexOf("}", end + 1)) {
+    try {
+      parsed = JSON.parse(content.slice(start, end + 1));
+      break;
+    } catch {
+      // Not a whole object yet: try the next closing brace.
+    }
   }
   if (typeof parsed.crash !== "boolean") {
     throw new Error(`Crash check gave no clear answer: ${content.slice(0, 200)}`);
