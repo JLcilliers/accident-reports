@@ -40,6 +40,7 @@ export default function Header() {
           {/* Logo */}
           <Link
             href="/"
+            prefetch={false}
             className="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
             aria-label="CarCrashReport.com home"
           >
@@ -53,6 +54,7 @@ export default function Header() {
           <nav className="hidden lg:flex items-center gap-8">
             <Link
               href="/"
+              prefetch={false}
               className={`text-sm font-medium transition-colors ${
                 isTransparent
                   ? "text-neutral-700 hover:text-neutral-900"
@@ -63,6 +65,7 @@ export default function Header() {
             </Link>
             <Link
               href="/search"
+              prefetch={false}
               className={`text-sm font-medium transition-colors ${
                 isTransparent
                   ? "text-neutral-700 hover:text-neutral-900"
@@ -73,6 +76,7 @@ export default function Header() {
             </Link>
             <Link
               href="/accidents"
+              prefetch={false}
               className={`text-sm font-medium transition-colors ${
                 isTransparent
                   ? "text-neutral-700 hover:text-neutral-900"
@@ -83,6 +87,7 @@ export default function Header() {
             </Link>
             <Link
               href="/crash-reports"
+              prefetch={false}
               className={`text-sm font-medium transition-colors ${
                 isTransparent
                   ? "text-neutral-700 hover:text-neutral-900"
@@ -93,6 +98,7 @@ export default function Header() {
             </Link>
             <Link
               href="/how-it-works"
+              prefetch={false}
               className={`text-sm font-medium transition-colors ${
                 isTransparent
                   ? "text-neutral-700 hover:text-neutral-900"
@@ -103,6 +109,7 @@ export default function Header() {
             </Link>
             <Link
               href="/blog"
+              prefetch={false}
               className={`text-sm font-medium transition-colors ${
                 isTransparent
                   ? "text-neutral-700 hover:text-neutral-900"
@@ -113,6 +120,7 @@ export default function Header() {
             </Link>
             <Link
               href="/about"
+              prefetch={false}
               className={`text-sm font-medium transition-colors ${
                 isTransparent
                   ? "text-neutral-700 hover:text-neutral-900"
@@ -127,6 +135,7 @@ export default function Header() {
           <div className="hidden lg:flex items-center">
             <Link
               href="/incidents"
+              prefetch={false}
               className={`px-5 py-2 text-sm font-medium rounded-full transition-colors ${
                 isTransparent
                   ? "text-neutral-900 border border-neutral-400 hover:border-neutral-900 hover:bg-white/50"
@@ -185,6 +194,7 @@ export default function Header() {
             <nav className="flex flex-col gap-1">
               <Link
                 href="/"
+                prefetch={false}
                 className="px-4 py-3 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 rounded-lg transition-colors text-sm font-medium"
                 onClick={() => setMobileMenuOpen(false)}
               >
@@ -192,6 +202,7 @@ export default function Header() {
               </Link>
               <Link
                 href="/search"
+                prefetch={false}
                 className="px-4 py-3 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 rounded-lg transition-colors text-sm font-medium"
                 onClick={() => setMobileMenuOpen(false)}
               >
@@ -199,6 +210,7 @@ export default function Header() {
               </Link>
               <Link
                 href="/accidents"
+                prefetch={false}
                 className="px-4 py-3 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 rounded-lg transition-colors text-sm font-medium"
                 onClick={() => setMobileMenuOpen(false)}
               >
@@ -206,6 +218,7 @@ export default function Header() {
               </Link>
               <Link
                 href="/crash-reports"
+                prefetch={false}
                 className="px-4 py-3 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 rounded-lg transition-colors text-sm font-medium"
                 onClick={() => setMobileMenuOpen(false)}
               >
@@ -213,6 +226,7 @@ export default function Header() {
               </Link>
               <Link
                 href="/how-it-works"
+                prefetch={false}
                 className="px-4 py-3 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 rounded-lg transition-colors text-sm font-medium"
                 onClick={() => setMobileMenuOpen(false)}
               >
@@ -220,6 +234,7 @@ export default function Header() {
               </Link>
               <Link
                 href="/blog"
+                prefetch={false}
                 className="px-4 py-3 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 rounded-lg transition-colors text-sm font-medium"
                 onClick={() => setMobileMenuOpen(false)}
               >
@@ -227,6 +242,7 @@ export default function Header() {
               </Link>
               <Link
                 href="/about"
+                prefetch={false}
                 className="px-4 py-3 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 rounded-lg transition-colors text-sm font-medium"
                 onClick={() => setMobileMenuOpen(false)}
               >
@@ -235,6 +251,7 @@ export default function Header() {
               <div className="pt-4 px-4">
                 <Link
                   href="/incidents"
+                  prefetch={false}
                   className="block w-full text-center px-5 py-3 text-sm font-medium text-neutral-900 border border-neutral-300 rounded-full hover:border-neutral-900 transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
