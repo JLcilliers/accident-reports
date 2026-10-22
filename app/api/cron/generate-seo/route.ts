@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 import prisma from "@/lib/prisma";
@@ -215,6 +216,9 @@ export async function GET(req: NextRequest) {
           ...(incident.articleAttempts >= MAX_ATTEMPTS && { articleQualityStatus: "FAILED" }),
         },
       });
+    } finally {
+      // The incident page is otherwise rebuilt only once a day.
+      revalidatePath(`/incidents/${incident.slug}`);
     }
   }
 

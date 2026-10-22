@@ -1,5 +1,6 @@
 import { createHash } from "crypto";
 import { list } from "@vercel/blob";
+import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import type { AccidentFacts } from "@/lib/seo/extractAccidentFacts";
@@ -134,8 +135,8 @@ async function runScheduled() {
     usedTodayBefore ??= usedToday;
     if (claimed.length === 0) break;
 
-    const batch = await illustrateBatch(claimed, history, null, (incident) => incident.slug, deadline, (incident, item) =>
-      item.status === "NOT_A_CRASH"
+    const batch = await illustrateBatch(claimed, history, null, (incident) => incident.slug, deadline, async (incident, item) => {
+      await (item.status === "NOT_A_CRASH"
         ? markNotACrash(prisma, incident.id)
         : saveIllustration(prisma, incident.id, {
             status: item.status,
@@ -146,8 +147,10 @@ async function runScheduled() {
             attempts: item.attempts.filter((attempt) => !attempt.skipped).length,
             composition: item.composition,
             hash: item.hash,
-          })
-    );
+          }));
+      // The incident page is otherwise rebuilt only once a day.
+      revalidatePath(`/incidents/${incident.slug}`);
+    });
     results.push(...batch);
 
     // A whole batch failing without a single billed call means the provider is refusing work; stop claiming.
