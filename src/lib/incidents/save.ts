@@ -246,6 +246,7 @@ export async function batchUpsertIncidents(
         }
       } else if (result.sourceAdded) {
         updatedIncidents++;
+        stalePaths.add(`/incidents/${result.slug}`);
       } else {
         skipped++;
       }
@@ -256,8 +257,8 @@ export async function batchUpsertIncidents(
     }
   }
 
-  // Listing, state and city pages are otherwise rebuilt only every hour or day; rebuilding them on their next visit
-  // shows a new incident right away and keeps a city page's count and its state page's tile for the city the same.
+  // Listing, state, city and incident pages are otherwise rebuilt only every hour or day; rebuilding them on their next
+  // visit shows a new incident or source right away and keeps a city page's count and its state page's tile for the city the same.
   for (const path of stalePaths) revalidatePath(path);
 
   return { newIncidents, updatedIncidents, skipped, errors };

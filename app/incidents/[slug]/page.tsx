@@ -27,7 +27,8 @@ import {
   ArticleContent,
 } from "@/components/incident";
 
-export const revalidate = 3600; // Re-generate every hour
+// Rebuilt daily; every job that changes an incident (new source, brief, article, image) also marks its page stale.
+export const revalidate = 86400;
 
 const getIncident = cache(async (slug: string) => {
   return prisma.incident.findUnique({
