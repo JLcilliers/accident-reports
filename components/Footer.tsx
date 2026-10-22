@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 mb-16">
           {/* Brand Column */}
           <div className="lg:col-span-4">
-            <Link href="/" className="inline-flex items-center gap-2.5 mb-6" aria-label="CarCrashReport.com home">
+            <Link href="/" prefetch={false} className="inline-flex items-center gap-2.5 mb-6" aria-label="CarCrashReport.com home">
               <LogoMark className="h-8 w-8" />
               <span className="text-xl font-semibold tracking-tight text-neutral-900">
                 CarCrashReport<span className="text-[#2A7D6E]">.com</span>
@@ -27,22 +27,22 @@ export default function Footer() {
             </h4>
             <ul className="space-y-3">
               <li>
-                <Link href="/search" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">
+                <Link href="/search" prefetch={false} className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">
                   Accident Search
                 </Link>
               </li>
               <li>
-                <Link href="/accidents" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">
+                <Link href="/accidents" prefetch={false} className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">
                   News
                 </Link>
               </li>
               <li>
-                <Link href="/crash-reports" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">
+                <Link href="/crash-reports" prefetch={false} className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">
                   Crash Report Guides
                 </Link>
               </li>
               <li>
-                <Link href="/how-it-works" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">
+                <Link href="/how-it-works" prefetch={false} className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">
                   How It Works
                 </Link>
               </li>
@@ -56,17 +56,17 @@ export default function Footer() {
             </h4>
             <ul className="space-y-3">
               <li>
-                <Link href="/blog" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">
+                <Link href="/blog" prefetch={false} className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">
                   Blog
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">
+                <Link href="/about" prefetch={false} className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/faq" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">
+                <Link href="/faq" prefetch={false} className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">
                   FAQ
                 </Link>
               </li>
@@ -80,12 +80,12 @@ export default function Footer() {
             </h4>
             <ul className="space-y-3">
               <li>
-                <Link href="/privacy" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">
+                <Link href="/privacy" prefetch={false} className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">
+                <Link href="/terms" prefetch={false} className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">
                   Terms of Service
                 </Link>
               </li>

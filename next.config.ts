@@ -2,6 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
+    // Four widths instead of the default eight, so each image is resized and cached in fewer variants.
+    deviceSizes: [640, 828, 1200, 1920],
     remotePatterns: [
       {
         protocol: 'https',
